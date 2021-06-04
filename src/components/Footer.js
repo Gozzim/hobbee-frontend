@@ -28,11 +28,11 @@ function Footer(props) {
             <CopyrightIcon size="small" />
             <Typography variant="h6">
                 <Link
-                    href="https://wwwmatthes.in.tum.de/pages/1mqqqoqe7gapz/SEBA-Master-Web-Application-Engineering"
+                    href="https://www.hobb.ee"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    sebis
+                    Hobb.ee
                 </Link>
             </Typography>
         </div>

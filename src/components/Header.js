@@ -55,7 +55,7 @@ function Header(props) {
                     variant="h5"
                     color="inherit"
                 >
-                    Movie Database App
+                    Hobb.ee
                 </Typography>
                 <IconButton onClick={onClickGithub} color="inherit">
                     <GitHubIcon />
