@@ -26,14 +26,36 @@ function Footer(props) {
 
     return (
         <div className={classes.footerRoot}>
-            <CopyrightIcon size="small" />
+
             <Typography variant="h6">
                 <Link
-                    href="https://wwwmatthes.in.tum.de/pages/1mqqqoqe7gapz/SEBA-Master-Web-Application-Engineering"
+                    href="https://www.hobb.ee/imprint"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    sebis
+                    Imprint
+                </Link>
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+            </Typography>
+
+            <Typography variant="h6">
+                <Link
+                    href="https://www.hobb.ee/tos"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Terms of Service
+                </Link>
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+            </Typography>
+
+            <Typography variant="h6">
+                <Link
+                    href="https://www.hobb.ee/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Privacy Policy
                 </Link>
             </Typography>
         </div>
