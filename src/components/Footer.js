@@ -26,37 +26,38 @@ function Footer(props) {
 
     return (
         <div className={classes.footerRoot}>
-
             <Typography variant="h6">
-                <Link
+                <a className={"link"}
+
                     href="https://www.hobb.ee/imprint"
                     target="_blank"
                     rel="noopener noreferrer"
+
                 >
                     Imprint
-                </Link>
+                </a>
                 &nbsp;&nbsp; | &nbsp;&nbsp;
             </Typography>
 
             <Typography variant="h6">
-                <Link
+                <a className={"link"}
                     href="https://www.hobb.ee/tos"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
                     Terms of Service
-                </Link>
+                </a>
                 &nbsp;&nbsp; | &nbsp;&nbsp;
             </Typography>
 
             <Typography variant="h6">
-                <Link
+                <a className={"link"}
                     href="https://www.hobb.ee/privacy"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
                     Privacy Policy
-                </Link>
+                </a>
             </Typography>
         </div>
     );
