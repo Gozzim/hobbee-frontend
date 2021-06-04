@@ -1,13 +1,13 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
+import {AppBar, Button, Icon, IconButton, Toolbar, Typography} from "@material-ui/core";
 
-import MenuIcon from "@material-ui/icons/Menu";
-import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
-import Brightness3Icon from "@material-ui/icons/Brightness3";
+import MenuIcon from "@material-ui/icons/AccountCircle";
+import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
+import NotificationIcon from "@material-ui/icons/NotificationsNoneOutlined";
+
+import HobbeeIcon from "../assets/cat.png";
 
 import KebabMenu from "./KebabMenu";
 
@@ -18,6 +18,12 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flexGrow: 1,
         paddingLeft: theme.spacing(1),
+    },
+    navButton: {
+        color: "white",
+        fontSize: 17,
+        marginLeft: 20,
+        marginRight: 20,
     },
 }));
 
@@ -46,22 +52,58 @@ function Header(props) {
                 onClose={() => setMenuAnchor(null)}
             />
             <Toolbar className={classes.toolbar}>
-                <LocalMoviesIcon
+                <IconButton
                     fontSize="large"
                     onClick={() => props.history.push("/")}
-                />
+                >
+                    <img src={HobbeeIcon} height={40}/>
+                </IconButton>
                 <Typography
                     className={classes.title}
                     variant="h5"
                     color="inherit"
                 >
-                    Movie Database App
+                    Hobb.ee
                 </Typography>
-                <IconButton onClick={onClickGithub} color="inherit">
-                    <GitHubIcon />
+                <Button
+                    className={classes.navButton}
+                    type="button"
+                    onClick={() => props.history.push("/recommended")}
+                >
+                    RECOMMENDED
+                </Button>
+                <Button
+                    className={classes.navButton}
+                    type="button"
+                    onClick={() => props.history.push("/in-my-area")}
+                >
+                    IN MY AREA
+                </Button>
+                <Button
+                    className={classes.navButton}
+                    type="button"
+                    onClick={() => props.history.push("/my-groups")}
+                >
+                    MY GROUPS
+                </Button>
+                <Button
+                    className={classes.navButton}
+                    type="button"
+                    onClick={() => props.history.push("/create-group")}
+                    style={{
+                        backgroundColor: "orange",
+                    }}
+                >
+                    CREATE GROUP
+                </Button>
+                <IconButton onClick={() => props.history.push("/premium")} color="inherit">
+                    <PremiumIcon />
                 </IconButton>
-                <IconButton onClick={props.toggletheme} color="inherit">
-                    {props.darkmode ? <WbSunnyIcon /> : <Brightness3Icon />}
+                <IconButton
+                    onClick={(event) => setMenuAnchor(event.currentTarget)}
+                    color="inherit"
+                >
+                    <NotificationIcon />
                 </IconButton>
                 <IconButton
                     onClick={(event) => setMenuAnchor(event.currentTarget)}
