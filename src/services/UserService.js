@@ -1,6 +1,6 @@
-import HttpService from "./HttpService";
+import { HttpService } from "./HttpService";
 
-export default class UserService {
+export class UserService {
     static baseURL() {
         return "http://localhost:4000/auth";
     }

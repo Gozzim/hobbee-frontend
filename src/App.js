@@ -3,19 +3,15 @@ import { Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from "redux-thunk";
-import {
-    MuiThemeProvider,
-    createMuiTheme,
-    makeStyles,
-} from "@material-ui/core/styles";
+import { MuiThemeProvider, createMuiTheme, makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import ContentContainer from "./components/ContentContainer";
+import { ContentContainer } from "./components/ContentContainer";
 import reducers from "./redux/reducers";
-import routes from "./routes";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import AppTheme from "./theming/themetypes";
-import AppThemeOptions from "./theming/themes";
+import { routes } from "./routes";
+import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
+import { AppTheme } from "./theming/themetypes";
+import { AppThemeOptions } from "./theming/themes";
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
@@ -25,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function App() {
+export function App() {
     const classes = useStyles();
 
     // set document title
@@ -61,7 +57,6 @@ function App() {
                                     <Route key={i} {...route} />
                                 ))}
                             </Switch>
-
                         </ContentContainer>
                         <Footer />
                     </React.Fragment>
@@ -72,4 +67,3 @@ function App() {
     );
 }
 
-export default App;

@@ -6,7 +6,7 @@ const themeindependent = {
     },
 };
 
-const appThemeOptions = {
+export const AppThemeOptions = {
     [AppTheme.LIGHT]: {
         palette: {
             type: "light",
@@ -48,5 +48,3 @@ const appThemeOptions = {
         ...themeindependent,
     },
 };
-
-export default appThemeOptions;

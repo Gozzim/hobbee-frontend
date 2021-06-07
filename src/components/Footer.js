@@ -1,9 +1,8 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import "../views/style.css";
-import CopyrightIcon from "@material-ui/icons/Copyright";
 
 const useStyles = makeStyles((theme) => ({
     footerRoot: {
@@ -22,38 +21,30 @@ const useStyles = makeStyles((theme) => ({
  * Footer of the app
  * @param {props} props
  */
-function Footer(props) {
+export function Footer(props) {
     const classes = useStyles();
 
     return (
         <div className={classes.footerRoot}>
             <Typography variant="h6">
-                <a className={"link"}
-                    onClick={() => props.history.push("/imprint")}
-                >
-                    Imprint
-                </a>
+                <Link className={"linkDefault"} to={"/imprint"}>
+                    imprint
+                </Link>
                 &nbsp;&nbsp; | &nbsp;&nbsp;
             </Typography>
 
             <Typography variant="h6">
-                <a className={"link"}
-                    onClick={() => props.history.push("/tos")}
-                >
+                <Link className={"linkDefault"} to={"/tos"}>
                     Terms of Service
-                </a>
+                </Link>
                 &nbsp;&nbsp; | &nbsp;&nbsp;
             </Typography>
 
             <Typography variant="h6">
-                <a className={"link"}
-                    onClick={() => props.history.push("/privacy")}
-                >
+                <Link className={"linkDefault"} to={"/privacy"}>
                     Privacy Policy
-                </a>
+                </Link>
             </Typography>
         </div>
     );
 }
-
-export default withRouter(Footer);

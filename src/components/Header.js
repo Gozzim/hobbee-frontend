@@ -1,15 +1,10 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
-
+import { Link } from "react-router-dom";
+import UserMenu from "./UserMenu";
 import MenuIcon from "@material-ui/icons/Menu";
 import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
-import Brightness3Icon from "@material-ui/icons/Brightness3";
-
-import KebabMenu from "./KebabMenu";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -25,31 +20,22 @@ const useStyles = makeStyles((theme) => ({
  * Navigation bar of the app
  * @param {props} props
  */
-function Header(props) {
+export function Header(props) {
     const classes = useStyles();
 
-    const [menuAnchor, setMenuAnchor] = React.useState(null);
-
-    const onClickGithub = (event) => {
-        var win = window.open(
-            "https://github.com/sebischair/seba-master-movie-frontend",
-            "_blank"
-        );
-        win.focus();
-    };
+    const [userMenuAnchor, setUserMenuAnchor] = React.useState(null);
 
     return (
         <AppBar position="sticky">
-            <KebabMenu
-                open={Boolean(menuAnchor)}
-                anchor={menuAnchor}
-                onClose={() => setMenuAnchor(null)}
+            <UserMenu
+                open={Boolean(userMenuAnchor)}
+                anchor={userMenuAnchor}
+                onClose={() => setUserMenuAnchor(null)}
             />
             <Toolbar className={classes.toolbar}>
-                <LocalMoviesIcon
-                    fontSize="large"
-                    onClick={() => props.history.push("/")}
-                />
+                <Link className={"linkDefault"} to={"/"}>
+                    <LocalMoviesIcon/>
+                </Link>
                 <Typography
                     className={classes.title}
                     variant="h5"
@@ -57,14 +43,8 @@ function Header(props) {
                 >
                     Hobb.ee
                 </Typography>
-                <IconButton onClick={onClickGithub} color="inherit">
-                    <GitHubIcon />
-                </IconButton>
-                <IconButton onClick={props.toggletheme} color="inherit">
-                    {props.darkmode ? <WbSunnyIcon /> : <Brightness3Icon />}
-                </IconButton>
                 <IconButton
-                    onClick={(event) => setMenuAnchor(event.currentTarget)}
+                    onClick={(event) => setUserMenuAnchor(event.currentTarget)}
                     color="inherit"
                 >
                     <MenuIcon />
@@ -73,5 +53,3 @@ function Header(props) {
         </AppBar>
     );
 }
-
-export default withRouter(Header);
