@@ -1,4 +1,4 @@
-export default function entities(state = {}, action) {
+export function entities(state = {}, action) {
     switch (action.type) {
         case "GETMOVIES_SUCCESS":
             return { movies: action.movies };

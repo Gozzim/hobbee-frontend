@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
  * For register new users
  * @param {props} props
  */
-function SignUpComponent(props) {
+export function SignUpComponent(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState("");
@@ -174,4 +174,3 @@ function SignUpComponent(props) {
     );
 }
 
-export default SignUpComponent;

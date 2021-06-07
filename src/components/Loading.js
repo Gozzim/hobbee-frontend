@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
  * Loading screen
  * @param {props} props
  */
-function Loading(props) {
+export function Loading(props) {
     const classes = useStyles();
 
     return (
@@ -33,5 +33,3 @@ function Loading(props) {
         </div>
     );
 }
-
-export default Loading;

@@ -2,68 +2,36 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-    scrollContainerRoot: {
+    contentContainerRoot: {
         display: 'absolute',
         flexWrap: 'wrap',
-        marginRight: '20%',
-        marginLeft: '20%',
-},
-
+        marginRight: '15%',
+        marginLeft: '15%',
+    },
+    wrapper: {
+        height: "100%",
+        width: "100%",
+        flexWrap: "nowrap",
+        flex: "1 1 auto",
+        position: "absolute",
+        overflowY: "scroll",
+        display: "flex",
+        flexDirection: "column",
+    },
 }));
 
 /**
  * For having an internal scroll container
  * @param {props} props
  */
-function ContentContainer(props) {
+export function ContentContainer(props) {
     const classes = useStyles();
 
     return (
-        <div className={classes.scrollContainerRoot}>
-            <div className={classes.wrapper}>{props.children}</div>
-
-            et. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam
-            dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet
-            clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit am
-            et, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
-            duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-            sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet cli
-            ta kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            Duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-            sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet cli
-            ta kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et ius
-            to odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-            Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis
-            nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit
-            in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisi
-            s at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
-            delenit augue duis dolore te feugait nulla facilisi.
-
-            Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quo
-            d mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipisci
-            ng elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-            volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipi
-            t lobortis nisl ut aliquip ex ea commodo consequat.
-
-            Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequa
-            t, vel illum dolore eu feugiat nulla facilisis.
-
-            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
-            sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, conse
-            tetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore mag
-            na aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-            rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit am
-            et. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam
-            dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet
-            clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+        <div className={classes.contentContainerRoot}>
+            <div className={classes.wrapper}>
+                {props.children}
+            </div>
         </div>
-    );
+    )
 }
-
-export default ContentContainer;

@@ -1,4 +1,4 @@
-export default class HttpService {
+export class HttpService {
     static extractUser(token) {
         let base64Url = token.split(".")[1];
         let base64 = base64Url.replace("-", "+").replace("_", "/");

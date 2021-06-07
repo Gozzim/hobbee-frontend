@@ -3,17 +3,14 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import TodayIcon from "@material-ui/icons/Today";
 
 /**
  * component for changing movie attributes at the same place where they are displayed
  * @param {props} props
  */
-function CustomTextField(props) {
+export function CustomTextField(props) {
     // by moving the styles inside the functional component the props can influence the style
     const useStyles = makeStyles((theme) => ({
         customtextfieldroot: {
@@ -133,4 +130,3 @@ CustomTextField.propTypes = {
     furtherProps: PropTypes.any,
 };
 
-export default CustomTextField;

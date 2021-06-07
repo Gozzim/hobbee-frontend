@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import CustomTextField from "../components/CustomTextField";
+import { CustomTextField } from "./CustomTextField";
 
 const useStyles = makeStyles((theme) => ({
     flexCol: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
  * for presenting simple data of the movie
  * @param {props} props
  */
-function CustomChip(props) {
+export function CustomChip(props) {
     const classes = useStyles();
 
     return (
@@ -53,5 +53,3 @@ CustomChip.propTypes = {
     content: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     caption: PropTypes.string.isRequired,
 };
-
-export default CustomChip;
