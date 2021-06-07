@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, Typography } from "@material-ui/core";
-import CopyrightIcon from "@material-ui/icons/Copyright";
+import { Typography } from "@material-ui/core";
+import "../views/style.css";
 
 const useStyles = makeStyles((theme) => ({
     footerRoot: {
@@ -20,23 +21,30 @@ const useStyles = makeStyles((theme) => ({
  * Footer of the app
  * @param {props} props
  */
-function Footer(props) {
+export function Footer(props) {
     const classes = useStyles();
 
     return (
         <div className={classes.footerRoot}>
-            <CopyrightIcon size="small" />
             <Typography variant="h6">
-                <Link
-                    href="https://wwwmatthes.in.tum.de/pages/1mqqqoqe7gapz/SEBA-Master-Web-Application-Engineering"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    sebis
+                <Link className={"linkDefault"} to={"/imprint"}>
+                    imprint
+                </Link>
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+            </Typography>
+
+            <Typography variant="h6">
+                <Link className={"linkDefault"} to={"/tos"}>
+                    Terms of Service
+                </Link>
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+            </Typography>
+
+            <Typography variant="h6">
+                <Link className={"linkDefault"} to={"/privacy"}>
+                    Privacy Policy
                 </Link>
             </Typography>
         </div>
     );
 }
-
-export default Footer;

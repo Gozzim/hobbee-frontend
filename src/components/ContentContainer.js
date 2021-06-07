@@ -2,10 +2,11 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-    scrollContainerRoot: {
-        height: "100%",
-        width: "100%",
-        position: "relative",
+    contentContainerRoot: {
+        display: 'absolute',
+        flexWrap: 'wrap',
+        marginRight: '15%',
+        marginLeft: '15%',
     },
     wrapper: {
         height: "100%",
@@ -23,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
  * For having an internal scroll container
  * @param {props} props
  */
-function ScrollContainer(props) {
+export function ContentContainer(props) {
     const classes = useStyles();
 
     return (
-        <div className={classes.scrollContainerRoot}>
-            <div className={classes.wrapper}>{props.children}</div>
+        <div className={classes.contentContainerRoot}>
+            <div className={classes.wrapper}>
+                {props.children}
+            </div>
         </div>
-    );
+    )
 }
-
-export default ScrollContainer;

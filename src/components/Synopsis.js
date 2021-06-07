@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import PropTypes from "prop-types";
-import CustomTextField from "../components/CustomTextField";
+import { CustomTextField } from "./CustomTextField";
 
 const useStyles = makeStyles((theme) => ({
     flexCol: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
  * For presenting and changing movie details
  * @param {props} props
  */
-function Synopsis(props) {
+export function Synopsis(props) {
     const classes = useStyles();
 
     return props.editMode ? (
@@ -125,6 +125,6 @@ Synopsis.propTypes = {
     editMode: PropTypes.bool,
     onChangeThumbnail: PropTypes.func,
     onChangeSynopsis: PropTypes.func,
-};
+}
 
-export default Synopsis;
+

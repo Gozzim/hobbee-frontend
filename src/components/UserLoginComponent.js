@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
  * For user login
  * @param {props} props
  */
-function LoginComponent(props) {
+export function LoginComponent(props) {
     const classes = useStyles();
 
     const [username, setUsername] = React.useState("");
@@ -118,5 +118,3 @@ function LoginComponent(props) {
         </div>
     );
 }
-
-export default LoginComponent;

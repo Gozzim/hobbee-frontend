@@ -1,3 +1,4 @@
+import React from "react";
 import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
 import CreateGroupView from "./views/CreateGroupView";
@@ -6,11 +7,14 @@ import InMyAreaView from "./views/InMyAreaView";
 import PremiumView from "./views/PremiumView";
 import RecommendedView from "./views/RecommendedView";
 import MyGroupsView from "./views/MyGroupsView";
+import { Imprint } from "./views/Imprint"
+import { PrivacyPolicy } from "./views/PrivacyPolicy"
+import { ToS } from "./views/TermsOfService"
 
 // routes within the movie database example app
 // used for routing
 
-const routes = [
+export const routes = [
     {
         path: "/login",
         component: UserLoginView,
@@ -43,6 +47,16 @@ const routes = [
         path: "/",
         component: HomeView,
     },
+    {
+        path: "/imprint",
+        component: Imprint,
+    },
+    {
+        path: "/tos",
+        component: ToS,
+    },
+    {
+        path: "/privacy",
+        component: PrivacyPolicy,
+    },
 ];
-
-export default routes;

@@ -21,7 +21,7 @@ const getUser = () => {
     return {};
 };
 
-export default function user(state = getUser(), action) {
+export function user(state = getUser(), action) {
     switch (action.type) {
         case "LOGIN_SUCCESS":
             return { user: action.user };

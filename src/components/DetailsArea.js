@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
  * Container for presenting complex movie data
  * @param {props} props
  */
-function DetailsArea(props) {
+export function DetailsArea(props) {
     const classes = useStyles();
 
     return (
@@ -41,5 +41,3 @@ DetailsArea.propTypes = {
     content: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
 };
-
-export default DetailsArea;

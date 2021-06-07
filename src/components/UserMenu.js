@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
  * Menu for user managment
  * @param {props} props
  */
-function KebabMenu(props) {
+function UserMenu(props) {
     const classes = useStyles();
 
     const user = useSelector((state) => {
@@ -89,10 +89,10 @@ function KebabMenu(props) {
 }
 
 // attributes of props and their type
-KebabMenu.propTypes = {
+UserMenu.propTypes = {
     onClose: PropTypes.func.isRequired,
     anchor: PropTypes.element,
     open: PropTypes.bool.isRequired,
 };
 
-export default connect()(withRouter(KebabMenu));
+export default connect()(withRouter(UserMenu));
