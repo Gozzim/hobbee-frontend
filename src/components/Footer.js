@@ -1,6 +1,8 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, Typography } from "@material-ui/core";
+import "../views/style.css";
 import CopyrightIcon from "@material-ui/icons/Copyright";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,18 +27,33 @@ function Footer(props) {
 
     return (
         <div className={classes.footerRoot}>
-            <CopyrightIcon size="small" />
             <Typography variant="h6">
-                <Link
-                    href="https://wwwmatthes.in.tum.de/pages/1mqqqoqe7gapz/SEBA-Master-Web-Application-Engineering"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <a className={"link"}
+                    onClick={() => props.history.push("/imprint")}
                 >
-                    sebis
-                </Link>
+                    Imprint
+                </a>
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+            </Typography>
+
+            <Typography variant="h6">
+                <a className={"link"}
+                    onClick={() => props.history.push("/tos")}
+                >
+                    Terms of Service
+                </a>
+                &nbsp;&nbsp; | &nbsp;&nbsp;
+            </Typography>
+
+            <Typography variant="h6">
+                <a className={"link"}
+                    onClick={() => props.history.push("/privacy")}
+                >
+                    Privacy Policy
+                </a>
             </Typography>
         </div>
     );
 }
 
-export default Footer;
+export default withRouter(Footer);

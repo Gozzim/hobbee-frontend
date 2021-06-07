@@ -9,8 +9,7 @@ import {
     makeStyles,
 } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import ScrollContainer from "./components/ScrollContainer";
-
+import ContentContainer from "./components/ContentContainer";
 import reducers from "./redux/reducers";
 import routes from "./routes";
 import Header from "./components/Header";
@@ -46,6 +45,7 @@ function App() {
     };
 
     return (
+        //<Layout>
         <div className={classes.appRoot}>
             <MuiThemeProvider theme={createMuiTheme(AppThemeOptions[theme])}>
                 <Provider store={store}>
@@ -55,18 +55,20 @@ function App() {
                             darkmode={theme === AppTheme.DARK}
                             toggletheme={toggleTheme}
                         />
-                        <ScrollContainer>
+                        <ContentContainer>
                             <Switch>
                                 {routes.map((route, i) => (
                                     <Route key={i} {...route} />
                                 ))}
                             </Switch>
-                            <Footer />
-                        </ScrollContainer>
+
+                        </ContentContainer>
+                        <Footer />
                     </React.Fragment>
                 </Provider>
             </MuiThemeProvider>
         </div>
+        //</Layout>
     );
 }
 
