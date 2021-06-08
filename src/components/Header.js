@@ -1,10 +1,12 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import { AppBar, Button, Icon, IconButton, Toolbar, Typography } from "@material-ui/core";
 import UserMenu from "./UserMenu";
-import MenuIcon from "@material-ui/icons/Menu";
-import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
+import MenuIcon from "@material-ui/icons/AccountCircle";
+import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
+import NotificationIcon from "@material-ui/icons/NotificationsNoneOutlined";
+import HobbeeIcon from "../assets/cat.png";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -13,6 +15,12 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flexGrow: 1,
         paddingLeft: theme.spacing(1),
+    },
+    navButton: {
+        color: "white",
+        fontSize: 17,
+        marginLeft: 20,
+        marginRight: 20,
     },
 }));
 
@@ -34,7 +42,7 @@ export function Header(props) {
             />
             <Toolbar className={classes.toolbar}>
                 <Link className={"linkDefault"} to={"/"}>
-                    <LocalMoviesIcon/>
+                    <img src={HobbeeIcon} height={40}/>
                 </Link>
                 <Typography
                     className={classes.title}
@@ -43,6 +51,50 @@ export function Header(props) {
                 >
                     Hobb.ee
                 </Typography>
+                <Link className={"linkDefault"} to={"/recommended"}>
+                    <Button
+                        className={classes.navButton}
+                        type="button"
+                    >
+                        RECOMMENDED
+                    </Button>
+                </Link>
+                <Link className={"linkDefault"} to={"/in-my-area"}>
+                    <Button
+                        className={classes.navButton}
+                        type="button"
+                    >
+                        IN MY AREA
+                    </Button>
+                </Link>
+                <Link className={"linkDefault"} to={"/my-groups"}>
+                    <Button
+                        className={classes.navButton}
+                        type="button"
+                    >
+                        MY GROUPS
+                    </Button>
+                </Link>
+                <Link className={"linkDefault"} to={"/create-group"}>
+                    <Button
+                        className={classes.navButton}
+                        type="button"
+                        style={{
+                            backgroundColor: "orange",
+                        }}
+                    >
+                        CREATE GROUP
+                    </Button>
+                </Link>
+                <Link className={"linkDefault"} to={"/premium"}>
+                    <PremiumIcon />
+                </Link>
+                <IconButton
+                    onClick={(event) => setUserMenuAnchor(event.currentTarget)}
+                    color="inherit"
+                >
+                    <NotificationIcon />
+                </IconButton>
                 <IconButton
                     onClick={(event) => setUserMenuAnchor(event.currentTarget)}
                     color="inherit"
