@@ -44,10 +44,6 @@ export const routes = [
         component: MyGroupsView,
     },
     {
-        path: "/",
-        component: HomeView,
-    },
-    {
         path: "/imprint",
         component: Imprint,
     },
@@ -58,5 +54,9 @@ export const routes = [
     {
         path: "/privacy",
         component: PrivacyPolicy,
+    },
+    {
+        path: "/",
+        component: HomeView,
     },
 ];
