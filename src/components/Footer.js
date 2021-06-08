@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
+        height: "50px",
     },
     title: {
         flexGrow: 1,
@@ -28,7 +29,7 @@ export function Footer(props) {
         <div className={classes.footerRoot}>
             <Typography variant="h6">
                 <Link className={"linkDefault"} to={"/imprint"}>
-                    imprint
+                    Imprint
                 </Link>
                 &nbsp;&nbsp; | &nbsp;&nbsp;
             </Typography>
