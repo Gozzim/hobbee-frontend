@@ -1,16 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, Button, Icon, IconButton, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Button, IconButton, Toolbar, Typography } from "@material-ui/core";
 import UserMenu from "./UserMenu";
 import MenuIcon from "@material-ui/icons/AccountCircle";
 import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
 import NotificationIcon from "@material-ui/icons/NotificationsNoneOutlined";
-import HobbeeIcon from "../assets/cat.png";
+import HobbeeIcon from "../assets/hobbee_white.png";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
         flexGrow: 1,
+        backgroundColor:"#E98F1C",
     },
     title: {
         flexGrow: 1,
@@ -18,6 +19,21 @@ const useStyles = makeStyles((theme) => ({
     },
     navButton: {
         color: "white",
+        '&:hover': {
+            backgroundColor: "#FFFFFF",
+            color: "#32210B",
+        },
+        fontSize: 17,
+        marginLeft: 20,
+        marginRight: 20,
+    },
+    createGroupButton: {
+        color: "#32210B",
+        backgroundColor: "#FFCC00",
+        '&:hover': {
+            backgroundColor: "#1CE9E3",
+            color: "#32210B",
+        },
         fontSize: 17,
         marginLeft: 20,
         marginRight: 20,
@@ -42,15 +58,13 @@ export function Header(props) {
             />
             <Toolbar className={classes.toolbar}>
                 <Link className={"linkDefault"} to={"/"}>
-                    <img src={HobbeeIcon} height={40}/>
+                    <img src={HobbeeIcon} height={55}/>
                 </Link>
                 <Typography
                     className={classes.title}
                     variant="h5"
                     color="inherit"
-                >
-                    Hobb.ee
-                </Typography>
+                />
                 <Link className={"linkDefault"} to={"/recommended"}>
                     <Button
                         className={classes.navButton}
@@ -77,17 +91,16 @@ export function Header(props) {
                 </Link>
                 <Link className={"linkDefault"} to={"/create-group"}>
                     <Button
-                        className={classes.navButton}
+                        className={classes.createGroupButton}
                         type="button"
-                        style={{
-                            backgroundColor: "orange",
-                        }}
                     >
                         CREATE GROUP
                     </Button>
                 </Link>
                 <Link className={"linkDefault"} to={"/premium"}>
-                    <PremiumIcon />
+                    <IconButton color="inherit">
+                        <PremiumIcon />
+                    </IconButton>
                 </Link>
                 <IconButton
                     onClick={(event) => setUserMenuAnchor(event.currentTarget)}
