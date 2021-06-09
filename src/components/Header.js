@@ -1,18 +1,42 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import { AppBar, Button, IconButton, Toolbar, Typography } from "@material-ui/core";
 import UserMenu from "./UserMenu";
-import MenuIcon from "@material-ui/icons/Menu";
-import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
+import MenuIcon from "@material-ui/icons/AccountCircle";
+import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
+import NotificationIcon from "@material-ui/icons/NotificationsNoneOutlined";
+import HobbeeIcon from "../assets/hobbee_white.png";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
         flexGrow: 1,
+        backgroundColor:"#E98F1C",
     },
     title: {
         flexGrow: 1,
         paddingLeft: theme.spacing(1),
+    },
+    navButton: {
+        color: "white",
+        '&:hover': {
+            backgroundColor: "#FFFFFF",
+            color: "#32210B",
+        },
+        fontSize: 17,
+        marginLeft: 20,
+        marginRight: 20,
+    },
+    createGroupButton: {
+        color: "#32210B",
+        backgroundColor: "#FFCC00",
+        '&:hover': {
+            backgroundColor: "#1CE9E3",
+            color: "#32210B",
+        },
+        fontSize: 17,
+        marginLeft: 20,
+        marginRight: 20,
     },
 }));
 
@@ -34,15 +58,56 @@ export function Header(props) {
             />
             <Toolbar className={classes.toolbar}>
                 <Link className={"linkDefault"} to={"/"}>
-                    <LocalMoviesIcon/>
+                    <img src={HobbeeIcon} height={55}/>
                 </Link>
                 <Typography
                     className={classes.title}
                     variant="h5"
                     color="inherit"
+                />
+                <Link className={"linkDefault"} to={"/recommended"}>
+                    <Button
+                        className={classes.navButton}
+                        type="button"
+                    >
+                        RECOMMENDED
+                    </Button>
+                </Link>
+                <Link className={"linkDefault"} to={"/in-my-area"}>
+                    <Button
+                        className={classes.navButton}
+                        type="button"
+                    >
+                        IN MY AREA
+                    </Button>
+                </Link>
+                <Link className={"linkDefault"} to={"/my-groups"}>
+                    <Button
+                        className={classes.navButton}
+                        type="button"
+                    >
+                        MY GROUPS
+                    </Button>
+                </Link>
+                <Link className={"linkDefault"} to={"/create-group"}>
+                    <Button
+                        className={classes.createGroupButton}
+                        type="button"
+                    >
+                        CREATE GROUP
+                    </Button>
+                </Link>
+                <Link className={"linkDefault"} to={"/premium"}>
+                    <IconButton color="inherit">
+                        <PremiumIcon />
+                    </IconButton>
+                </Link>
+                <IconButton
+                    onClick={(event) => setUserMenuAnchor(event.currentTarget)}
+                    color="inherit"
                 >
-                    Hobb.ee
-                </Typography>
+                    <NotificationIcon />
+                </IconButton>
                 <IconButton
                     onClick={(event) => setUserMenuAnchor(event.currentTarget)}
                     color="inherit"
