@@ -1,12 +1,12 @@
 import React from "react";
 import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
-import CreateGroupView from "./views/CreateGroupView";
-import HomeView from "./views/HomeView";
-import InMyAreaView from "./views/InMyAreaView";
-import PremiumView from "./views/PremiumView";
-import RecommendedView from "./views/RecommendedView";
-import MyGroupsView from "./views/MyGroupsView";
+import { CreateGroupView } from "./views/CreateGroupView";
+import { HomeView } from "./views/HomeView";
+import { InMyAreaView } from "./views/InMyAreaView";
+import { PremiumView } from "./views/PremiumView";
+import { RecommendedView } from "./views/RecommendedView";
+import { MyGroupsView } from "./views/MyGroupsView";
 import { Imprint } from "./views/Imprint"
 import { PrivacyPolicy } from "./views/PrivacyPolicy"
 import { ToS } from "./views/TermsOfService"
