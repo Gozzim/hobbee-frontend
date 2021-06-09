@@ -13,7 +13,7 @@ import TodayIcon from "@material-ui/icons/Today";
 export function CustomTextField(props) {
     // by moving the styles inside the functional component the props can influence the style
     const useStyles = makeStyles((theme) => ({
-        customtextfieldroot: {
+        customTextFieldRoot: {
             minHeight: theme.mixins.textfieldminheight,
             width: props.nofullwidth ? "" : "100%",
             display: "flex",
@@ -42,8 +42,8 @@ export function CustomTextField(props) {
     }, [props.value]);
 
     return (
-        <div className={classes.customtextfieldroot}>
-            {(props.value === "" || !props.value || props.value === null) &&
+        <div className={classes.customTextFieldRoot}>
+            {(props.value === "" || !props.value) &&
             !props.editMode ? (
                 // if no value is given return the given text
                 <TextField
