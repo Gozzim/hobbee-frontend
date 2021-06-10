@@ -7,12 +7,15 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  Badge
 } from "@material-ui/core";
 import UserMenu from "./UserMenu";
+import NotificationMenu from "./NotificationMenu";
 import MenuIcon from "@material-ui/icons/AccountCircle";
 import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
-import NotificationIcon from "@material-ui/icons/NotificationsNoneOutlined";
+import NotificationIcon from "@material-ui/icons/Notifications";
 import HobbeeIcon from "../assets/hobbee_white.png";
+import { getNotificationAsync } from "../redux/reducers/notificationReducer";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -54,6 +57,8 @@ export function Header(props) {
   const classes = useStyles();
 
   const [userMenuAnchor, setUserMenuAnchor] = React.useState(null);
+  const [notificationMenuAnchor, setNotificationMenuAnchor] = React.useState(null);
+  const [numNotifications, setNumNotifications] = React.useState(3);
 
   return (
     <AppBar position="sticky">
@@ -61,6 +66,11 @@ export function Header(props) {
         open={Boolean(userMenuAnchor)}
         anchor={userMenuAnchor}
         onClose={() => setUserMenuAnchor(null)}
+      />
+      <NotificationMenu
+        open={Boolean(notificationMenuAnchor)}
+        anchor={notificationMenuAnchor}
+        onClose={() => setNotificationMenuAnchor(null)}
       />
       <Toolbar className={classes.toolbar}>
         <Link className={"linkDefault"} to={"/"}>
@@ -93,10 +103,15 @@ export function Header(props) {
           </IconButton>
         </Link>
         <IconButton
-          onClick={(event) => setUserMenuAnchor(event.currentTarget)}
+          onClick={(event) => setNotificationMenuAnchor(event.currentTarget)}
           color="inherit"
         >
-          <NotificationIcon />
+          <Badge
+            badgeContent={numNotifications}
+            color="secondary"
+            >
+              <NotificationIcon />
+          </Badge>
         </IconButton>
         <IconButton
           onClick={(event) => setUserMenuAnchor(event.currentTarget)}
