@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Menu, MenuItem, Divider } from "@material-ui/core";
 import { connect } from "react-redux";
-import { getNotificationAsync } from "../redux/reducers/notificationReducer";
+import { fetchNotifications } from "../redux/reducers/notificationReducer";
 
 const NotificationTypes = {
     CHAT : "Chat",
@@ -27,7 +27,7 @@ function NotificationMenu(props) {
     const classes = useStyles();
 
     useEffect(() => {
-        props.dispatch(getNotificationAsync())
+        props.dispatch(fetchNotifications())
     });
 
     let unread = () => this.props.notifications.filter(
@@ -82,7 +82,7 @@ function NotificationMenu(props) {
                 horizontal: "right",
             }}
         >
-            {renderNotificationItems([])}
+            {renderNotificationItems(fetchNotifications())}
             <Divider key="divider" />
             <MenuItem className={classes.menuitem}>
                 Mark as read
