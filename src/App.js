@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import thunkMiddleware from "redux-thunk";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ContentContainer } from "./components/ContentContainer";
-import reducers from "./redux/reducers";
 import { routes } from "./routes";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
+import {store} from "./app/store";
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
@@ -26,9 +24,6 @@ export function App() {
     useEffect(() => {
         document.title = "Movie Database App";
     }, []);
-
-    // create store for redux
-    const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
     return (
         //<Layout>
