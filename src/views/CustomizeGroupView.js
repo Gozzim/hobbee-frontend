@@ -1,10 +1,10 @@
 import React from "react";
-import DateFnsUtils from '@date-io/date-fns';
+import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
-} from '@material-ui/pickers';
+} from "@material-ui/pickers";
 import {
   Grid,
   Slider,
@@ -104,7 +104,9 @@ const marks = [
 ];
 
 export function CustomizeGroupView(props) {
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2021-07-25T21:11:54'));
+  const [selectedDate, setSelectedDate] = React.useState(
+    new Date("2021-07-25T21:11:54")
+  );
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -118,18 +120,17 @@ export function CustomizeGroupView(props) {
           <div>Limit the number of participants:</div>
         </Grid>
         <Grid item xs={6}>
-            <Typography id="discrete-slider" gutterBottom>
-            </Typography>
-            <Slider
-              defaultValue={100}
-              //getAriaValueText={valuetext}
-              aria-labelledby="discrete-slider"
-              valueLabelDisplay="auto"
-              step={null}
-              marks={marks}
-              min={2}
-              max={100}
-            />
+          <Typography id="discrete-slider" gutterBottom></Typography>
+          <Slider
+            defaultValue={100}
+            //getAriaValueText={valuetext}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={null}
+            marks={marks}
+            min={2}
+            max={100}
+          />
         </Grid>
         <Grid item xs={6}>
           <div>Set a time and date:</div>
@@ -142,39 +143,31 @@ export function CustomizeGroupView(props) {
                 id="date-picker-dialog"
                 label="Date picker dialog"
                 //format="MM/dd/yyyy"
-              //  value={selectedDate}
+                //  value={selectedDate}
                 value
-              //   onChange={handleDateChange}
+                //   onChange={handleDateChange}
                 KeyboardButtonProps={{
-                  'aria-label': 'change date',
+                  "aria-label": "change date",
                 }}
               />
               <KeyboardTimePicker
                 margin="normal"
                 id="time-picker"
                 label="Time picker"
-              //  value={selectedDate}
+                //  value={selectedDate}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
-                  'aria-label': 'change time',
+                  "aria-label": "change time",
                 }}
               />
             </Grid>
           </MuiPickersUtilsProvider>
-
         </Grid>
-          <Grid item xs={6}>
-            <div>Choose a specific location:</div>
-          </Grid>
-          <Grid item xs={6}>
-
-          </Grid>
-
+        <Grid item xs={6}>
+          <div>Choose a specific location:</div>
+        </Grid>
+        <Grid item xs={6}></Grid>
       </Grid>
-
-
-
-
     </div>
   );
 }
