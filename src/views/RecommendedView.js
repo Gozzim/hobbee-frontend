@@ -1,9 +1,5 @@
 import React from "react";
 
 export function RecommendedView(props) {
-    return (
-        <div>
-            This is RECOMMENDED page.
-        </div>
-    );
+  return <div>This is RECOMMENDED page.</div>;
 }
