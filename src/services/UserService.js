@@ -1,4 +1,4 @@
-import { HttpService } from "./HttpService";
+import axios from "./HttpService";
 
 export class UserService {
     static baseURL() {
@@ -7,7 +7,7 @@ export class UserService {
 
     static register(user, pass, isAdmin) {
         return new Promise((resolve, reject) => {
-            HttpService.post(
+            axios.post(
                 `${UserService.baseURL()}/register`,
                 {
                     username: user,
@@ -26,7 +26,7 @@ export class UserService {
 
     static login(user, pass) {
         return new Promise((resolve, reject) => {
-            HttpService.post(
+            axios.post(
                 `${UserService.baseURL()}/login`,
                 {
                     username: user,
