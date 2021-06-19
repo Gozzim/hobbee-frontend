@@ -18,10 +18,8 @@ import {
 
 const marks = [
   {
-    value: 1,
-  },
-  {
     value: 2,
+    label: 2,
   },
   {
     value: 3,
@@ -85,6 +83,7 @@ const marks = [
   },
   {
     value: 50,
+    label: 50,
   },
   {
     value: 60,
@@ -100,6 +99,7 @@ const marks = [
   },
   {
     value: 100, // als unlimited
+    label: "unlimited",
   },
 ];
 
@@ -113,31 +113,43 @@ export function CustomizeGroupView(props) {
   };
   return (
     <div>
-      <div>CUSTOMIZE GROUP</div>
-      <div>ADD SOME PERSONALITY</div>
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <div>Limit the number of participants:</div>
-        </Grid>
-        <Grid item xs={6}>
-          <Typography id="discrete-slider" gutterBottom></Typography>
-          <Slider
-            defaultValue={100}
-            //getAriaValueText={valuetext}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={null}
-            marks={marks}
-            min={2}
-            max={100}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <div>Set a time and date:</div>
-        </Grid>
-        <Grid item xs={6}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid container justify="space-around">
+      <Typography variant="h3" component={"h1"} align={"center"} className={""}>
+        {/* component (the semantic): how the heading is rendered; variant: how the heading looks */}
+        Customize Group
+      </Typography>
+      <Typography variant="h6" component={"h2"} align={"center"} className={""}>
+        Add some personality
+      </Typography>
+      <div className={"customizegroup-grid"}>
+        <Grid container spacing={6}>
+          <Grid item xs={6} className={"border"}>
+            <Typography>Limit the number of participants:</Typography>
+          </Grid>
+          <Grid item xs={6} className={"border"}>
+            <Typography id="discrete-slider" gutterBottom></Typography>
+            <Slider
+              defaultValue={100}
+              //getAriaValueText={valuetext}
+              aria-labelledby="discrete-slider"
+              valueLabelDisplay="auto"
+              step={null}
+              marks={marks}
+              min={2}
+              max={100}
+              valueLabelFormat={(x) => {
+                if (x === 100) {
+                  return "∞";
+                } else {
+                  return x;
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={6} className={"border"}>
+            <Typography>Set a time and date:</Typography>
+          </Grid>
+          <Grid item xs={6} className={"border"}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 margin="normal"
                 id="date-picker-dialog"
@@ -160,14 +172,35 @@ export function CustomizeGroupView(props) {
                   "aria-label": "change time",
                 }}
               />
-            </Grid>
-          </MuiPickersUtilsProvider>
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item xs={6} className={"border"}>
+            <Typography>Choose a specific location:</Typography>
+          </Grid>
+          <Grid item xs={6} className={"border"}>
+            <TextField
+              label="e.g. Arcisstr.21, 80333 Munich"
+              id="TitleField"
+              type="text"
+              className=""
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6} className={"border"}>
+            <Typography>
+              Give a short description of the planned activity:
+            </Typography>
+          </Grid>
+          <Grid item xs={6}></Grid>
+          <TextField
+            id="outlined-multiline-static"
+            multiline
+            rows={6}
+            variant="outlined"
+            fullWidth
+          />
         </Grid>
-        <Grid item xs={6}>
-          <div>Choose a specific location:</div>
-        </Grid>
-        <Grid item xs={6}></Grid>
-      </Grid>
+      </div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "15%",
     marginLeft: "15%",
     height: "calc(100vh - 50px)",
+    paddingTop: "40px",
   },
   wrapper: {
     height: "100%",
