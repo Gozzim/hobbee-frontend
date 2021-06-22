@@ -12,10 +12,19 @@ import {
   RadioGroup,
   Radio,
   Grid,
+  IconButton,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { Autocomplete } from "@material-ui/lab";
+import hobbies from "../assets/hobbies.json";
+import AddIcon from "@material-ui/icons/Add";
 
 export function CreateGroupView(props) {
+  const [tags, setTags] = React.useState([]);
+  const [autocompleteValue, setAutocompleteValue] = React.useState("");
+  console.log(tags);
+  console.log(autocompleteValue);
+
   return (
     <div>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
@@ -78,11 +87,38 @@ export function CreateGroupView(props) {
               Choose some tags, so that other users can find your group:
             </Typography>
 
-            <TagComponent />
+            <div className={"creategroup-tags"}>
+              <Autocomplete
+                id="combo-box-demo"
+                options={hobbies.map((x) => {
+                  return x.title;
+                })}
+                onChange={(event, autocompleteValue) =>
+                  setAutocompleteValue(autocompleteValue)
+                }
+                value={autocompleteValue}
+                style={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Combo box" variant="outlined" />
+                )}
+              />
+              <IconButton
+                onClick={() => {
+                  setTags([...tags, autocompleteValue]);
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+            </div>
+            {tags.map((x) => {
+              return <TagComponent title={x} key={x} />;
+            })}
 
             <div>
               <Link className={""} to={"/create-group/customize-group"}>
-                <Button type="button">CONTINUE</Button>
+                <Button type="button" variant="contained">
+                  CONTINUE
+                </Button>
               </Link>
             </div>
           </Grid>
