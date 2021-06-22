@@ -32,13 +32,12 @@ export function App() {
         <CssBaseline />
         <React.Fragment>
           <Header />
-          <ContentContainer>
+          <ContentContainer footer={<Footer />}>
             <Switch>
               {routes.map((route, i) => (
                 <Route key={i} {...route} />
               ))}
             </Switch>
-            <Footer />
           </ContentContainer>
         </React.Fragment>
       </Provider>

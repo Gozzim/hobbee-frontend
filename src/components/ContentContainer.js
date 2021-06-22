@@ -1,21 +1,20 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   contentContainerRoot: {
-    flexWrap: "wrap",
-    marginRight: "15%",
-    marginLeft: "15%",
-    height: "calc(100vh - 50px)",
+    height: "calc(100vh - 64px)",
+    paddingTop: "40px",
   },
   wrapper: {
     height: "100%",
     width: "100%",
-    flexWrap: "nowrap",
-    flex: "1 1 auto",
-    position: "relative",
     display: "flex",
     flexDirection: "column",
+  },
+  main: {
+    flexGrow: 1,
   },
 }));
 
@@ -26,9 +25,14 @@ const useStyles = makeStyles((theme) => ({
 export function ContentContainer(props) {
   const classes = useStyles();
 
+  const { children, footer } = props;
+
   return (
     <div className={classes.contentContainerRoot}>
-      <div className={classes.wrapper}>{props.children}</div>
+      <Container className={classes.wrapper} maxWidth="md">
+        <main className={classes.main}>{children}</main>
+        {footer}
+      </Container>
     </div>
   );
 }
