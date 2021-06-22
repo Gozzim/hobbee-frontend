@@ -8,7 +8,10 @@ import {
   FilePicker,
   CropMenu,
 } from "react-darkroom";
-
+import ImageIcon from "@material-ui/icons/Image";
+import LocalCafeIcon from "@material-ui/icons/LocalCafe";
+import DesktopMacIcon from "@material-ui/icons/DesktopMac";
+import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -23,99 +26,16 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
+  Card,
+  CardContent,
+  Avatar,
 } from "@material-ui/core";
-
-const marks = [
-  {
-    value: 2,
-    label: 2,
-  },
-  {
-    value: 3,
-  },
-  {
-    value: 4,
-  },
-  {
-    value: 5,
-  },
-  {
-    value: 6,
-  },
-  {
-    value: 7,
-  },
-  {
-    value: 8,
-  },
-  {
-    value: 9,
-  },
-  {
-    value: 10,
-  },
-  {
-    value: 11,
-  },
-  {
-    value: 12,
-  },
-  {
-    value: 13,
-  },
-  {
-    value: 14,
-  },
-  {
-    value: 15,
-  },
-  {
-    value: 16,
-  },
-  {
-    value: 17,
-  },
-  {
-    value: 18,
-  },
-  {
-    value: 19,
-  },
-  {
-    value: 20,
-  },
-  {
-    value: 30,
-  },
-  {
-    value: 40,
-  },
-  {
-    value: 50,
-    label: 50,
-  },
-  {
-    value: 60,
-  },
-  {
-    value: 70,
-  },
-  {
-    value: 80,
-  },
-  {
-    value: 90,
-  },
-  {
-    value: 100, // als unlimited
-    label: "unlimited",
-  },
-];
 
 export function CustomizeGroupView(props) {
   const [selectedDate, setSelectedDate] = React.useState(
     new Date("2021-07-25T21:11:54")
   );
+  const fileInput = React.useRef();
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -136,7 +56,7 @@ export function CustomizeGroupView(props) {
       </Typography>
       <div className={"customizegroup-grid"}>
         <Grid container spacing={6}>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <Darkroom>
               {/*<Toolbar>*/}
               {/*  <button*/}
@@ -238,39 +158,98 @@ export function CustomizeGroupView(props) {
               {/*    <span className="icon icon-floppy-disk" />*/}
               {/*  </button>*/}
               {/*</Toolbar>*/}
-              <Canvas
-              // ref="canvasWrapper"
-              // crop={crop}
-              // source={source}s
-              // angle={angle}
-              // width={canvasWidth}
-              // height={canvasHeight}
-              >
-                <FilePicker hasFile={hasFile} onChange={onFileChange} />
-              </Canvas>
+              <Card className={"cardImage"}>
+                <CardContent className={"cardImage"}>
+                  <Canvas
+                    // ref="canvasWrapper"
+                    // crop={crop}
+                    // source={source}
+                    // angle={angle}
+                    // width={canvasWidth}
+                    // height={canvasHeight}
+                    width={300}
+                    height={220}
+                  >
+                    <Button
+                      className={"customizegroup-ButtonCard"}
+                      onClick={() => {
+                        fileInput.current.click();
+                      }}
+                    >
+                      <div>
+                        <div className={"imageIcon"}>
+                          <ImageIcon color={"disabled"} fontSize={"inherit"} />
+                        </div>
+                        <Typography
+                          className={"selectImageText"}
+                          color={"textSecondary"}
+                          align={"center"}
+                          variant={"h6"}
+                        >
+                          Select image
+                        </Typography>
+                        <input
+                          type={"file"}
+                          className={"customizegroup-file"}
+                          ref={fileInput}
+                        />
+                      </div>
+                    </Button>
+                  </Canvas>
+                </CardContent>
+              </Card>
             </Darkroom>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>Upload or choose a picture:</Typography>
+            <div className={"customizegroup-filename"}>
+              [no file uploaded yet]
+            </div>
+            <div className={"customizegroup-avatare"}>
+              <Avatar variant="square" className={"customizegroup-avatar"}>
+                <LocalCafeIcon />
+              </Avatar>
+              <Avatar variant="square" className={"customizegroup-avatar"}>
+                <WbSunnyIcon />
+              </Avatar>
+              <Avatar variant="square" className={"customizegroup-avatar"}>
+                <DesktopMacIcon />
+              </Avatar>
+            </div>
           </Grid>
 
           <Grid item xs={6} className={"border"}>
             <Typography>Limit the number of participants:</Typography>
           </Grid>
+
+          {/*<Grid item xs={6} className={"border"}>*/}
+          {/*  <Typography id="discrete-slider" gutterBottom></Typography>*/}
+          {/*  <Slider*/}
+          {/*    defaultValue={100}*/}
+          {/*    //getAriaValueText={valuetext}*/}
+          {/*    aria-labelledby="discrete-slider"*/}
+          {/*    valueLabelDisplay="auto"*/}
+          {/*    step={null}*/}
+          {/*    marks={marks}*/}
+          {/*    min={2}*/}
+          {/*    max={100}*/}
+          {/*    valueLabelFormat={(x) => {*/}
+          {/*      if (x === 100) {*/}
+          {/*        return "∞";*/}
+          {/*      } else {*/}
+          {/*        return x;*/}
+          {/*      }*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</Grid>*/}
           <Grid item xs={6} className={"border"}>
-            <Typography id="discrete-slider" gutterBottom></Typography>
-            <Slider
-              defaultValue={100}
-              //getAriaValueText={valuetext}
-              aria-labelledby="discrete-slider"
-              valueLabelDisplay="auto"
-              step={null}
-              marks={marks}
-              min={2}
-              max={100}
-              valueLabelFormat={(x) => {
-                if (x === 100) {
-                  return "∞";
-                } else {
-                  return x;
-                }
+            <TextField
+              id="standard-number"
+              label="Number"
+              type="number"
+              placeholder={"unlimited"}
+              InputLabelProps={{
+                shrink: true,
               }}
             />
           </Grid>
