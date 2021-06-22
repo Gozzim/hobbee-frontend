@@ -1,4 +1,5 @@
 import {
+  fetchUser,
   loginRequest,
   logoutRequest,
 } from "../../services/UserService";
@@ -22,6 +23,24 @@ export const login = createAsyncThunk(
   async ({ username, password }, thunkAPI) => {
     try {
       const result = await loginRequest(username, password);
+      return result;
+    } catch (e) {
+      switch (e.response.status) {
+        case 401:
+        case 404:
+          return thunkAPI.rejectWithValue("Incorrect username or password.");
+        default:
+          return thunkAPI.rejectWithValue(e.response.data.error);
+      }
+    }
+  }
+);
+
+export const authenticate = createAsyncThunk(
+  "user/auth",
+  async (_, thunkAPI) => {
+    try {
+      const result = await fetchUser();
       return result;
     } catch (e) {
       switch (e.response.status) {
@@ -60,6 +79,16 @@ const userSlice = createSlice({
       state.error = null;
     },
     [login.rejected]: (state, action) => {
+      state.isLoggedIn = false;
+      state.user = null;
+      state.error = action.payload;
+    },
+    [authenticate.fulfilled]: (state, action) => {
+      state.isLoggedIn = true;
+      state.user = action.payload;
+      state.error = null;
+    },
+    [authenticate.rejected]: (state, action) => {
       state.isLoggedIn = false;
       state.user = null;
       state.error = action.payload;
