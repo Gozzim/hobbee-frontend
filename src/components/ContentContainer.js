@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     marginRight: "15%",
     marginLeft: "15%",
-    height: "calc(100vh - 50px)",
+    height: "calc(100vh - 64px)",
     paddingTop: "40px",
   },
   wrapper: {
