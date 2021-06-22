@@ -54,3 +54,11 @@ creategroup-grid{
 .customizegroup-filename {
   padding-top: 20px;
 }
+.creategroup-padding{
+  padding-top: 35px;
+  padding-bottom: 15px;
+}
+.creategroup-radios{
+  display: flex;
+  flex-direction: row !important;
+}

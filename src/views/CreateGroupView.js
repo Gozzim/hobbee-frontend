@@ -25,7 +25,9 @@ export function CreateGroupView(props) {
       <div className={"creategroup-grid"}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
-            <Typography>What do you want to call your group?</Typography>
+            <Typography className={"creategroup-padding"}>
+              What do you want to call your group?
+            </Typography>
             <TextField
               label="e.g. Table Tennis at TUM"
               className=""
@@ -35,7 +37,9 @@ export function CreateGroupView(props) {
               size="small"
             />
 
-            <Typography>In what city will your activity take place?</Typography>
+            <Typography className={"creategroup-padding"}>
+              In what city will your activity take place?
+            </Typography>
 
             <TextField
               label="e.g. Munich, Germany"
@@ -46,10 +50,12 @@ export function CreateGroupView(props) {
               size="small"
             />
 
-            <Typography>Do you want to meet online or in real life?</Typography>
+            <Typography className={"creategroup-padding"}>
+              Do you want to meet online or in real life?
+            </Typography>
 
             <FormControl component="fieldset">
-              <RadioGroup aria-label="gender" name="gender1">
+              <RadioGroup className={"creategroup-radios"}>
                 <FormControlLabel
                   value="online"
                   control={<Radio />}
@@ -68,7 +74,7 @@ export function CreateGroupView(props) {
               </RadioGroup>
             </FormControl>
 
-            <Typography>
+            <Typography className={"creategroup-padding"}>
               Choose some tags, so that other users can find your group:
             </Typography>
 
