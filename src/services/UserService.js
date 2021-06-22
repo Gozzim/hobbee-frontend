@@ -1,48 +1,27 @@
-import axios from "./HttpService";
+import HttpService, { setToken } from "./HttpService";
 
 export class UserService {
   static baseURL() {
     return "http://localhost:4000/auth";
   }
+}
 
-  static register(user, pass, isAdmin) {
-    return new Promise((resolve, reject) => {
-      axios.post(
-        `${UserService.baseURL()}/register`,
-        {
-          username: user,
-          password: pass,
-          isAdmin: isAdmin,
-        },
-        function (data) {
-          resolve(data);
-        },
-        function (textStatus) {
-          reject(textStatus);
-        }
-      );
-    });
-  }
+async function processToken(token) {
+  setToken(token);
 
-  static login(user, pass) {
-    return new Promise((resolve, reject) => {
-      axios.post(
-        `${UserService.baseURL()}/login`,
-        {
-          username: user,
-          password: pass,
-        },
-        function (data) {
-          resolve(data);
-        },
-        function (textStatus) {
-          reject(textStatus);
-        }
-      );
-    });
-  }
+  return await fetchUser();
+}
 
-  static logout() {
-    window.localStorage.removeItem("jwtToken");
-  }
+export async function loginRequest(username, password) {
+  const resp = await HttpService.post(`${UserService.baseURL()}/login`, {
+    username: username,
+    password: password,
+  });
+  return await processToken(resp.data.token);
+}
+
+export async function fetchUser() {
+  const resp = await HttpService.get(`${UserService.baseURL()}/me`);
+  const user = { ...resp.data };
+  return user;
 }

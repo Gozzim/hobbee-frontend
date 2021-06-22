@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import { LoginComponent } from "../components/UserLoginComponent";
-
-import { login } from "../redux/actions";
+import { login } from "../redux/reducers/userReducer";
 
 /**
  * For user login
@@ -19,7 +18,7 @@ function UserLoginView(props) {
   }, [user, props.history]);
 
   const onLogin = (username, password) => {
-    props.dispatch(login(username, password));
+    props.dispatch(login({ username, password }));
   };
 
   const onCancel = () => {
