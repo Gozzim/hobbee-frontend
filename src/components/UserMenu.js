@@ -2,11 +2,11 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { logout } from "../redux/actions";
 import { Menu, MenuItem, Avatar, Divider } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
+import { logout } from "../redux/reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({
   menuitem: {
@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
 }));
+
 /**
  * Menu for user managment
  * @param {props} props

@@ -20,6 +20,11 @@ export async function loginRequest(username, password) {
   return await processToken(resp.data.token);
 }
 
+export async function logoutRequest() {
+  const resp = await HttpService.post(`${UserService.baseURL()}/logout`);
+  return resp;
+}
+
 export async function fetchUser() {
   const resp = await HttpService.get(`${UserService.baseURL()}/me`);
   const user = { ...resp.data };

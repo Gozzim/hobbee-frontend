@@ -1,5 +1,5 @@
 import axios from "axios";
-import { logout } from "../redux/actions";
+import { logout } from "../redux/reducers/userReducer";
 
 // Handling requests before they are sent
 axios.interceptors.request.use(

@@ -1,7 +1,9 @@
 import {
   loginRequest,
+  logoutRequest,
 } from "../../services/UserService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { setToken } from "../../services/HttpService";
 
 const initialState = {
   isLoggedIn: false,
@@ -33,10 +35,23 @@ export const login = createAsyncThunk(
   }
 );
 
+export const logout = () => async (dispatch) => {
+  const result = await logoutRequest();
+  if (result.status === 200) {
+    setToken(null);
+    dispatch(userSlice.actions.logout());
+  }
+};
+
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    logout: state => {
+      state.isLoggedIn = false;
+      state.user = null;
+      state.error = null;
+    },
   },
   extraReducers: {
     [login.fulfilled]: (state, action) => {
