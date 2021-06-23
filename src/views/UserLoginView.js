@@ -11,9 +11,20 @@ import { login } from "../redux/reducers/userReducer";
 function UserLoginView(props) {
   const user = useSelector((state) => state.user);
 
+  const onAfterLogin = () => {
+    let targetPath = "/";
+    try {
+      // get last visited site for redirect
+      targetPath = sessionStorage.getItem("last_visited");
+    } catch (e) {
+      // sessionStorage not supported
+    }
+    props.history.push(targetPath);
+  };
+
   useEffect(() => {
     if (user.user) {
-      props.history.push("/");
+      onAfterLogin();
     }
   }, [user, props.history]);
 
@@ -22,7 +33,7 @@ function UserLoginView(props) {
   };
 
   const onCancel = () => {
-    props.history.push("/");
+    onAfterLogin();
   };
 
   const onSignUp = () => {

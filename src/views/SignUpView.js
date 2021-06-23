@@ -14,7 +14,7 @@ function SignUpView(props) {
 
   useEffect(() => {
     if (user.user) {
-      props.history.push("/");
+      props.history.push("/profile");
     }
   }, [user, props.history]);
 

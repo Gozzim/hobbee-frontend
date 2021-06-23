@@ -31,6 +31,12 @@ function UserMenu(props) {
   });
 
   const onClickLogin = () => {
+    // store current site
+    try {
+      sessionStorage.setItem("last_visited", props.location.pathname);
+    } catch (e) {
+      // sessionStorage not supported
+    }
     // close this menu
     props.onClose();
     // navigate to the login page
