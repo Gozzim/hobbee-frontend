@@ -14,7 +14,6 @@ const initialState = {
 
 /*
  * TODO:
- *  - Correct error handling
  *  - Error not showing on second try
  */
 
@@ -23,7 +22,7 @@ export const login = createAsyncThunk(
   async ({ username, password }, thunkAPI) => {
     try {
       const result = await loginRequest(username, password);
-      return result;
+      return result.data;
     } catch (e) {
       switch (e.response.status) {
         case 401:
@@ -35,40 +34,19 @@ export const login = createAsyncThunk(
     }
   }
 );
-
-export const authenticate = createAsyncThunk(
-  "user/auth",
-  async (_, thunkAPI) => {
-    try {
-      const result = await fetchUser();
-      return result;
-    } catch (e) {
-      switch (e.response.status) {
-        case 401:
-        case 404:
-          return thunkAPI.rejectWithValue("Incorrect username or password.");
-        default:
-          return thunkAPI.rejectWithValue(e.response.data.error);
-      }
-    }
-  }
-);
-
-export const logout = () => async (dispatch) => {
-  const result = await logoutRequest();
-  if (result.status === 200) {
-    setToken(null);
-    dispatch(userSlice.actions.logout());
-  }
-};
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logout: state => {
+    logoutReducer: (state) => {
       state.isLoggedIn = false;
       state.user = null;
+      state.error = null;
+    },
+    authUserReducer: (state, action) => {
+      state.isLoggedIn = true;
+      state.user = action.payload;
       state.error = null;
     },
   },
@@ -83,17 +61,24 @@ const userSlice = createSlice({
       state.user = null;
       state.error = action.payload;
     },
-    [authenticate.fulfilled]: (state, action) => {
-      state.isLoggedIn = true;
-      state.user = action.payload;
-      state.error = null;
-    },
-    [authenticate.rejected]: (state, action) => {
-      state.isLoggedIn = false;
-      state.user = null;
-      state.error = action.payload;
-    },
   },
 });
+
+export const { logoutReducer, authUserReducer } = userSlice.actions;
+
+export const logout = () => async (dispatch) => {
+  await logoutRequest();
+  setToken(null);
+  dispatch(logoutReducer());
+};
+
+export const authUser = () => async (dispatch) => {
+  try {
+    const result = await fetchUser();
+    dispatch(authUserReducer(result.data));
+  } catch (e) {
+    setToken(null);
+  }
+};
 
 export default userSlice.reducer;

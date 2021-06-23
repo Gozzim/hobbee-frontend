@@ -6,12 +6,6 @@ export class UserService {
   }
 }
 
-async function processToken(token) {
-  setToken(token);
-
-  return await fetchUser();
-}
-
 export async function loginRequest(username, password) {
   const resp = await HttpService.post(`${UserService.baseURL()}/login`, {
     username: username,
@@ -27,6 +21,13 @@ export async function logoutRequest() {
 
 export async function fetchUser() {
   const resp = await HttpService.get(`${UserService.baseURL()}/me`);
-  const user = { ...resp.data };
+  // TODO: Token Refreshment
+  const user = { ...resp };
   return user;
+}
+
+async function processToken(token) {
+  setToken(token);
+
+  return await fetchUser();
 }
