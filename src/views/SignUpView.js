@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import { SignUpComponent } from "../components/SignUpComponent";
 
-import { register } from "../redux/actions";
+import { register } from "../redux/reducers/userReducer"
 
 /**
  * For register new users
@@ -18,8 +18,8 @@ function SignUpView(props) {
     }
   }, [user, props.history]);
 
-  const onRegister = (username, password, isAdmin) => {
-    props.dispatch(register(username, password, isAdmin));
+  const onRegister = (username, password) => {
+    props.dispatch(register(username, password));
   };
 
   const onCancel = () => {

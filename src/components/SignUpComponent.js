@@ -60,7 +60,7 @@ export function SignUpComponent(props) {
 
   const onRegister = (e) => {
     e.preventDefault();
-    props.onRegister(username, password, isAdmin);
+    props.onRegister(username, password);
   };
 
   const onChangeUsername = (e) => {

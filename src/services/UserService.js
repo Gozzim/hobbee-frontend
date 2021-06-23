@@ -6,6 +6,14 @@ export class UserService {
   }
 }
 
+export async function registrationRequest(username, password) {
+  const resp = await HttpService.post(`${UserService.baseURL()}/register`, {
+    username: username,
+    password: password,
+  });
+  return await processToken(resp.data.token);
+}
+
 export async function loginRequest(username, password) {
   const resp = await HttpService.post(`${UserService.baseURL()}/login`, {
     username: username,

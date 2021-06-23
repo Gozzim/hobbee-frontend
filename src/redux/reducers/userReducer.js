@@ -2,6 +2,7 @@ import {
   fetchUser,
   loginRequest,
   logoutRequest,
+  registrationRequest,
 } from "../../services/UserService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setToken } from "../../services/HttpService";
@@ -75,6 +76,15 @@ export const logout = () => async (dispatch) => {
 export const authUser = () => async (dispatch) => {
   try {
     const result = await fetchUser();
+    dispatch(authUserReducer(result.data));
+  } catch (e) {
+    setToken(null);
+  }
+};
+
+export const register = (username, password) => async (dispatch) => {
+  try {
+    const result = await registrationRequest(username, password);
     dispatch(authUserReducer(result.data));
   } catch (e) {
     setToken(null);
