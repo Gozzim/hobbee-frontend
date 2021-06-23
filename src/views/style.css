@@ -1,5 +1,3 @@
-/*@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');*/
-
 @font-face {
   font-family: "Roboto", sans-serif;
   font-display: swap;
@@ -12,4 +10,70 @@
   text-decoration: none;
   color: inherit;
   font-size: 16px;
+}
+.orange{
+  background-color: #E98F1C !important;
+}
+.yellow{
+  background-color: #FFCC00 !important;
+}
+.blue{
+  background-color: #1CE9E3 !important;
+}
+.smallcaps{
+  font-variant: small-caps;
+}
+.displayrow{
+  display: flex;
+}
+.border{
+  border-bottom: 1px solid #eee;
+}
+creategroup-grid{
+  padding-top: 60px;
+}
+.customizegroup-grid{
+  padding-top: 60px;
+  padding-bottom: 50px;
+}
+.imageIcon{
+  display: flex;
+  justify-content: center;
+  font-size: 200px;
+}
+.cardImage{
+  display: inline-block !important;
+  padding: 0px !important;
+}
+.selectImageText{
+  margin-top: -15px !important;
+}
+.customizegroup-file{
+  display: none;
+}
+.customizegroup-ButtonCard{
+  width: 100%;
+  height: 100%;
+}
+.customizegroup-avatare{
+  display: flex;
+}
+.customizegroup-avatar{
+  margin-top: 50px;
+  margin-right: 25px;
+}
+.customizegroup-filename {
+  padding-top: 20px;
+}
+.creategroup-padding{
+  padding-top: 35px;
+  padding-bottom: 15px;
+}
+.creategroup-radios{
+  display: flex;
+  flex-direction: row !important;
+}
+.creategroup-tags{
+  display: flex;
+  padding-bottom: 30px;
 }
