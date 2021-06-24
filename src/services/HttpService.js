@@ -47,6 +47,6 @@ export function getToken() {
   return window.localStorage.getItem("jwtToken");
 }
 
-//axios.defaults.baseURL = "/api/" // Requires changes in backend
+axios.defaults.baseURL = window.location.protocol + "//" +window.location.hostname + ":4000/api/" ;
 
 export default axios;

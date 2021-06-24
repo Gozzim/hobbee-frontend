@@ -1,13 +1,7 @@
 import HttpService, { setToken } from "./HttpService";
 
-export class UserService {
-  static baseURL() {
-    return "http://localhost:4000/auth";
-  }
-}
-
 export async function registrationRequest(username, password) {
-  const resp = await HttpService.post(`${UserService.baseURL()}/register`, {
+  const resp = await HttpService.post("auth/register", {
     username: username,
     password: password,
   });
@@ -15,7 +9,7 @@ export async function registrationRequest(username, password) {
 }
 
 export async function loginRequest(username, password) {
-  const resp = await HttpService.post(`${UserService.baseURL()}/login`, {
+  const resp = await HttpService.post("auth/login", {
     username: username,
     password: password,
   });
@@ -23,12 +17,12 @@ export async function loginRequest(username, password) {
 }
 
 export async function logoutRequest() {
-  const resp = await HttpService.post(`${UserService.baseURL()}/logout`);
+  const resp = await HttpService.post("auth/logout");
   return resp;
 }
 
 export async function fetchUser() {
-  const resp = await HttpService.get(`${UserService.baseURL()}/me`);
+  const resp = await HttpService.get("auth/me");
   // TODO: Token Refreshment
   const user = { ...resp };
   return user;
