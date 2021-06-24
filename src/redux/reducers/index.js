@@ -1,8 +1,9 @@
-import { combineReducers } from "redux";
-import { user } from "./userReducer";
+import userReducer from "./userReducer";
 import { entities } from "./entitiesReducer";
 
-export default combineReducers({
-    user,
-    entities,
-});
+// TODO: refactor reducer function names
+
+export const rootReducer = {
+  user: userReducer,
+  entities: entities,
+};

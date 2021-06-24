@@ -2,42 +2,52 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import { LoginComponent } from "../components/UserLoginComponent";
-
-import { login } from "../redux/actions";
+import { login } from "../redux/reducers/userReducer";
 
 /**
  * For user login
  * @param {props} props
  */
 function UserLoginView(props) {
-    const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
 
-    useEffect(() => {
-        if (user.user) {
-            props.history.push("/");
-        }
-    }, [user, props.history]);
+  const onAfterLogin = () => {
+    let targetPath = "/";
+    try {
+      // get last visited site for redirect
+      targetPath = sessionStorage.getItem("last_visited");
+    } catch (e) {
+      // sessionStorage not supported
+    }
+    props.history.push(targetPath);
+  };
 
-    const onLogin = (username, password) => {
-        props.dispatch(login(username, password));
-    };
+  useEffect(() => {
+    if (user.user) {
+      onAfterLogin();
+    }
+  }, [user, props.history]);
 
-    const onCancel = () => {
-        props.history.push("/");
-    };
+  const onLogin = (username, password) => {
+    props.dispatch(login({ username, password }));
+  };
 
-    const onSignUp = () => {
-        props.history.push("/register");
-    };
+  const onCancel = () => {
+    onAfterLogin();
+  };
 
-    return (
-        <LoginComponent
-            user={user}
-            onCancel={onCancel}
-            onLogin={onLogin}
-            onSignUp={onSignUp}
-        />
-    );
+  const onSignUp = () => {
+    props.history.push("/register");
+  };
+
+  return (
+    <LoginComponent
+      user={user}
+      onCancel={onCancel}
+      onLogin={onLogin}
+      onSignUp={onSignUp}
+    />
+  );
 }
 
 export default connect()(withRouter(UserLoginView));

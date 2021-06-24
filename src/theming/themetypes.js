@@ -1,4 +1,4 @@
 export const AppTheme = {
-    DARK: "dark",
-    LIGHT: "light",
+  DARK: "dark",
+  LIGHT: "light",
 };

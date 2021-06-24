@@ -1,48 +1,41 @@
-import { HttpService } from "./HttpService";
+import HttpService, { setToken } from "./HttpService";
 
 export class UserService {
-    static baseURL() {
-        return "http://localhost:4000/auth";
-    }
+  static baseURL() {
+    return "http://localhost:4000/auth";
+  }
+}
 
-    static register(user, pass, isAdmin) {
-        return new Promise((resolve, reject) => {
-            HttpService.post(
-                `${UserService.baseURL()}/register`,
-                {
-                    username: user,
-                    password: pass,
-                    isAdmin: isAdmin,
-                },
-                function (data) {
-                    resolve(data);
-                },
-                function (textStatus) {
-                    reject(textStatus);
-                }
-            );
-        });
-    }
+export async function registrationRequest(username, password) {
+  const resp = await HttpService.post(`${UserService.baseURL()}/register`, {
+    username: username,
+    password: password,
+  });
+  return await processToken(resp.data.token);
+}
 
-    static login(user, pass) {
-        return new Promise((resolve, reject) => {
-            HttpService.post(
-                `${UserService.baseURL()}/login`,
-                {
-                    username: user,
-                    password: pass,
-                },
-                function (data) {
-                    resolve(data);
-                },
-                function (textStatus) {
-                    reject(textStatus);
-                }
-            );
-        });
-    }
+export async function loginRequest(username, password) {
+  const resp = await HttpService.post(`${UserService.baseURL()}/login`, {
+    username: username,
+    password: password,
+  });
+  return await processToken(resp.data.token);
+}
 
-    static logout() {
-        window.localStorage.removeItem("jwtToken");
-    }
+export async function logoutRequest() {
+  const resp = await HttpService.post(`${UserService.baseURL()}/logout`);
+  return resp;
+}
+
+export async function fetchUser() {
+  const resp = await HttpService.get(`${UserService.baseURL()}/me`);
+  // TODO: Token Refreshment
+  const user = { ...resp };
+  return user;
+}
+
+async function processToken(token) {
+  setToken(token);
+
+  return await fetchUser();
 }
