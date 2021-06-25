@@ -21,7 +21,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 export function CreateGroupView(props) {
   const [tags, setTags] = React.useState([]);
-  const [autocompleteValue, setAutocompleteValue] = React.useState("");
+  const [autocompleteValue, setAutocompleteValue] = React.useState(null);
   console.log(tags);
   console.log(autocompleteValue);
 
@@ -99,22 +99,30 @@ export function CreateGroupView(props) {
                 value={autocompleteValue}
                 style={{ width: 300 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Combo box" variant="outlined" />
+                  <TextField {...params} variant="outlined" />
                 )}
               />
               <IconButton
                 onClick={() => {
-                  setTags([...tags, autocompleteValue]);
+                  if (
+                    tags.includes(autocompleteValue) ||
+                    autocompleteValue === null
+                  ) {
+                  } else {
+                    setTags([...tags, autocompleteValue]);
+                  }
                 }}
               >
                 <AddIcon />
               </IconButton>
             </div>
-            {tags.map((x) => {
-              return <TagComponent title={x} key={x} />;
-            })}
+            <div className={"creategroup-tags"}>
+              {tags.map((x) => {
+                return <TagComponent title={x} key={x} />;
+              })}
+            </div>
 
-            <div>
+            <div className={"creategroup-continuebutton"}>
               <Link className={""} to={"/create-group/customize-group"}>
                 <Button type="button" variant="contained">
                   CONTINUE

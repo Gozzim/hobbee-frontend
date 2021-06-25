@@ -76,4 +76,19 @@ creategroup-grid{
 .creategroup-tags{
   display: flex;
   padding-bottom: 30px;
+  flex-wrap: wrap;
+}
+.creategroup-tags{
+  display: flex;
+}
+.creategroup-continuebutton{
+  display:flex;
+  justify-content: flex-end;
+  padding-top: 30px;
+}
+.customizegroup-bottombuttons{
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
 }

@@ -30,6 +30,7 @@ import {
   CardContent,
   Avatar,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 export function CustomizeGroupView(props) {
   const [selectedDate, setSelectedDate] = React.useState(
@@ -307,6 +308,17 @@ export function CustomizeGroupView(props) {
             variant="outlined"
             fullWidth
           />
+          <div className={"customizegroup-bottombuttons"}>
+            <Link className={""} to={"/create-group"}>
+              <Button type="button" variant="contained">
+                Back
+              </Button>
+            </Link>
+
+            <Button type="button" variant="contained">
+              Create
+            </Button>
+          </div>
         </Grid>
       </div>
     </div>
