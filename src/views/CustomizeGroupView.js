@@ -33,6 +33,7 @@ import {
 import { Link } from "react-router-dom";
 
 export function CustomizeGroupView(props) {
+  const [participants, setParticipants] = React.useState("");
   const [selectedDate, setSelectedDate] = React.useState(
     new Date("2021-07-25T21:11:54")
   );
@@ -246,12 +247,23 @@ export function CustomizeGroupView(props) {
           <Grid item xs={6} className={"border"}>
             <TextField
               id="standard-number"
-              label="Number"
               type="number"
               placeholder={"unlimited"}
               InputLabelProps={{
                 shrink: true,
               }}
+              onChange={(event) => {
+                if (event.target.value < 1) {
+                  setParticipants("");
+                } else if (event.target.value === "1" && participants === "2") {
+                  setParticipants("");
+                } else if (event.target.value === "1") {
+                  setParticipants("2");
+                } else {
+                  setParticipants(event.target.value);
+                }
+              }}
+              value={participants}
             />
           </Grid>
           <Grid item xs={6} className={"border"}>
