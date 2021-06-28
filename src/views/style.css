@@ -2,7 +2,7 @@
   font-family: "Roboto", sans-serif;
   font-display: swap;
   src: url("https://fonts.gstatic.com"),
-    url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+  url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 }
 
 .linkDefault {
@@ -28,9 +28,6 @@
 }
 .border{
   border-bottom: 1px solid #eee;
-}
-creategroup-grid{
-  padding-top: 60px;
 }
 .customizegroup-grid{
   padding-top: 60px;
