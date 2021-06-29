@@ -12,6 +12,7 @@ import { PrivacyPolicy } from "./views/PrivacyPolicy";
 import { ToS } from "./views/TermsOfService";
 import { CustomizeGroupView } from "./views/CustomizeGroupView";
 import { ProfileView } from "./views/ProfileView";
+import { GroupPageView } from "./views/GroupPageView";
 
 // routes within the movie database example app
 // used for routing
@@ -48,6 +49,10 @@ export const routes = [
   {
     path: "/recommended",
     component: RecommendedView,
+  },
+  {
+    path: "/group-page",
+    component: GroupPageView,
   },
   {
     path: "/my-groups",
