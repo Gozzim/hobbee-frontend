@@ -6,12 +6,9 @@ import {
   Divider,
   ListItem,
   Typography,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
 } from "@material-ui/core";
 import { connect } from "react-redux";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Notification } from "./Notification";
 
 /*
  * TODO:
@@ -63,17 +60,15 @@ function NotificationMenu(props) {
         horizontal: "right",
       }}
     >
-      <ListItem key={"Noty"} button dense >
-        <ListItemText
-            primary={"Hobb.ee Meetup"}
-            secondary={"Hobb.ee is awesome!"}
-        />
-        <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
+      {props.notifications.map((notification) => (
+          <Notification
+              msgId={notification._id}
+              groupName={/*"TODO"*/notification.group}
+              msgType={notification.notificationType}
+              message={notification.content}
+              read={notification.read}
+          />
+      ))}
       <Divider key="divider" />
       <ListItem button>
         <Typography component="span" align="right" variant="body2">
