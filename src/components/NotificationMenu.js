@@ -15,7 +15,6 @@ import { Notification } from "./Notification";
  *  - Map group to name
  *  - Mark as read button functionality
  *  - Mark all as read button functionality
- *  - Notification Type indicator
  *  - Notification Routing
  *  - Filtering by read and unread
  */

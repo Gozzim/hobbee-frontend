@@ -2,12 +2,23 @@ import React from "react";
 import {
   IconButton,
   ListItem,
+  ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
+import AlarmIcon from "@material-ui/icons/Alarm";
+import AssistantIcon from "@material-ui/icons/Assistant";
+import ChatIcon from "@material-ui/icons/Chat";
+import InfoIcon from "@material-ui/icons/Info";
+
+const NotificationTypes = {
+  CHAT: "Chat",
+  REMINDER: "Reminder",
+  FEEDBACK: "Feedback",
+};
 
 const useStyles = makeStyles(() => ({
   notification: {
@@ -22,12 +33,23 @@ const useStyles = makeStyles(() => ({
 export function Notification(props) {
   const classes = useStyles();
 
+  const getNotificationIcon = (msgType) => {
+    switch (msgType) {
+      case NotificationTypes.CHAT:
+        return <ChatIcon />;
+      case NotificationTypes.REMINDER:
+        return <AlarmIcon />;
+      case NotificationTypes.FEEDBACK:
+        return <AssistantIcon />;
+      default:
+        return <InfoIcon />;
+    }
+  };
+
   return (
     <ListItem key={props.msgId} button dense className={classes.notification}>
-      <ListItemText
-          primary={props.groupName}
-          secondary={props.message}
-      />
+      <ListItemIcon>{getNotificationIcon(props.msgType)}</ListItemIcon>
+      <ListItemText primary={props.groupName} secondary={props.message} />
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="delete">
           <DeleteIcon />
