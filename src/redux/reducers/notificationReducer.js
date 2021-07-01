@@ -1,14 +1,18 @@
-import {getUserNotifications} from "../../services/NotificationService";
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import { fetchNotificationRequest } from "../../services/NotificationService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-const initialState = {
-    notifications: {},
-    error: false,
-}
+const initialState = [];
 
-export const fetchNotifications = createAsyncThunk('data/Notifications', () => async dispatch => {
-    dispatch(getUserNotifications());
-});
+export const fetchNotifications = createAsyncThunk(
+  "notifications/fetchAll",
+  async (_, { getState }) => {
+    const currentNotifications = getState().notification;
+    const [last] = currentNotifications.slice(-1);
+    const lastUpdate = last ? last.date : (new Date(0)).toISOString();
+    const result = await fetchNotificationRequest(lastUpdate);
+    return result;
+  }
+);
 
 const notificationSlice = createSlice({
     name: 'notification',
@@ -17,12 +21,7 @@ const notificationSlice = createSlice({
     },
     extraReducers: {
         [fetchNotifications.fulfilled]: (state, action) => {
-            state.notifications = action.data;
-            state.error = false;
-        },
-        [fetchNotifications.rejected]: (state, action) => {
-            state.notifications = action.data;
-            state.error = true;
+            state.push(...action.payload);
         },
     }
 });

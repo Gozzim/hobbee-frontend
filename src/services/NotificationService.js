@@ -1,15 +1,6 @@
-import { HttpService } from "./HttpService";
+import HttpService from "./HttpService";
 
-/*
- * TODO:
- *  - Count function
- */
-
-export async function getUserNotifications() {
-    try {
-        const resp = await HttpService.get("/data/Notifications");
-        return { success: true, data: resp.content };
-    } catch (error) {
-        return { success: false, data: error.message };
-    }
+export async function fetchNotificationRequest(date) {
+        const resp = await HttpService.get("/storage/notifications?since=" + date);
+        return resp.data;
 }
