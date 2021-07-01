@@ -7,15 +7,14 @@ import {
   IconButton,
   Toolbar,
   Typography,
-  Badge
 } from "@material-ui/core";
 import UserMenu from "./UserMenu";
 import NotificationMenu from "./NotificationMenu";
 import MenuIcon from "@material-ui/icons/AccountCircle";
 import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
-import NotificationIcon from "@material-ui/icons/Notifications";
 import HobbeeIcon from "../assets/hobbee_white.png";
-import { getNotificationAsync } from "../redux/reducers/notificationReducer";
+import { useSelector } from "react-redux";
+import { NotificationBell } from "./NotificationBell";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -55,10 +54,11 @@ const useStyles = makeStyles((theme) => ({
  */
 export function Header(props) {
   const classes = useStyles();
+  const user = useSelector((state) => {return state.user});
+  const notifications = useSelector((state) => {return state.notification});
 
   const [userMenuAnchor, setUserMenuAnchor] = React.useState(null);
   const [notificationMenuAnchor, setNotificationMenuAnchor] = React.useState(null);
-  const [numNotifications, setNumNotifications] = React.useState(3);
 
   return (
     <AppBar position="sticky">
@@ -71,7 +71,7 @@ export function Header(props) {
         open={Boolean(notificationMenuAnchor)}
         anchor={notificationMenuAnchor}
         onClose={() => setNotificationMenuAnchor(null)}
-      />
+        notifications={notifications}/>
       <Toolbar className={classes.toolbar}>
         <Link className={"linkDefault"} to={"/"}>
           <img src={HobbeeIcon} height={55} />
@@ -102,17 +102,13 @@ export function Header(props) {
             <PremiumIcon />
           </IconButton>
         </Link>
-        <IconButton
-          onClick={(event) => setNotificationMenuAnchor(event.currentTarget)}
-          color="inherit"
-        >
-          <Badge
-            badgeContent={numNotifications}
-            color="secondary"
-            >
-              <NotificationIcon />
-          </Badge>
-        </IconButton>
+        {user.isLoggedIn && (
+                    <NotificationBell
+          clickAnchorSet={(event) => setNotificationMenuAnchor(event.currentTarget)}
+          notificationCount={notifications.length}
+               />
+          )
+        }
         <IconButton
           onClick={(event) => setUserMenuAnchor(event.currentTarget)}
           color="inherit"
