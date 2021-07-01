@@ -56,7 +56,7 @@ function NotificationMenu(props) {
     >
       {props.notifications.map((notification) => (
         <Notification
-          msgId={notification._id}
+          key={notification._id}
           groupName={/*"TODO"*/ notification.group}
           msgType={notification.notificationType}
           message={notification.content}

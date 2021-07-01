@@ -47,7 +47,7 @@ export function Notification(props) {
   };
 
   return (
-    <ListItem key={props.msgId} button dense className={classes.notification}>
+    <ListItem button dense className={classes.notification}>
       <ListItemIcon>{getNotificationIcon(props.msgType)}</ListItemIcon>
       <ListItemText primary={props.groupName} secondary={props.message} />
       <ListItemSecondaryAction>
@@ -61,7 +61,6 @@ export function Notification(props) {
 
 // attributes of props and their type
 Notification.propTypes = {
-  msgId: PropTypes.number.isRequired,
   groupName: PropTypes.string.isRequired,
   msgType: PropTypes.string,
   message: PropTypes.string,
