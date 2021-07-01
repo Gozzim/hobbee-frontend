@@ -1,12 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import {
-  Menu,
-  Divider,
-  ListItem,
-  Typography,
-} from "@material-ui/core";
+import { Menu, Divider, ListItem, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import { Notification } from "./Notification";
 
@@ -30,8 +25,8 @@ const NotificationTypes = {
  * @param {props} props
  */
 function NotificationMenu(props) {
-
-  const onClickNotification = (notificationType) => { //TODO
+  const onClickNotification = (notificationType) => {
+    //TODO
     props.onClose();
 
     switch (notificationType) {
@@ -60,13 +55,13 @@ function NotificationMenu(props) {
       }}
     >
       {props.notifications.map((notification) => (
-          <Notification
-              msgId={notification._id}
-              groupName={/*"TODO"*/notification.group}
-              msgType={notification.notificationType}
-              message={notification.content}
-              read={notification.read}
-          />
+        <Notification
+          msgId={notification._id}
+          groupName={/*"TODO"*/ notification.group}
+          msgType={notification.notificationType}
+          message={notification.content}
+          read={notification.read}
+        />
       ))}
       <Divider key="divider" />
       <ListItem button>

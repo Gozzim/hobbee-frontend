@@ -1,6 +1,6 @@
-import HttpService from "./HttpService";
+import HttpService from "./TestHttpService";
 
 export async function fetchNotificationRequest(date) {
-        const resp = await HttpService.get("/storage/notifications?since=" + date);
-        return resp.data;
+  const resp = await HttpService.get("/storage/notifications?since=" + date);
+  return resp.data;
 }

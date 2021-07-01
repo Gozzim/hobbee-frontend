@@ -6,11 +6,11 @@ import { useDispatch } from "react-redux";
 import { fetchNotifications } from "../redux/reducers/notificationReducer";
 
 export function NotificationBell(props) {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchNotifications())
-    }, []);
+  useEffect(() => {
+    dispatch(fetchNotifications());
+  }, []);
 
   return (
     <IconButton onClick={props.clickAnchorSet} color="inherit">
