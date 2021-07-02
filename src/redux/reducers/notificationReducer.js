@@ -1,18 +1,18 @@
-import { getUserNotifications } from "../../services/NotificationService";
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import {getUserNotifications} from "../../services/NotificationService";
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 
-const defaultState = {
-    notifications: [],
-    error: null,
+const initialState = {
+    notifications: {},
+    error: false,
 }
 
-export const fetchNotifications = createAsyncThunk('users/fetchUsers', () => async dispatch => {
+export const fetchNotifications = createAsyncThunk('data/Notifications', () => async dispatch => {
     dispatch(getUserNotifications());
 });
 
 const notificationSlice = createSlice({
     name: 'notification',
-    defaultState,
+    initialState,
     reducers: {
     },
     extraReducers: {
