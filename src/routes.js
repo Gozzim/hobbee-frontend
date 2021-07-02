@@ -10,7 +10,6 @@ import { MyGroupsView } from "./views/MyGroupsView";
 import { Imprint } from "./views/Imprint";
 import { PrivacyPolicy } from "./views/PrivacyPolicy";
 import { ToS } from "./views/TermsOfService";
-import { CustomizeGroupView } from "./views/CustomizeGroupView";
 import { ProfileView } from "./views/ProfileView";
 
 // routes within the movie database example app
@@ -20,10 +19,6 @@ export const routes = [
   {
     path: "/profile",
     component: ProfileView,
-  },
-  {
-    path: "/create-group/customize-group",
-    component: CustomizeGroupView,
   },
   {
     path: "/login",

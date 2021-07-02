@@ -2,7 +2,7 @@
   font-family: "Roboto", sans-serif;
   font-display: swap;
   src: url("https://fonts.gstatic.com"),
-    url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+  url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 }
 
 .linkDefault {
@@ -28,9 +28,6 @@
 }
 .border{
   border-bottom: 1px solid #eee;
-}
-creategroup-grid{
-  padding-top: 60px;
 }
 .customizegroup-grid{
   padding-top: 60px;
@@ -76,4 +73,19 @@ creategroup-grid{
 .creategroup-tags{
   display: flex;
   padding-bottom: 30px;
+  flex-wrap: wrap;
+}
+.creategroup-tags{
+  display: flex;
+}
+.creategroup-continuebutton{
+  display:flex;
+  justify-content: flex-end;
+  padding-top: 30px;
+}
+.customizegroup-bottombuttons{
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
 }
