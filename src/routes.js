@@ -1,6 +1,7 @@
 import React from "react";
 import UserLoginView from "./views/UserLoginView";
 import SignUpView from "./views/SignUpView";
+import { CreateGroupView } from "./views/CreateGroupView";
 import { HomeView } from "./views/HomeView";
 import { InMyAreaView } from "./views/InMyAreaView";
 import { PremiumView } from "./views/PremiumView";
@@ -9,12 +10,16 @@ import { MyGroupsView } from "./views/MyGroupsView";
 import { Imprint } from "./views/Imprint";
 import { PrivacyPolicy } from "./views/PrivacyPolicy";
 import { ToS } from "./views/TermsOfService";
-import { CreateGroupView } from "./views/CreateGroupView";
+import { ProfileView } from "./views/ProfileView";
 
 // routes within the movie database example app
 // used for routing
 
 export const routes = [
+  {
+    path: "/profile",
+    component: ProfileView,
+  },
   {
     path: "/login",
     component: UserLoginView,
