@@ -24,7 +24,7 @@ export function App() {
 
   // set document title
   useEffect(() => {
-    document.title = "Movie Database App";
+    document.title = "Hobb.ee";
     const token = getToken();
     if (token) {
       setToken(token);
