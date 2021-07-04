@@ -1,8 +1,6 @@
-import { connect } from "react-redux";
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import HobbeeIcon from "../assets/bee_cream.png";
@@ -10,9 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import { GroupComponent } from "../components/GroupComponent";
 import { GroupComponentVertical } from "../components/GroupComponentVertical";
 import { TagComponent } from "../components/TagComponent";
-import { Autocomplete } from "@material-ui/lab";
-import AddIcon from "@material-ui/icons/Add";
-import { useTags } from "../hooks/useTags";
+import { TagAutocomplete } from "../components/TagAutocomplete";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function ProfileView(props) {
-  const hobbies = useTags();
   const classes = useStyles();
 
   const name = "Jaina Jainason";
@@ -45,7 +40,6 @@ export function ProfileView(props) {
   const mail = "jaina@gmail.com";
 
   const [tags, setTags] = React.useState([]);
-  const [autocompleteValue, setAutocompleteValue] = React.useState("");
 
   return (
     <div className={classes.root}>
@@ -104,33 +98,16 @@ export function ProfileView(props) {
 
       <Grid container spacing={2}>
         {tags.map((x) => {
-          return <TagComponent title={x} key={x} />;
+          return <TagComponent id={x} key={x} />;
         })}
 
         <Grid item>
-          <div className={"creategroup-tags"}>
-            <Autocomplete
-              id="combo-box-demo"
-              options={hobbies.map((x) => {
-                return x.title;
-              })}
-              onChange={(event, autocompleteValue) =>
-                setAutocompleteValue(autocompleteValue)
-              }
-              value={autocompleteValue}
-              style={{ width: 200 }}
-              renderInput={(params) => (
-                <TextField {...params} label="Combo box" variant="outlined" />
-              )}
-            />
-            <IconButton
-              onClick={() => {
-                setTags([...tags, autocompleteValue]);
-              }}
-            >
-              <AddIcon />
-            </IconButton>
-          </div>
+          <TagAutocomplete
+            onChange={(tags) => {
+              setTags(tags);
+            }}
+            value={tags}
+          />
         </Grid>
       </Grid>
 

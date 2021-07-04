@@ -1,27 +1,19 @@
 import React from "react";
 import { TagComponent } from "../../components/TagComponent";
 import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
-  FormControlLabel,
-  FormControl,
-  RadioGroup,
-  Radio,
-  IconButton,
 } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
-import AddIcon from "@material-ui/icons/Add";
-import { useTags } from "../../hooks/useTags";
+import { TagAutocomplete } from "../../components/TagAutocomplete";
 
 export function CreateGroup(props) {
-  const [autocompleteValue, setAutocompleteValue] = React.useState(null);
-
-  const hobbies = useTags();
-
   return (
     <>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
-        {/* component (the semantic): how the heading is rendered; variant: how the heading looks */}
         Create Group
       </Typography>
       <Typography className={"creategroup-padding"}>
@@ -94,37 +86,19 @@ export function CreateGroup(props) {
         Choose some tags, so that other users can find your group:
       </Typography>
 
-      <div className={"creategroup-tags"}>
-        <Autocomplete
-          id="combo-box-demo"
-          options={hobbies.map((x) => {
-            return x.title;
-          })}
-          onChange={(event, autoValue) => setAutocompleteValue(autoValue)}
-          value={autocompleteValue}
-          style={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} variant="outlined" />}
-        />
-        <IconButton
-          onClick={() => {
-            if (
-              props.state.tags.includes(autocompleteValue) ||
-              autocompleteValue === null
-            ) {
-            } else {
-              props.dispatch({
-                type: "TAGS",
-                tags: [...props.state.tags, autocompleteValue],
-              });
-            }
-          }}
-        >
-          <AddIcon />
-        </IconButton>
-      </div>
+      <TagAutocomplete
+        onChange={(tags) => {
+          props.dispatch({
+            type: "TAGS",
+            tags: tags,
+          });
+        }}
+        value={props.state.tags}
+      />
+
       <div className={"creategroup-tags"}>
         {props.state.tags.map((x) => {
-          return <TagComponent title={x} key={x} />;
+          return <TagComponent id={x} key={x} />;
         })}
       </div>
     </>

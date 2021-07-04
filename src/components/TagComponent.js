@@ -5,7 +5,7 @@ import { useTags } from "../hooks/useTags";
 export function TagComponent(props) {
   const hobbies = useTags();
   const index = hobbies.findIndex((x) => {
-    return x.title === props.title;
+    return x._id === props.id;
   });
   const colors = ["orange", "yellow", "blue"];
   const colorindex = index % colors.length;
@@ -17,7 +17,11 @@ export function TagComponent(props) {
 
   return (
     <div>
-      <Chip label={props.title} onDelete={handleDelete} className={color} />
+      <Chip
+        label={hobbies[index].title}
+        onDelete={handleDelete}
+        className={color}
+      />
     </div>
   );
 }
