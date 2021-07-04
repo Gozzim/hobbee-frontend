@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import MUILink from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import ExitIcon from "@material-ui/icons/ExitToApp";
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import { Button } from "@material-ui/core";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -51,7 +55,6 @@ function handleClick(event) {
 
 export function PremiumView(props) {
   const classes = useStyles();
-  const [overview, setOverview] = useState(false);
 
   return (
     <div>
@@ -69,7 +72,7 @@ export function PremiumView(props) {
       <div className={classes.pageContent}>
         <Typography
           variant="h4"
-          style={{ textAlign: "center", marginBottom: "50px" }}
+          style={{ textAlign: "center", marginBottom: "30px" }}
         >
           Hobb.ee PREMIUM
         </Typography>
@@ -81,39 +84,42 @@ export function PremiumView(props) {
           }}
         >
           <div className={classes.perkBox}>
-            <ExitIcon
+            <NotInterestedIcon
               style={{ margin: "30px", marginBottom: "15px", fontSize: "5rem" }}
             />
             <Typography variant="h6">Zero Ads</Typography>
           </div>
           <div className={classes.perkBox}>
-            <ExitIcon
-              style={{ margin: "30px", marginBottom: "15px", fontSize: "5rem" }}
+            <AllInclusiveIcon
+              style={{ margin: "30px", marginBottom: "0px", fontSize: "5rem" }}
             />
-            <Typography variant="h6">Zero Ads</Typography>
+            <Typography variant="h6">Unlimited</Typography>
+            <Typography variant="h6">Groups</Typography>
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-around" }}>
           <div className={classes.perkBox}>
-            <ExitIcon
-              style={{ margin: "30px", marginBottom: "15px", fontSize: "5rem" }}
+            <TrendingUpIcon
+              style={{ margin: "30px", marginBottom: "0px", fontSize: "5rem" }}
             />
-            <Typography variant="h6">Zero Ads</Typography>
+            <Typography variant="h6">Boost</Typography>
+            <Typography variant="h6">Your Groups</Typography>
           </div>
           <div className={classes.perkBox}>
-            <ExitIcon
+            <FavoriteIcon
               style={{ margin: "30px", marginBottom: "15px", fontSize: "5rem" }}
             />
-            <Typography variant="h6">Zero Ads</Typography>
+            <Typography variant="h6">Support Us</Typography>
           </div>
         </div>
-        <Button
-          className={classes.choosePlanButton}
-          type="button"
-          onClick={() => setOverview(true)}
-        >
-          JOIN GROUP
-        </Button>
+        <Link className={"linkDefault"} to={"/premium/payment-plan"}>
+          <Button
+              className={classes.choosePlanButton}
+              type="button"
+          >
+            CHOOSE YOUR PAYMENT PLAN
+          </Button>
+        </Link>
       </div>
     </div>
   );
