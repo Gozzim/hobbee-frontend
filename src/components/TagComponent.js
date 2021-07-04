@@ -21,6 +21,7 @@ export function TagComponent(props) {
   const colors = ["orange", "yellow", "blue"];
   const colorindex = index % colors.length;
   const color = colors[colorindex];
+  const hideDeleteIcon = props.hideDeleteIcon;
 
   const handleDelete = () => {
     console.info("You clicked the delete icon.");
@@ -28,7 +29,7 @@ export function TagComponent(props) {
 
   return (
     <div className={classes.root}>
-      <Chip label={props.title} onDelete={handleDelete} className={color} />
+      <Chip label={props.title} onDelete={hideDeleteIcon ? undefined : handleDelete} className={color} />
     </div>
   );
 }

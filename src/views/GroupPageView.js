@@ -13,6 +13,7 @@ import GroupIcon from "@material-ui/icons/PeopleAlt";
 import { Button, IconButton } from "@material-ui/core";
 import { Chat } from "../components/Chat";
 import ExitIcon from "@material-ui/icons/ExitToApp";
+import { TagComponent } from "../components/TagComponent";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -85,6 +86,7 @@ function handleClick(event) {
 export function GroupPageView(props) {
   const classes = useStyles();
   const [joined, setJoined] = useState(false);
+  const tags = ["Sewing","Crafting","Cosplay"]
 
   if (joined) {
     return (
@@ -152,11 +154,17 @@ export function GroupPageView(props) {
                 </Typography>
               </div>
             </div>
+            <div style={{display: "flex"}}>
+              {tags.map((x) => {
+                return <TagComponent title={x} key={x} hideDeleteIcon={true} />;
+              })}
+            </div>
           </div>
           <div className={classes.chat}>
             <Chat />
           </div>
         </div>
+
         <div style={{ fontSize: "17px" }}>
           <p>
             Failure to comply will result in disqualification. Lorem ipsum dolor
@@ -238,6 +246,11 @@ export function GroupPageView(props) {
               JOIN GROUP
             </Button>
           </div>
+        </div>
+        <div style={{display: "flex"}}>
+          {tags.map((x) => {
+            return <TagComponent title={x} key={x} hideDeleteIcon={true} />;
+          })}
         </div>
         <div style={{ fontSize: "17px" }}>
           <p>

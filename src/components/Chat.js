@@ -4,21 +4,6 @@ import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  contentContainerRoot: {
-    flexWrap: "wrap",
-    marginRight: "15%",
-    marginLeft: "15%",
-    height: "calc(100vh - 50px)",
-  },
-  wrapper: {
-    height: "100%",
-    width: "100%",
-    flexWrap: "nowrap",
-    flex: "1 1 auto",
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-  },
   inputField: {
     "& > *": {
       margin: theme.spacing(1),
@@ -29,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   chatField: {
     backgroundColor: "lightblue",
     width: "100%",
-    height: "500px",
+    height: "560px",
   },
   messageButtonDiv: {
     //flex: 1,
