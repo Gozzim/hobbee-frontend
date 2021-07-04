@@ -11,21 +11,12 @@ import {
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import AddIcon from "@material-ui/icons/Add";
-import { fetchTags } from "../../services/TagService";
+import { useTags } from "../../hooks/useTags";
 
 export function CreateGroup(props) {
   const [autocompleteValue, setAutocompleteValue] = React.useState(null);
-  const [hobbies, setHobbies] = React.useState([]);
 
-  React.useEffect(() => {
-    // will be run once
-    const exec = async () => {
-      const tags = await fetchTags();
-      setHobbies(tags);
-      console.log(tags);
-    };
-    exec();
-  }, []);
+  const hobbies = useTags();
 
   return (
     <>

@@ -11,8 +11,8 @@ import { GroupComponent } from "../components/GroupComponent";
 import { GroupComponentVertical } from "../components/GroupComponentVertical";
 import { TagComponent } from "../components/TagComponent";
 import { Autocomplete } from "@material-ui/lab";
-import hobbies from "../assets/hobbies.json";
 import AddIcon from "@material-ui/icons/Add";
+import { useTags } from "../hooks/useTags";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function ProfileView(props) {
+  const hobbies = useTags();
   const classes = useStyles();
 
   const name = "Jaina Jainason";
