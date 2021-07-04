@@ -1,13 +1,6 @@
 import React from "react";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  Darkroom,
-  Canvas,
-  History,
-  Toolbar,
-  FilePicker,
-  CropMenu,
-} from "react-darkroom";
+import { Darkroom, Canvas } from "react-darkroom";
 import ImageIcon from "@material-ui/icons/Image";
 import LocalCafeIcon from "@material-ui/icons/LocalCafe";
 import DesktopMacIcon from "@material-ui/icons/DesktopMac";
@@ -19,35 +12,17 @@ import {
 } from "@material-ui/pickers";
 import {
   Grid,
-  Slider,
-  Paper,
   Button,
   TextField,
   Typography,
-  FormControlLabel,
-  Checkbox,
   Card,
   CardContent,
   Avatar,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import { formatISO } from "date-fns";
 
 export function CustomizeGroup(props) {
-  const [participants, setParticipants] = React.useState("");
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date("2021-07-25T21:11:54")
-  );
   const fileInput = React.useRef();
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  let hasFile = false;
-
-  function onFileChange() {}
-
   return (
     <div>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>

@@ -1,25 +1,31 @@
 import React from "react";
 import { TagComponent } from "../../components/TagComponent";
 import {
-  Paper,
-  Button,
   TextField,
   Typography,
   FormControlLabel,
-  Checkbox,
-  FormLabel,
   FormControl,
   RadioGroup,
   Radio,
   IconButton,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import { Autocomplete } from "@material-ui/lab";
-import hobbies from "../../assets/hobbies.json";
 import AddIcon from "@material-ui/icons/Add";
+import { fetchTags } from "../../services/TagService";
 
 export function CreateGroup(props) {
   const [autocompleteValue, setAutocompleteValue] = React.useState(null);
+  const [hobbies, setHobbies] = React.useState([]);
+
+  React.useEffect(() => {
+    // will be run once
+    const exec = async () => {
+      const tags = await fetchTags();
+      setHobbies(tags);
+      console.log(tags);
+    };
+    exec();
+  }, []);
 
   return (
     <>
@@ -103,9 +109,7 @@ export function CreateGroup(props) {
           options={hobbies.map((x) => {
             return x.title;
           })}
-          onChange={(event, autocompleteValue) =>
-            setAutocompleteValue(autocompleteValue)
-          }
+          onChange={(event, autoValue) => setAutocompleteValue(autoValue)}
           value={autocompleteValue}
           style={{ width: 300 }}
           renderInput={(params) => <TextField {...params} variant="outlined" />}

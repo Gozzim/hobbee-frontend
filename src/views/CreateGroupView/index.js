@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Grid } from "@material-ui/core";
 import { CreateGroup } from "./CreateGroup";
 import { CustomizeGroup } from "./CustomizeGroup";
+import { createRequest } from "../../services/GroupService";
 
 const initialState = {
   formStep: 0,
@@ -80,7 +81,6 @@ function reducer(state, action) {
 
 export function CreateGroupView() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  console.log(state);
 
   return (
     <>
@@ -125,7 +125,16 @@ export function CreateGroupView() {
             Back
           </Button>
 
-          <Button type="button" variant="contained">
+          <Button
+            type="button"
+            variant="contained"
+            onClick={() => {
+              const exec = async () => {
+                await createRequest(state);
+              };
+              exec();
+            }}
+          >
             Create
           </Button>
         </div>
