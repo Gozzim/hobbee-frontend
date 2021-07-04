@@ -1,0 +1,21 @@
+image: node:16.3.0
+
+stages:
+  - build
+
+build:
+  stage: build
+  only:
+    - master
+    - develop
+    - merge_requests
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - build
+  cache:
+    paths:
+      - node_modules
