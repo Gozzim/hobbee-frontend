@@ -6,10 +6,19 @@ import { createRequest } from "../../services/GroupService";
 
 const initialState = {
   formStep: 0,
-  groupName: "",
-  city: "",
-  how: "",
-  tags: [],
+  groupName: {
+    touched: false,
+    value: "",
+  },
+  city: {
+    touched: false,
+    value: "",
+  },
+  how: "both",
+  tags: {
+    touched: false,
+    value: [],
+  },
   pic: "",
   participants: "",
   date: new Date().toISOString(),
@@ -20,10 +29,32 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case "CONTINUE":
-      return {
-        ...state,
-        formStep: state.formStep + 1,
-      };
+      if (
+        state.groupName.value !== "" &&
+        state.city.value !== "" &&
+        state.tags.value.length > 0
+      ) {
+        return {
+          ...state,
+          formStep: state.formStep + 1,
+        };
+      } else {
+        return {
+          ...state,
+          groupName: {
+            value: state.groupName.value,
+            touched: true,
+          },
+          city: {
+            value: state.city.value,
+            touched: true,
+          },
+          tags: {
+            value: state.tags.value,
+            touched: true,
+          },
+        };
+      }
     case "BACK":
       return {
         ...state,
@@ -32,12 +63,18 @@ function reducer(state, action) {
     case "SET_GROUP_NAME":
       return {
         ...state,
-        groupName: action.groupName,
+        groupName: {
+          touched: state.groupName.touched || action.groupName !== "",
+          value: action.groupName,
+        },
       };
     case "SET_CITY":
       return {
         ...state,
-        city: action.city,
+        city: {
+          touched: state.city.touched || action.city !== "",
+          value: action.city,
+        },
       };
     case "ONLINE_OFFLINE_BOTH":
       return {
@@ -47,7 +84,10 @@ function reducer(state, action) {
     case "TAGS":
       return {
         ...state,
-        tags: action.tags,
+        tags: {
+          touched: state.tags.touched || action.tags.length > 0,
+          value: action.tags,
+        },
       };
     case "PIC":
       return {

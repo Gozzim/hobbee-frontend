@@ -17,7 +17,14 @@ export function TagAutocomplete(props) {
         }}
         value={autocompleteValue}
         style={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} variant="outlined" />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="outlined"
+            error={props.error}
+            helperText={props.helperText}
+          />
+        )}
       />
       <IconButton
         onClick={() => {

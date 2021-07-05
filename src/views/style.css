@@ -56,8 +56,11 @@
   display: flex;
 }
 .customizegroup-avatar {
-  margin-top: 50px;
+  margin-top: 45px;
   margin-right: 25px;
+  width: 136px !important;
+  height: 110px !important;
+  border: 1px solid dimgray;
 }
 .customizegroup-filename {
   padding-top: 20px;

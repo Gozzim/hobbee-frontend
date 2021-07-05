@@ -31,7 +31,15 @@ export function CreateGroup(props) {
             groupName: event.target.value,
           });
         }}
-        value={props.state.groupName}
+        value={props.state.groupName.value}
+        error={
+          props.state.groupName.touched && props.state.groupName.value === ""
+        }
+        helperText={
+          props.state.groupName.touched && props.state.groupName.value === ""
+            ? "Empty entry"
+            : ""
+        }
       />
 
       <Typography className={"creategroup-padding"}>
@@ -51,7 +59,13 @@ export function CreateGroup(props) {
             city: event.target.value,
           });
         }}
-        value={props.state.city}
+        value={props.state.city.value}
+        error={props.state.city.touched && props.state.city.value === ""}
+        helperText={
+          props.state.city.touched && props.state.city.value === ""
+            ? "Empty entry"
+            : ""
+        }
       />
 
       <Typography className={"creategroup-padding"}>
@@ -67,6 +81,7 @@ export function CreateGroup(props) {
               how: event.target.value,
             });
           }}
+          value={props.state.how}
         >
           <FormControlLabel value="online" control={<Radio />} label="Online" />
           <FormControlLabel
@@ -93,11 +108,17 @@ export function CreateGroup(props) {
             tags: tags,
           });
         }}
-        value={props.state.tags}
+        value={props.state.tags.value}
+        error={props.state.tags.touched && props.state.tags.value.length === 0}
+        helperText={
+          props.state.tags.touched && props.state.tags.value.length === 0
+            ? "Empty entry"
+            : ""
+        }
       />
 
       <div className={"creategroup-tags"}>
-        {props.state.tags.map((x) => {
+        {props.state.tags.value.map((x) => {
           return <TagComponent id={x} key={x} />;
         })}
       </div>
