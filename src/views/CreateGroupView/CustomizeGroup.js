@@ -1,17 +1,7 @@
 import React from "react";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  Darkroom,
-  Canvas,
-  History,
-  Toolbar,
-  FilePicker,
-  CropMenu,
-} from "react-darkroom";
+import { Darkroom, Canvas } from "react-darkroom";
 import ImageIcon from "@material-ui/icons/Image";
-import LocalCafeIcon from "@material-ui/icons/LocalCafe";
-import DesktopMacIcon from "@material-ui/icons/DesktopMac";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -19,32 +9,20 @@ import {
 } from "@material-ui/pickers";
 import {
   Grid,
-  Slider,
-  Paper,
   Button,
   TextField,
   Typography,
-  FormControlLabel,
-  Checkbox,
   Card,
   CardContent,
   Avatar,
 } from "@material-ui/core";
+import { formatISO } from "date-fns";
+import examplepic1 from "../../assets/examplepic1.jpg";
+import examplepic2 from "../../assets/examplepic2.jpg";
+import examplepic3 from "../../assets/examplepic3.jpg";
 
-export function CustomizeGroupView(props) {
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date("2021-07-25T21:11:54")
-  );
+export function CustomizeGroup(props) {
   const fileInput = React.useRef();
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  let hasFile = false;
-
-  function onFileChange() {}
-
   return (
     <div>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
@@ -192,6 +170,12 @@ export function CustomizeGroupView(props) {
                           type={"file"}
                           className={"customizegroup-file"}
                           ref={fileInput}
+                          onChange={(event) => {
+                            props.dispatch({
+                              type: "PIC",
+                              pic: event.target.value,
+                            });
+                          }}
                         />
                       </div>
                     </Button>
@@ -206,15 +190,23 @@ export function CustomizeGroupView(props) {
               [no file uploaded yet]
             </div>
             <div className={"customizegroup-avatare"}>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <LocalCafeIcon />
-              </Avatar>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <WbSunnyIcon />
-              </Avatar>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <DesktopMacIcon />
-              </Avatar>
+              <div>
+                <Avatar
+                  variant="square"
+                  className={"customizegroup-avatar"}
+                  src={examplepic1}
+                />
+              </div>
+              <Avatar
+                variant="square"
+                className={"customizegroup-avatar"}
+                src={examplepic2}
+              />
+              <Avatar
+                variant="square"
+                className={"customizegroup-avatar"}
+                src={examplepic3}
+              />
             </div>
           </Grid>
 
@@ -245,12 +237,38 @@ export function CustomizeGroupView(props) {
           <Grid item xs={6} className={"border"}>
             <TextField
               id="standard-number"
-              label="Number"
               type="number"
               placeholder={"unlimited"}
               InputLabelProps={{
                 shrink: true,
               }}
+              onChange={(event) => {
+                if (event.target.value < 1) {
+                  props.dispatch({
+                    type: "NUMBER_OF_PARTICIPANTS",
+                    participants: "",
+                  });
+                } else if (
+                  event.target.value === "1" &&
+                  props.state.participants === "2"
+                ) {
+                  props.dispatch({
+                    type: "NUMBER_OF_PARTICIPANTS",
+                    participants: "",
+                  });
+                } else if (event.target.value === "1") {
+                  props.dispatch({
+                    type: "NUMBER_OF_PARTICIPANTS",
+                    participants: "2",
+                  });
+                } else {
+                  props.dispatch({
+                    type: "NUMBER_OF_PARTICIPANTS",
+                    participants: event.target.value,
+                  });
+                }
+              }}
+              value={props.state.participants}
             />
           </Grid>
           <Grid item xs={6} className={"border"}>
@@ -263,9 +281,10 @@ export function CustomizeGroupView(props) {
                 id="date-picker-dialog"
                 label="Date picker dialog"
                 //format="MM/dd/yyyy"
-                //  value={selectedDate}
-                value
-                //   onChange={handleDateChange}
+                onChange={(date) => {
+                  props.dispatch({ type: "DATE", date: formatISO(date) });
+                }}
+                value={props.state.date}
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
@@ -275,7 +294,10 @@ export function CustomizeGroupView(props) {
                 id="time-picker"
                 label="Time picker"
                 //  value={selectedDate}
-                onChange={handleDateChange}
+                onChange={(date) => {
+                  props.dispatch({ type: "DATE", date: formatISO(date) });
+                }}
+                value={props.state.date}
                 KeyboardButtonProps={{
                   "aria-label": "change time",
                 }}
@@ -292,6 +314,12 @@ export function CustomizeGroupView(props) {
               type="text"
               className=""
               fullWidth
+              onChange={(event) => {
+                props.dispatch({
+                  type: "LOCATION",
+                  location: event.target.value,
+                });
+              }}
             />
           </Grid>
           <Grid item xs={6} className={"border"}>
@@ -301,11 +329,16 @@ export function CustomizeGroupView(props) {
           </Grid>
           <Grid item xs={6}></Grid>
           <TextField
-            id="outlined-multiline-static"
             multiline
             rows={6}
             variant="outlined"
             fullWidth
+            onChange={(event) => {
+              props.dispatch({
+                type: "DESCRIPTION",
+                description: event.target.value,
+              });
+            }}
           />
         </Grid>
       </div>

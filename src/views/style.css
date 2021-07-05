@@ -11,69 +11,84 @@
   color: inherit;
   font-size: 16px;
 }
-.orange{
-  background-color: #E98F1C !important;
+.orange {
+  background-color: #e98f1c !important;
 }
-.yellow{
-  background-color: #FFCC00 !important;
+.yellow {
+  background-color: #ffcc00 !important;
 }
-.blue{
-  background-color: #1CE9E3 !important;
+.blue {
+  background-color: #1ce9e3 !important;
 }
-.smallcaps{
+.smallcaps {
   font-variant: small-caps;
 }
-.displayrow{
+.displayrow {
   display: flex;
 }
-.border{
+.border {
   border-bottom: 1px solid #eee;
 }
-creategroup-grid{
-  padding-top: 60px;
-}
-.customizegroup-grid{
+.customizegroup-grid {
   padding-top: 60px;
   padding-bottom: 50px;
 }
-.imageIcon{
+.imageIcon {
   display: flex;
   justify-content: center;
   font-size: 200px;
 }
-.cardImage{
+.cardImage {
   display: inline-block !important;
   padding: 0px !important;
 }
-.selectImageText{
+.selectImageText {
   margin-top: -15px !important;
 }
-.customizegroup-file{
+.customizegroup-file {
   display: none;
 }
-.customizegroup-ButtonCard{
+.customizegroup-ButtonCard {
   width: 100%;
   height: 100%;
 }
-.customizegroup-avatare{
+.customizegroup-avatare {
   display: flex;
 }
-.customizegroup-avatar{
-  margin-top: 50px;
+.customizegroup-avatar {
+  margin-top: 45px;
   margin-right: 25px;
+  width: 136px !important;
+  height: 110px !important;
+  border: 1px solid dimgray;
 }
 .customizegroup-filename {
   padding-top: 20px;
 }
-.creategroup-padding{
+.creategroup-padding {
   padding-top: 35px;
   padding-bottom: 15px;
 }
-.creategroup-radios{
+.creategroup-radios {
   display: flex;
   flex-direction: row !important;
 }
-.creategroup-tags{
+.creategroup-tags {
   display: flex;
   padding-bottom: 30px;
+  flex-wrap: wrap;
+}
+.creategroup-tags {
+  display: flex;
+}
+.creategroup-continuebutton {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 30px;
+}
+.customizegroup-bottombuttons {
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
 }
