@@ -7,7 +7,7 @@ import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import TocIcon from "@material-ui/icons/Toc";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   topContent: {
@@ -111,7 +111,12 @@ export function HomeView(props) {
         </div>
       </div>
       <div className={classes.bottomContent}>
-        <Typography variant="h5" style={{width: "100%", textAlign: "center", marginTop: "15px"}} >MEETING UP MADE EASY</Typography>
+        <Typography
+          variant="h5"
+          style={{ width: "100%", textAlign: "center", marginTop: "15px" }}
+        >
+          MEETING UP MADE EASY
+        </Typography>
         <div className={classes.stepsContainer}>
           <div className={classes.stepContent}>
             <AssignmentIndIcon className={classes.stepIcon} />
