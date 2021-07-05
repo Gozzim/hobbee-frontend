@@ -21,7 +21,7 @@ const initialState = {
   },
   pic: "",
   participants: "",
-  date: new Date().toISOString(),
+  date: null,
   location: "",
   description: "",
 };

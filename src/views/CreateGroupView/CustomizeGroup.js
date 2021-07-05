@@ -26,7 +26,6 @@ export function CustomizeGroup(props) {
   return (
     <div>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
-        {/* component (the semantic): how the heading is rendered; variant: how the heading looks */}
         Customize Group
       </Typography>
       <Typography variant="h6" component={"h2"} align={"center"} className={""}>
@@ -278,8 +277,6 @@ export function CustomizeGroup(props) {
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 margin="normal"
-                id="date-picker-dialog"
-                label="Date picker dialog"
                 //format="MM/dd/yyyy"
                 onChange={(date) => {
                   props.dispatch({ type: "DATE", date: formatISO(date) });
@@ -291,8 +288,6 @@ export function CustomizeGroup(props) {
               />
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
-                label="Time picker"
                 //  value={selectedDate}
                 onChange={(date) => {
                   props.dispatch({ type: "DATE", date: formatISO(date) });
@@ -303,6 +298,16 @@ export function CustomizeGroup(props) {
                 }}
               />
             </MuiPickersUtilsProvider>
+            <div>
+              <Button
+                className={"creategroup-nodatebutton"}
+                onClick={() => {
+                  props.dispatch({ type: "DATE", date: null });
+                }}
+              >
+                No date
+              </Button>
+            </div>
           </Grid>
           <Grid item xs={6} className={"border"}>
             <Typography>Choose a specific location:</Typography>
