@@ -1,22 +1,11 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
-import hobbies from "../assets/hobbies.json";
+import { useTags } from "../hooks/useTags";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    // display: "flex",
-    // justifyContent: "center",
-    // flexWrap: "wrap",
-    // "& > *": {
-    //   margin: theme.spacing(0.5),
-    // },
-  },
-}));
 export function TagComponent(props) {
-  const classes = useStyles();
+  const hobbies = useTags();
   const index = hobbies.findIndex((x) => {
-    return x.title === props.title;
+    return x._id === props.id;
   });
   const colors = ["orange", "yellow", "blue"];
   const colorindex = index % colors.length;
@@ -27,8 +16,12 @@ export function TagComponent(props) {
   };
 
   return (
-    <div className={classes.root}>
-      <Chip label={props.title} onDelete={handleDelete} className={color} />
+    <div>
+      <Chip
+        label={hobbies[index].title}
+        onDelete={handleDelete}
+        className={color}
+      />
     </div>
   );
 }
