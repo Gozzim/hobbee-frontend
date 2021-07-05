@@ -119,7 +119,18 @@ export function CreateGroup(props) {
 
       <div className={"creategroup-tags"}>
         {props.state.tags.value.map((x) => {
-          return <TagComponent id={x} key={x} />;
+          return (
+            <TagComponent
+              id={x}
+              key={x}
+              onDelete={() => {
+                props.dispatch({
+                  type: "DELETE_TAG",
+                  tagId: x,
+                });
+              }}
+            />
+          );
         })}
       </div>
     </>

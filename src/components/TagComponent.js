@@ -11,15 +11,11 @@ export function TagComponent(props) {
   const colorindex = index % colors.length;
   const color = colors[colorindex];
 
-  const handleDelete = () => {
-    console.info("You clicked the delete icon.");
-  };
-
   return (
     <div>
       <Chip
         label={hobbies[index].title}
-        onDelete={handleDelete}
+        onDelete={props.onDelete}
         className={color}
       />
     </div>

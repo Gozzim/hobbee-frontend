@@ -89,6 +89,16 @@ function reducer(state, action) {
           value: action.tags,
         },
       };
+    case "DELETE_TAG":
+      return {
+        ...state,
+        tags: {
+          touched: state.tags.touched,
+          value: state.tags.value.filter((tag) => {
+            return action.tagId !== tag;
+          }),
+        },
+      };
     case "PIC":
       return {
         ...state,
