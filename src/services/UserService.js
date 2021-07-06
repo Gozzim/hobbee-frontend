@@ -1,9 +1,11 @@
 import HttpService, { setToken } from "./HttpService";
 
-export async function registrationRequest(username, password) {
+export async function registrationRequest(username, email, password, hobbies) {
   const resp = await HttpService.post("auth/register", {
     username: username,
+    email: email,
     password: password,
+    hobbies: [...hobbies]
   });
   return await processToken(resp.data.token);
 }

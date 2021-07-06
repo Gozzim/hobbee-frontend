@@ -1,15 +1,15 @@
 import { MAIL_REGEX, PASS_REGEX, USERNAME_REGEX } from "./regex_exp";
 
 // Requires Email to be lower characters only.
-export async function isValidEmail(email) {
+export function isValidEmail(email) {
   return email && typeof email === "string" && MAIL_REGEX.test(email);
 }
 
-export async function isValidPassword(pass) {
+export function isValidPassword(pass) {
   return pass && typeof pass === "string" && PASS_REGEX.WEAK.test(pass);
 }
 
-export async function isValidName(name) {
+export function isValidUsername(name) {
   return name && typeof name === "string" && USERNAME_REGEX.test(name);
 }
 

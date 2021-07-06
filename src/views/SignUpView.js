@@ -18,8 +18,8 @@ function SignUpView(props) {
     }
   }, [user, props.history]);
 
-  const onRegister = (username, password) => {
-    props.dispatch(register(username, password));
+  const onRegister = (username, email, password, hobbies) => {
+    props.dispatch(register(username, email, password, hobbies));
   };
 
   const onCancel = () => {

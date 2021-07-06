@@ -82,9 +82,9 @@ export const authUser = () => async (dispatch) => {
   }
 };
 
-export const register = (username, password) => async (dispatch) => {
+export const register = (username, email, password, hobbies) => async (dispatch) => {
   try {
-    const result = await registrationRequest(username, password);
+    const result = await registrationRequest(username, email, password, hobbies);
     dispatch(authUserReducer(result.data));
   } catch (e) {
     setToken(null);
