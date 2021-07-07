@@ -1,17 +1,7 @@
 import React from "react";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  Darkroom,
-  Canvas,
-  History,
-  Toolbar,
-  FilePicker,
-  CropMenu,
-} from "react-darkroom";
+import { Darkroom, Canvas } from "react-darkroom";
 import ImageIcon from "@material-ui/icons/Image";
-import LocalCafeIcon from "@material-ui/icons/LocalCafe";
-import DesktopMacIcon from "@material-ui/icons/DesktopMac";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -19,35 +9,20 @@ import {
 } from "@material-ui/pickers";
 import {
   Grid,
-  Slider,
-  Paper,
   Button,
   TextField,
   Typography,
-  FormControlLabel,
-  Checkbox,
   Card,
   CardContent,
   Avatar,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import { formatISO } from "date-fns";
+import examplepic1 from "../../assets/examplepic1.jpg";
+import examplepic2 from "../../assets/examplepic2.jpg";
+import examplepic3 from "../../assets/examplepic3.jpg";
 
 export function CustomizeGroup(props) {
-  const [participants, setParticipants] = React.useState("");
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date("2021-07-25T21:11:54")
-  );
   const fileInput = React.useRef();
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  let hasFile = false;
-
-  function onFileChange() {}
-
   return (
     <div>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
@@ -215,15 +190,23 @@ export function CustomizeGroup(props) {
               [no file uploaded yet]
             </div>
             <div className={"customizegroup-avatare"}>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <LocalCafeIcon />
-              </Avatar>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <WbSunnyIcon />
-              </Avatar>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <DesktopMacIcon />
-              </Avatar>
+              <div>
+                <Avatar
+                  variant="square"
+                  className={"customizegroup-avatar"}
+                  src={examplepic1}
+                />
+              </div>
+              <Avatar
+                variant="square"
+                className={"customizegroup-avatar"}
+                src={examplepic2}
+              />
+              <Avatar
+                variant="square"
+                className={"customizegroup-avatar"}
+                src={examplepic3}
+              />
             </div>
           </Grid>
 
@@ -346,7 +329,6 @@ export function CustomizeGroup(props) {
           </Grid>
           <Grid item xs={6}></Grid>
           <TextField
-            id="outlined-multiline-static"
             multiline
             rows={6}
             variant="outlined"
