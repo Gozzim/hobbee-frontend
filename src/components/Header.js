@@ -12,7 +12,7 @@ import UserMenu from "./UserMenu";
 import NotificationMenu from "./NotificationMenu";
 import MenuIcon from "@material-ui/icons/AccountCircle";
 import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
-import HobbeeIcon from "../assets/hobbee_white.png";
+import HobbeeIcon from "../assets/hobbee_white.svg";
 import { useSelector } from "react-redux";
 import { NotificationBell } from "./NotificationBell";
 
@@ -80,7 +80,7 @@ export function Header(props) {
       />
       <Toolbar className={classes.toolbar}>
         <Link className={"linkDefault"} to={"/"}>
-          <img src={HobbeeIcon} height={55} />
+          <img src={HobbeeIcon} height={55} alt="hobb.ee logo" />
         </Link>
         <Typography className={classes.title} variant="h5" color="inherit" />
         <Link className={"linkDefault"} to={"/recommended"}>
@@ -93,11 +93,13 @@ export function Header(props) {
             IN MY AREA
           </Button>
         </Link>
-        <Link className={"linkDefault"} to={"/my-groups"}>
-          <Button className={classes.navButton} type="button">
-            MY GROUPS
-          </Button>
-        </Link>
+        {user.isLoggedIn && (
+          <Link className={"linkDefault"} to={"/my-groups"}>
+            <Button className={classes.navButton} type="button">
+              MY GROUPS
+            </Button>
+          </Link>
+        )}
         <Link className={"linkDefault"} to={"/create-group"}>
           <Button className={classes.createGroupButton} type="button">
             CREATE GROUP
