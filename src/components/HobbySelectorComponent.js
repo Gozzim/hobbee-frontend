@@ -10,18 +10,17 @@ export function HobbySelector(props) {
 
   const isValidTag = (hobbyTag) => {
     // dummy
-    if (hobbyTag)
-      return true;
+    if (hobbyTag) return true;
     return false;
-  }
+  };
 
   const onChangeHobbyInput = (event, hobbyTag) => {
     setSelectedHobby(hobbyTag);
     if (isValidTag(hobbyTag) && !tags.includes(hobbyTag)) {
       try {
         setTags([...tags, hobbyTag]);
-        setSelectedHobby(null)
-        console.log(event.currentTarget.innerHTML)
+        setSelectedHobby(null);
+        console.log(event.currentTarget.innerHTML);
       } catch (e) {
         console.log(e.message);
       }
@@ -53,7 +52,7 @@ export function HobbySelector(props) {
         })}
         onChange={onChangeHobbyInput}
         value={selectedHobby}
-        style={{ width: 300 }}
+        style={{ width: "60%" }}
         renderInput={(params) => <TextField {...params} variant="outlined" />}
       />
       <div className={"hobby-tags"}>
@@ -64,4 +63,3 @@ export function HobbySelector(props) {
     </div>
   );
 }
-

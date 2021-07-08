@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  Paper,
   Button,
   TextField,
   Typography,
   FormControlLabel,
   Checkbox,
   LinearProgress,
+  FormControl,
 } from "@material-ui/core";
 import { HobbySelector } from "./HobbySelectorComponent";
 import {
@@ -17,50 +17,64 @@ import {
   isValidUsername,
 } from "../validators/UserDataValidator";
 
-const useStyles = makeStyles((theme) => ({
-  usersignUpRoot: {
-    margin: "auto",
-  },
-  signUpPaper: {
-    width: "500px",
-    padding: theme.spacing(2),
-  },
-  signUpRow: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    "&:last-child": {
-      paddingBottom: theme.spacing(0),
+const useStyles = (passwordState) =>
+  makeStyles((theme) => ({
+    usersignUpRoot: {
+      margin: "auto",
     },
-    "&:first-child": {
-      paddingTop: theme.spacing(0),
+    signUpBar: {
+      width: "60%",
     },
-  },
-  signUpButtons: {
-    display: "flex",
-    justifyContent: "flex-end",
-  },
-  signUpButton: {
-    marginLeft: theme.spacing(1),
-  },
-  greenBar: {
-    "&:MuiLinearProgress-barColorPrimary": {
-      backgroundColor: "green",
+    signUpRow: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      "&:last-child": {
+        paddingBottom: theme.spacing(0),
+      },
+      "&:first-child": {
+        paddingTop: theme.spacing(0),
+      },
     },
-    "&:MuiLinearProgress-colorPrimary": {
-      backgroundColor: "light-green",
+    signUpButtons: {
+      display: "flex",
+      justifyContent: "flex-end",
     },
-  },
-}));
+    signUpButton: {
+      marginLeft: theme.spacing(1),
+    },
+    passStrengthBar: {
+      width: "60%",
+      backgroundColor: "lightgray", //crimson
+      "& .MuiLinearProgress-barColorPrimary": {
+        backgroundColor: passwordColors[passwordState],
+      },
+    },
+  }));
 
-const passwordColors = [
-  "red", // Too Weak
-  "orange", // Weak
-  "yellow", // Medium
-  "green", // Strong
-];
+const passwordColors = ["inherit", "red", "orange", "gold", "limegreen"];
+
+const passwordString = [null, "Too Weak", "Weak", "Medium", "Strong"];
+
+const initialPasswordState = {
+  pending: false,
+  email: "",
+  password: "",
+  confirmPassword: "",
+  hobbies: [],
+  acceptTOS: false,
+  errors: false,
+};
+
+const initialErrors = {
+  mail: null,
+  name: null,
+  pass: null,
+};
 
 export function SignUpComponent(props) {
-  const classes = useStyles();
+  // TODO: More of an ugly solution currently
+  const [passwordStrength, setPasswordStrength] = React.useState(0);
+  const classes = useStyles(passwordStrength)();
 
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -69,37 +83,15 @@ export function SignUpComponent(props) {
   const [hobbies, setHobbies] = React.useState([]);
   const [acceptedTOS, setAcceptedTOS] = React.useState(false);
 
-  const [registerError, setRegisterError] = React.useState("");
+  const [passError, setPassError] = React.useState("");
   const [nameError, setNameError] = React.useState("");
   const [mailError, setMailError] = React.useState("");
-  const [passwordStrength, setPasswordStrength] = React.useState(0);
+  const [registerError, setRegisterError] = React.useState(initialErrors); //TODO
+  const [passwordState, setPasswordState] = React.useState(initialPasswordState); //TODO
 
-  useEffect(() => {
-    if (props.user.error) {
-      setRegisterError(props.user.error);
-    } else {
-      setRegisterError("");
-    }
-  }, [props.user]);
-
-  const onRegister = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    // TODO
-    // Temporary Implementation
-    if (!isValidEmail(email.toLowerCase())) {
-      setMailError("Invalid Email");
-    }
-    if (!isValidUsername(username)) {
-      setNameError("Invalid Username");
-    }
-    if (!isValidPassword(password)) {
-      setRegisterError("Invalid Password");
-    }
-    const hasError = () => {
-      return registerError !== "" || nameError !== "" || mailError !== "";
-    };
-    if (hasError) {
-      console.log("error")
+    if (passError !== "" || nameError !== "" || mailError !== "") {
       return;
     }
     props.onRegister(username, email, password, hobbies);
@@ -107,38 +99,54 @@ export function SignUpComponent(props) {
 
   const onChangeUsername = (e) => {
     setUsername(e.target.value);
-    setNameError("");
+    if (e.target.value !== "" && !isValidUsername(e.target.value)) {
+      setNameError("Invalid Username");
+    } else {
+      setNameError("");
+    }
   };
 
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
-    setMailError("");
+    if (e.target.value !== "" && !isValidEmail(e.target.value.toLowerCase())) {
+      setMailError("Invalid Email");
+    } else {
+      setMailError("");
+    }
   };
 
   const onChangePassword = (e) => {
     setPassword(e.target.value);
-    setRegisterError("");
+    // TODO: Fix ugly if statements
+    if (e.target.value === "") {
+      setPassError("");
+    } else if (!isValidPassword(e.target.value)) {
+      setPassError("Invalid Password");
+    } else if (password2 !== "" && password2 !== e.target.value) {
+      setPassError("Passwords do not match.");
+    } else {
+      setPassError("");
+    }
     setPasswordStrength(getPasswordStrength(e.target.value));
   };
 
   const onChangePassword2 = (e) => {
     setPassword2(e.target.value);
-    setRegisterError("");
-  };
-
-  const onBlurPassword = (e) => {
-    if (password !== "" && password2 !== "") {
-      if (password !== password2) {
-        setRegisterError("Passwords do not match.");
+    // TODO: Fix ugly if statements
+    if (password !== "") {
+      if (password !== e.target.value && e.target.value !== "") {
+        setPassError("Passwords do not match.");
+      } else if (!isValidPassword(password)) {
+        setPassError("Invalid Password");
       } else {
-        setRegisterError("");
+        setPassError("");
       }
     }
   };
 
   return (
     <div className={classes.usersignUpRoot}>
-      <Paper className={classes.signUpPaper} component="form">
+      <form onSubmit={onSubmit}>
         <div className={classes.signUpRow}>
           <Typography variant="h4" align="center">
             Welcome to Hobb.ee!
@@ -154,6 +162,7 @@ export function SignUpComponent(props) {
             value={username}
             onChange={onChangeUsername}
             error={nameError !== ""}
+            className={classes.signUpBar}
           />
         </div>
         <div className={classes.signUpRow}>
@@ -165,6 +174,7 @@ export function SignUpComponent(props) {
             value={email}
             onChange={onChangeEmail}
             error={mailError !== ""}
+            className={classes.signUpBar}
             autoComplete="email"
           />
         </div>
@@ -176,9 +186,9 @@ export function SignUpComponent(props) {
             variant="outlined"
             value={password}
             onChange={onChangePassword}
-            error={registerError !== ""}
-            onBlur={onBlurPassword}
+            error={passError !== ""}
             type="password"
+            className={classes.signUpBar}
             autoComplete="new-password"
           />
         </div>
@@ -190,10 +200,10 @@ export function SignUpComponent(props) {
             variant="outlined"
             value={password2}
             onChange={onChangePassword2}
-            error={registerError !== ""}
-            onBlur={onBlurPassword}
+            error={passError !== "" && password2 !== ""}
             type="password"
-            autoComplete="new-password"
+            className={classes.signUpBar}
+            autoComplete="password"
           />
         </div>
         {passwordStrength > 0 && (
@@ -201,9 +211,15 @@ export function SignUpComponent(props) {
             <LinearProgress
               variant="determinate"
               value={passwordStrength * 25}
-              className={classes.greenBar} //TODO
+              className={classes.passStrengthBar}
+              //style={barStyle}
             />
-            <Typography variant="body2">{"$Strength Password"}</Typography>{" "}
+            <Typography
+              variant="body2"
+              style={{ color: passwordColors[passwordStrength] }}
+            >
+              {passwordString[passwordStrength] + " Password"}
+            </Typography>
             {/*TODO*/}
           </div>
         )}
@@ -211,44 +227,46 @@ export function SignUpComponent(props) {
           <HobbySelector />
         </div>
         <div className={classes.signUpRow}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={acceptedTOS}
-                onChange={(e) => setAcceptedTOS(e.target.checked)}
-                color="primary"
-              />
-            }
-            label="TOS"
-          />
+          <FormControl
+            required //TODO
+            error={!acceptedTOS}
+          >
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={acceptedTOS}
+                  onChange={(e) => setAcceptedTOS(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="I agree to Hobb.ee's terms of service and privacy policy."
+            />
+          </FormControl>
         </div>
-        {registerError !== "" ? (
+        {passError !== "" && (
           <div className={classes.signUpRow}>
-            <Typography color="error">{registerError}</Typography>
+            <Typography color="error">{passError}</Typography>
           </div>
-        ) : null}
+        )}
         <div className={classes.signUpRow + " " + classes.signUpButtons}>
-          <Button className={classes.signUpButton} onClick={props.onCancel}>
-            Cancel
-          </Button>
           <Button
             className={classes.signUpButton}
             variant="contained"
             color="primary"
-            onClick={onRegister}
             disabled={
               username === "" ||
               email === "" ||
               password === "" ||
               password2 === "" ||
-              password !== password2
+              password !== password2 ||
+              !acceptedTOS
             }
             type="submit"
           >
-            Register
+            Create Account
           </Button>
         </div>
-      </Paper>
+      </form>
     </div>
   );
 }

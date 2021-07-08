@@ -22,12 +22,8 @@ function SignUpView(props) {
     props.dispatch(register(username, email, password, hobbies));
   };
 
-  const onCancel = () => {
-    props.history.push("/");
-  };
-
   return (
-    <SignUpComponent user={user} onRegister={onRegister} onCancel={onCancel} />
+    <SignUpComponent user={user} onRegister={onRegister} />
   );
 }
 
