@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Button, TextField, Typography } from "@material-ui/core";
+import { Button, TextField, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   userLoginRoot: {
@@ -29,10 +29,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/**
- * For user login
- * @param {props} props
- */
 export function LoginComponent(props) {
   const classes = useStyles();
 
@@ -42,6 +38,7 @@ export function LoginComponent(props) {
   const [loginError, setLoginError] = React.useState("");
 
   useEffect(() => {
+    // TODO: fix server response error handling
     if (props.user.error) {
       setLoginError(props.user.error);
     } else {
@@ -49,7 +46,7 @@ export function LoginComponent(props) {
     }
   }, [props.user]);
 
-  const onLogin = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     props.onLogin(username, password);
   };
@@ -66,7 +63,7 @@ export function LoginComponent(props) {
 
   return (
     <div className={classes.userLoginRoot}>
-      <Paper className={classes.loginPaper} component="form">
+      <form onSubmit={onSubmit}>
         <div className={classes.loginRow}>
           <TextField
             label="Username"
@@ -86,11 +83,11 @@ export function LoginComponent(props) {
             type="password"
           />
         </div>
-        {loginError !== "" ? (
+        {loginError !== "" && (
           <div className={classes.loginRow}>
             <Typography color="error">{loginError}</Typography>
           </div>
-        ) : null}
+        )}
         <div className={classes.loginRow + " " + classes.loginButtons}>
           <Button onClick={props.onSignUp}>Not Registered yet?</Button>
           <div>
@@ -101,7 +98,6 @@ export function LoginComponent(props) {
               className={classes.loginButton}
               variant="contained"
               color="primary"
-              onClick={onLogin}
               disabled={username === "" || password === ""}
               type="submit"
             >
@@ -109,7 +105,7 @@ export function LoginComponent(props) {
             </Button>
           </div>
         </div>
-      </Paper>
+      </form>
     </div>
   );
 }

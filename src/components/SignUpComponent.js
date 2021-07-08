@@ -8,6 +8,9 @@ import {
   Checkbox,
   LinearProgress,
   FormControl,
+  Divider,
+  InputAdornment,
+  IconButton,
 } from "@material-ui/core";
 import { HobbySelector } from "./HobbySelectorComponent";
 import {
@@ -16,14 +19,18 @@ import {
   isValidPassword,
   isValidUsername,
 } from "../validators/UserDataValidator";
+import { Link } from "react-router-dom";
+import HobbeeIcon from "../assets/hobbee_white.svg";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 
 const useStyles = (passwordState) =>
   makeStyles((theme) => ({
     usersignUpRoot: {
       margin: "auto",
-    },
-    signUpBar: {
       width: "60%",
+    },
+    bottomSpacing: {
+      paddingTop: theme.spacing(2),
     },
     signUpRow: {
       paddingTop: theme.spacing(1),
@@ -35,15 +42,17 @@ const useStyles = (passwordState) =>
         paddingTop: theme.spacing(0),
       },
     },
-    signUpButtons: {
-      display: "flex",
-      justifyContent: "flex-end",
-    },
-    signUpButton: {
-      marginLeft: theme.spacing(1),
+    submitRow: {
+      "& button": {
+        backgroundColor: "#E98F1C",
+        "&:hover": {
+          backgroundColor: "#FFCC00",
+        },
+      },
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(2),
     },
     passStrengthBar: {
-      width: "60%",
       backgroundColor: "lightgray", //crimson
       "& .MuiLinearProgress-barColorPrimary": {
         backgroundColor: passwordColors[passwordState],
@@ -53,7 +62,7 @@ const useStyles = (passwordState) =>
 
 const passwordColors = ["inherit", "red", "orange", "gold", "limegreen"];
 
-const passwordString = [null, "Too Weak", "Weak", "Medium", "Strong"];
+const passwordString = [null, "Very Weak", "Weak", "Medium", "Strong"];
 
 const initialPasswordState = {
   pending: false,
@@ -86,6 +95,7 @@ export function SignUpComponent(props) {
   const [passError, setPassError] = React.useState("");
   const [nameError, setNameError] = React.useState("");
   const [mailError, setMailError] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
   const [registerError, setRegisterError] = React.useState(initialErrors); //TODO
   const [passwordState, setPasswordState] = React.useState(initialPasswordState); //TODO
 
@@ -94,7 +104,11 @@ export function SignUpComponent(props) {
     if (passError !== "" || nameError !== "" || mailError !== "") {
       return;
     }
-    props.onRegister(username, email, password, hobbies);
+    props.onRegister(username, email, password, hobbies); // TODO: handle server response errors
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   const onChangeUsername = (e) => {
@@ -148,8 +162,9 @@ export function SignUpComponent(props) {
     <div className={classes.usersignUpRoot}>
       <form onSubmit={onSubmit}>
         <div className={classes.signUpRow}>
+          <img src={HobbeeIcon} width={"100%"} />
           <Typography variant="h4" align="center">
-            Welcome to Hobb.ee!
+            Let's Bee Active!
           </Typography>
         </div>
         <div className={classes.signUpRow}>
@@ -162,7 +177,6 @@ export function SignUpComponent(props) {
             value={username}
             onChange={onChangeUsername}
             error={nameError !== ""}
-            className={classes.signUpBar}
           />
         </div>
         <div className={classes.signUpRow}>
@@ -174,7 +188,6 @@ export function SignUpComponent(props) {
             value={email}
             onChange={onChangeEmail}
             error={mailError !== ""}
-            className={classes.signUpBar}
             autoComplete="email"
           />
         </div>
@@ -187,8 +200,20 @@ export function SignUpComponent(props) {
             value={password}
             onChange={onChangePassword}
             error={passError !== ""}
-            type="password"
-            className={classes.signUpBar}
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={toggleShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             autoComplete="new-password"
           />
         </div>
@@ -201,8 +226,20 @@ export function SignUpComponent(props) {
             value={password2}
             onChange={onChangePassword2}
             error={passError !== "" && password2 !== ""}
-            type="password"
-            className={classes.signUpBar}
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={toggleShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             autoComplete="password"
           />
         </div>
@@ -239,20 +276,45 @@ export function SignUpComponent(props) {
                   color="primary"
                 />
               }
-              label="I agree to Hobb.ee's terms of service and privacy policy."
+              label={
+                <>
+                  I agree to Hobb.ee's&nbsp;
+                  <Link
+                    style={{ textDecoration: "underline", color: "black" }}
+                    to={"/tos"}
+                    target={"_blank"}
+                    rel={"noopener noreferrer"}
+                  >
+                    terms of service
+                  </Link>{" "}
+                  and&nbsp;
+                  <Link
+                    style={{ textDecoration: "underline", color: "black" }}
+                    to={"/privacy"}
+                    target={"_blank"}
+                    rel={"noopener noreferrer"}
+                  >
+                    privacy policy
+                  </Link>
+                  .
+                </>
+              }
             />
           </FormControl>
         </div>
-        {passError !== "" && (
+        {/* removed, errors will show in fields instead
+        passError !== "" && (
           <div className={classes.signUpRow}>
             <Typography color="error">{passError}</Typography>
           </div>
-        )}
-        <div className={classes.signUpRow + " " + classes.signUpButtons}>
+        )*/}
+        <div className={classes.submitRow}>
           <Button
-            className={classes.signUpButton}
+            fullWidth
+            size={"large"}
             variant="contained"
             color="primary"
+            /* removed, handling will be taken care of by errors and validations
             disabled={
               username === "" ||
               email === "" ||
@@ -260,11 +322,27 @@ export function SignUpComponent(props) {
               password2 === "" ||
               password !== password2 ||
               !acceptedTOS
-            }
+            }*/
             type="submit"
           >
             Create Account
           </Button>
+        </div>
+        <Divider key={"divider"} />
+        <div>
+          <Typography
+            className={classes.bottomSpacing}
+            align="center"
+            style={{ fontWeight: "bold" }}
+          >
+            Already got a Hobb.ee Account?{" "}
+            <Link
+              style={{ color: "#E98F1C", textDecoration: "none" }}
+              to={"/login"}
+            >
+              Login here
+            </Link>
+          </Typography>
         </div>
       </form>
     </div>

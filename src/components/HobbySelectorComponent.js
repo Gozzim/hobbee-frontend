@@ -52,7 +52,7 @@ export function HobbySelector(props) {
         })}
         onChange={onChangeHobbyInput}
         value={selectedHobby}
-        style={{ width: "60%" }}
+        //style={{ width: "60%" }}
         renderInput={(params) => <TextField {...params} variant="outlined" />}
       />
       <div className={"hobby-tags"}>
