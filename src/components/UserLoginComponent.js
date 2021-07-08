@@ -1,14 +1,24 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, TextField, Typography } from "@material-ui/core";
+import {
+  Button,
+  Divider,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import HobbeeIcon from "../assets/hobbee_white.svg";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   userLoginRoot: {
     margin: "auto",
+    width: "60%",
   },
-  loginPaper: {
-    width: "500px",
-    padding: theme.spacing(2),
+  bottomSpacing: {
+    paddingTop: theme.spacing(2),
   },
   loginRow: {
     paddingTop: theme.spacing(1),
@@ -20,25 +30,34 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: theme.spacing(0),
     },
   },
-  loginButtons: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  loginButton: {
-    marginLeft: theme.spacing(1),
+  submitRow: {
+    "& button": {
+      backgroundColor: "#E98F1C",
+      "&:hover": {
+        backgroundColor: "#FFCC00",
+      },
+    },
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
+/*
+ * TODO:
+ *  - Forgot Password
+ *  - Add server response error handling
+ *  - Fix error handling
+ */
 export function LoginComponent(props) {
   const classes = useStyles();
 
-  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const [loginError, setLoginError] = React.useState("");
 
   useEffect(() => {
-    // TODO: fix server response error handling
     if (props.user.error) {
       setLoginError(props.user.error);
     } else {
@@ -46,13 +65,17 @@ export function LoginComponent(props) {
     }
   }, [props.user]);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    props.onLogin(username, password);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
-  const onChangeUsername = (e) => {
-    setUsername(e.target.value);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    props.onLogin(email, password);
+  };
+
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
     setLoginError("");
   };
 
@@ -63,24 +86,45 @@ export function LoginComponent(props) {
 
   return (
     <div className={classes.userLoginRoot}>
+      <div className={classes.signUpRow}>
+        <img src={HobbeeIcon} width={"100%"} />
+      </div>
       <form onSubmit={onSubmit}>
         <div className={classes.loginRow}>
           <TextField
-            label="Username"
+            label="Email"
             fullWidth
-            value={username}
-            onChange={onChangeUsername}
+            autoFocus
+            variant="outlined"
+            value={email}
+            onChange={onChangeEmail}
             error={loginError !== ""}
+            autoComplete="email"
           />
         </div>
         <div className={classes.loginRow}>
           <TextField
             label="Password"
             fullWidth
+            variant="outlined"
             value={password}
             onChange={onChangePassword}
             error={loginError !== ""}
-            type="password"
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={toggleShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            autoComplete="new-password"
           />
         </div>
         {loginError !== "" && (
@@ -88,22 +132,31 @@ export function LoginComponent(props) {
             <Typography color="error">{loginError}</Typography>
           </div>
         )}
-        <div className={classes.loginRow + " " + classes.loginButtons}>
-          <Button onClick={props.onSignUp}>Not Registered yet?</Button>
-          <div>
-            <Button className={classes.loginButton} onClick={props.onCancel}>
-              Cancel
-            </Button>
-            <Button
-              className={classes.loginButton}
-              variant="contained"
-              color="primary"
-              disabled={username === "" || password === ""}
-              type="submit"
+        <div className={classes.submitRow}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Sign In
+          </Button>
+        </div>
+        <Divider key={"divider"} />
+        <div>
+          <Typography
+            className={classes.bottomSpacing}
+            align="center"
+            style={{ fontWeight: "bold" }}
+          >
+            New to Hobb.ee?{" "}
+            <Link
+              style={{ color: "#E98F1C", textDecoration: "none" }}
+              to={"/register"}
             >
-              Login
-            </Button>
-          </div>
+              Create an account
+            </Link>
+          </Typography>
         </div>
       </form>
     </div>

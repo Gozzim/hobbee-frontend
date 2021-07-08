@@ -160,13 +160,13 @@ export function SignUpComponent(props) {
 
   return (
     <div className={classes.usersignUpRoot}>
+      <div className={classes.signUpRow}>
+        <img src={HobbeeIcon} width={"100%"} />
+        <Typography variant="h4" align="center">
+          Let's Bee Active!
+        </Typography>
+      </div>
       <form onSubmit={onSubmit}>
-        <div className={classes.signUpRow}>
-          <img src={HobbeeIcon} width={"100%"} />
-          <Typography variant="h4" align="center">
-            Let's Bee Active!
-          </Typography>
-        </div>
         <div className={classes.signUpRow}>
           <TextField
             label="Username"
@@ -278,7 +278,7 @@ export function SignUpComponent(props) {
               }
               label={
                 <>
-                  I agree to Hobb.ee's&nbsp;
+                  I agree to Hobb.ee's{" "}
                   <Link
                     style={{ textDecoration: "underline", color: "black" }}
                     to={"/tos"}
@@ -287,7 +287,7 @@ export function SignUpComponent(props) {
                   >
                     terms of service
                   </Link>{" "}
-                  and&nbsp;
+                  and{" "}
                   <Link
                     style={{ textDecoration: "underline", color: "black" }}
                     to={"/privacy"}
