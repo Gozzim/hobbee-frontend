@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   AppBar,
+  Avatar,
   Button,
   IconButton,
   Toolbar,
@@ -12,7 +13,7 @@ import UserMenu from "./UserMenu";
 import NotificationMenu from "./NotificationMenu";
 import MenuIcon from "@material-ui/icons/AccountCircle";
 import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
-import HobbeeIcon from "../assets/hobbee_white.png";
+import HobbeeIcon from "../assets/hobbee_white.svg";
 import { useSelector } from "react-redux";
 import { NotificationBell } from "./NotificationBell";
 
@@ -71,7 +72,8 @@ export function Header(props) {
         open={Boolean(notificationMenuAnchor)}
         anchor={notificationMenuAnchor}
         onClose={() => setNotificationMenuAnchor(null)}
-        notifications={notifications}/>
+        notifications={notifications}
+      />
       <Toolbar className={classes.toolbar}>
         <Link className={"linkDefault"} to={"/"}>
           <img src={HobbeeIcon} height={55} />
@@ -103,17 +105,28 @@ export function Header(props) {
           </IconButton>
         </Link>
         {user.isLoggedIn && (
-                    <NotificationBell
-          clickAnchorSet={(event) => setNotificationMenuAnchor(event.currentTarget)}
-          notificationCount={notifications.length}
-               />
-          )
-        }
+          <NotificationBell
+            clickAnchorSet={(event) =>
+              setNotificationMenuAnchor(event.currentTarget)
+            }
+            notificationCount={notifications.length}
+          />
+        )}
         <IconButton
           onClick={(event) => setUserMenuAnchor(event.currentTarget)}
           color="inherit"
         >
-          <MenuIcon />
+          {user.isLoggedIn ? (
+            /*TODO: RenderUserAvatarFunction*/
+            <Avatar>
+              {user.user.avatar
+                ? "🐝"
+                : (user.user.username ? user.user.username[0] : "🍯")
+              }
+            </Avatar>
+          ) : (
+            <MenuIcon />
+          )}
         </IconButton>
       </Toolbar>
     </AppBar>

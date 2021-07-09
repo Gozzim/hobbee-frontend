@@ -53,6 +53,8 @@ const useStyles = (passwordState) =>
       paddingBottom: theme.spacing(2),
     },
     passStrengthBar: {
+      height: "5px",
+      borderRadius: "5px",
       backgroundColor: "lightgray", //crimson
       "& .MuiLinearProgress-barColorPrimary": {
         backgroundColor: passwordColors[passwordState],

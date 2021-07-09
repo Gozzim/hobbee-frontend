@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Menu, MenuItem, Avatar, Divider } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { logout } from "../redux/reducers/userReducer";
 
@@ -12,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
   menuitem: {
     display: "flex",
     minWidth: "200px",
+    marginTop: theme.spacing(1),
   },
   avatar: {
     marginRight: theme.spacing(1),
@@ -25,10 +25,7 @@ const useStyles = makeStyles((theme) => ({
 function UserMenu(props) {
   const classes = useStyles();
 
-  const user = useSelector((state) => {
-    // return the currnetly logged in user from redux store
-    return state.user;
-  });
+  const user = useSelector((state) => {return state.user});
 
   const onClickLogin = () => {
     // store current site
@@ -77,8 +74,7 @@ function UserMenu(props) {
               onClick={onClickLogout}
               className={classes.menuitem}
             >
-              <ExitToAppIcon className={classes.avatar} />
-              Logout
+              Sign out
             </MenuItem>,
           ]
         : [
@@ -98,7 +94,7 @@ function UserMenu(props) {
 // attributes of props and their type
 UserMenu.propTypes = {
   onClose: PropTypes.func.isRequired,
-  anchor: PropTypes.element,
+  anchor: PropTypes.object,
   open: PropTypes.bool.isRequired,
 };
 
