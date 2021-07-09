@@ -2,15 +2,13 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
-  TextField,
-  Typography,
-  FormControlLabel,
   Checkbox,
-  LinearProgress,
-  FormControl,
   Divider,
-  InputAdornment,
+  FormControl,
+  FormControlLabel,
   IconButton,
+  InputAdornment,
+  Typography,
 } from "@material-ui/core";
 import { HobbySelector } from "./HobbySelectorComponent";
 import {
@@ -22,49 +20,39 @@ import {
 import { Link } from "react-router-dom";
 import HobbeeIcon from "../assets/hobbee_white.svg";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { SignInUpInput } from "./SignInUpInput";
+import { PasswordStrengthBar } from "./PasswordStrengthBar";
+import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
 
-const useStyles = (passwordState) =>
-  makeStyles((theme) => ({
-    usersignUpRoot: {
-      margin: "auto",
-      width: "60%",
+const useStyles = makeStyles((theme) => ({
+  usersignUpRoot: {
+    margin: "auto",
+    width: "60%",
+  },
+  bottomSpacing: {
+    paddingTop: theme.spacing(2),
+  },
+  signUpRow: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    "&:last-child": {
+      paddingBottom: theme.spacing(0),
     },
-    bottomSpacing: {
-      paddingTop: theme.spacing(2),
+    "&:first-child": {
+      paddingTop: theme.spacing(0),
     },
-    signUpRow: {
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
-      "&:last-child": {
-        paddingBottom: theme.spacing(0),
-      },
-      "&:first-child": {
-        paddingTop: theme.spacing(0),
-      },
-    },
-    submitRow: {
-      "& button": {
-        backgroundColor: "#E98F1C",
-        "&:hover": {
-          backgroundColor: "#FFCC00",
-        },
-      },
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(2),
-    },
-    passStrengthBar: {
-      height: "5px",
-      borderRadius: "5px",
-      backgroundColor: "lightgray", //crimson
-      "& .MuiLinearProgress-barColorPrimary": {
-        backgroundColor: passwordColors[passwordState],
+  },
+  submitRow: {
+    "& button": {
+      backgroundColor: HOBBEE_ORANGE,
+      "&:hover": {
+        backgroundColor: HOBBEE_YELLOW,
       },
     },
-  }));
-
-const passwordColors = ["inherit", "red", "orange", "gold", "limegreen"];
-
-const passwordString = [null, "Very Weak", "Weak", "Medium", "Strong"];
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
+  },
+}));
 
 const initialPasswordState = {
   pending: false,
@@ -84,8 +72,7 @@ const initialErrors = {
 
 export function SignUpComponent(props) {
   // TODO: More of an ugly solution currently
-  const [passwordStrength, setPasswordStrength] = React.useState(0);
-  const classes = useStyles(passwordStrength)();
+  const classes = useStyles();
 
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -98,8 +85,25 @@ export function SignUpComponent(props) {
   const [nameError, setNameError] = React.useState("");
   const [mailError, setMailError] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [passwordStrength, setPasswordStrength] = React.useState(0);
   const [registerError, setRegisterError] = React.useState(initialErrors); //TODO
   const [passwordState, setPasswordState] = React.useState(initialPasswordState); //TODO
+
+  const passEye = {
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton
+          aria-label="toggle password visibility"
+          onClick={() => {
+            setShowPassword(!showPassword);
+          }}
+          edge="end"
+        >
+          {showPassword ? <Visibility /> : <VisibilityOff />}
+        </IconButton>
+      </InputAdornment>
+    ),
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -107,10 +111,6 @@ export function SignUpComponent(props) {
       return;
     }
     props.onRegister(username, email, password, hobbies); // TODO: handle server response errors
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
   };
 
   const onChangeUsername = (e) => {
@@ -162,7 +162,7 @@ export function SignUpComponent(props) {
 
   return (
     <div className={classes.usersignUpRoot}>
-      <div className={classes.signUpRow}>
+      <div>
         <img src={HobbeeIcon} width={"100%"} />
         <Typography variant="h4" align="center">
           Let's Bee Active!
@@ -170,97 +170,51 @@ export function SignUpComponent(props) {
       </div>
       <form onSubmit={onSubmit}>
         <div className={classes.signUpRow}>
-          <TextField
-            label="Username"
-            required
-            fullWidth
-            variant="outlined"
-            autoFocus
-            value={username}
-            onChange={onChangeUsername}
-            error={nameError !== ""}
+          <SignInUpInput
+            id={"username"}
+            label={"Username"}
+            fieldValue={username}
+            changeFunc={onChangeUsername}
+            inputError={nameError !== ""}
+            autoComplete={"username"}
           />
         </div>
         <div className={classes.signUpRow}>
-          <TextField
-            label="Email"
-            required
-            fullWidth
-            variant="outlined"
-            value={email}
-            onChange={onChangeEmail}
-            error={mailError !== ""}
-            autoComplete="email"
+          <SignInUpInput
+            id={"email"}
+            label={"Email"}
+            fieldValue={email}
+            changeFunc={onChangeEmail}
+            inputError={mailError !== ""}
+            autoComplete={"email"}
           />
         </div>
         <div className={classes.signUpRow}>
-          <TextField
-            label="Password"
-            required
-            fullWidth
-            variant="outlined"
-            value={password}
-            onChange={onChangePassword}
-            error={passError !== ""}
-            type={showPassword ? "text" : "password"}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={toggleShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            autoComplete="new-password"
+          <SignInUpInput
+            id={"password"}
+            label={"Password"}
+            fieldValue={password}
+            changeFunc={onChangePassword}
+            fieldType={showPassword ? "text" : "password"}
+            inputProps={passEye}
+            inputError={passError !== ""}
+            autoComplete={"new-password"}
           />
         </div>
         <div className={classes.signUpRow}>
-          <TextField
-            label="Repeat Password"
-            required
-            fullWidth
-            variant="outlined"
-            value={password2}
-            onChange={onChangePassword2}
-            error={passError !== "" && password2 !== ""}
-            type={showPassword ? "text" : "password"}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={toggleShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            autoComplete="password"
+          <SignInUpInput
+            id={"password2"}
+            label={"Repeat Password"}
+            fieldValue={password2}
+            changeFunc={onChangePassword2}
+            fieldType={showPassword ? "text" : "password"}
+            inputProps={passEye}
+            inputError={passError !== "" && password2 !== ""}
+            autoComplete={"new-password"}
           />
         </div>
         {passwordStrength > 0 && (
-          <div>
-            <LinearProgress
-              variant="determinate"
-              value={passwordStrength * 25}
-              className={classes.passStrengthBar}
-              //style={barStyle}
-            />
-            <Typography
-              variant="body2"
-              style={{ color: passwordColors[passwordStrength] }}
-            >
-              {passwordString[passwordStrength] + " Password"}
-            </Typography>
-            {/*TODO*/}
-          </div>
+          <PasswordStrengthBar passStrength={passwordStrength} />
         )}
         <div className={classes.signUpRow}>
           <HobbySelector />
@@ -304,27 +258,12 @@ export function SignUpComponent(props) {
             />
           </FormControl>
         </div>
-        {/* removed, errors will show in fields instead
-        passError !== "" && (
-          <div className={classes.signUpRow}>
-            <Typography color="error">{passError}</Typography>
-          </div>
-        )*/}
         <div className={classes.submitRow}>
           <Button
             fullWidth
             size={"large"}
             variant="contained"
             color="primary"
-            /* removed, handling will be taken care of by errors and validations
-            disabled={
-              username === "" ||
-              email === "" ||
-              password === "" ||
-              password2 === "" ||
-              password !== password2 ||
-              !acceptedTOS
-            }*/
             type="submit"
           >
             Create Account
@@ -339,7 +278,7 @@ export function SignUpComponent(props) {
           >
             Already got a Hobb.ee Account?{" "}
             <Link
-              style={{ color: "#E98F1C", textDecoration: "none" }}
+              style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
               to={"/login"}
             >
               Login here

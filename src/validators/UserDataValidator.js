@@ -1,4 +1,4 @@
-import { MAIL_REGEX, PASS_REGEX, USERNAME_REGEX } from "./regex_exp";
+import { MAIL_REGEX, PASS_REGEX, USERNAME_REGEX } from "../shared/Constants";
 
 // Requires Email to be lower characters only.
 export function isValidEmail(email) {

@@ -5,12 +5,13 @@ import {
   Divider,
   IconButton,
   InputAdornment,
-  TextField,
   Typography,
 } from "@material-ui/core";
 import HobbeeIcon from "../assets/hobbee_white.svg";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
+import { SignInUpInput } from "./SignInUpInput";
 
 const useStyles = makeStyles((theme) => ({
   userLoginRoot: {
@@ -32,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
   },
   submitRow: {
     "& button": {
-      backgroundColor: "#E98F1C",
+      backgroundColor: HOBBEE_ORANGE,
       "&:hover": {
-        backgroundColor: "#FFCC00",
+        backgroundColor: HOBBEE_YELLOW,
       },
     },
     paddingTop: theme.spacing(1),
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 export function LoginComponent(props) {
   const classes = useStyles();
 
-  const [email, setEmail] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -65,17 +66,13 @@ export function LoginComponent(props) {
     }
   }, [props.user]);
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
   const onSubmit = (e) => {
     e.preventDefault();
-    props.onLogin(email, password);
+    props.onLogin(username, password);
   };
 
-  const onChangeEmail = (e) => {
-    setEmail(e.target.value);
+  const onChangeUsername = (e) => {
+    setUsername(e.target.value);
     setLoginError("");
   };
 
@@ -86,37 +83,36 @@ export function LoginComponent(props) {
 
   return (
     <div className={classes.userLoginRoot}>
-      <div className={classes.signUpRow}>
-        <img src={HobbeeIcon} width={"100%"} />
+      <div className={classes.loginRow}>
+        <img src={HobbeeIcon} width={"100%"} alt={"logo"} />
       </div>
       <form onSubmit={onSubmit}>
         <div className={classes.loginRow}>
-          <TextField
-            label="Email"
-            fullWidth
-            autoFocus
-            variant="outlined"
-            value={email}
-            onChange={onChangeEmail}
-            error={loginError !== ""}
-            autoComplete="email"
+          <SignInUpInput
+            id={"username"}
+            label={"Username or Email"}
+            fieldValue={username}
+            changeFunc={onChangeUsername}
+            inputLabelProps={{ required: false }}
+            inputError={loginError !== ""}
+            autoComplete={"username"}
           />
         </div>
         <div className={classes.loginRow}>
-          <TextField
-            label="Password"
-            fullWidth
-            variant="outlined"
-            value={password}
-            onChange={onChangePassword}
-            error={loginError !== ""}
-            type={showPassword ? "text" : "password"}
-            InputProps={{
+          <SignInUpInput
+            id={"password"}
+            label={"Password"}
+            fieldValue={password}
+            changeFunc={onChangePassword}
+            fieldType={showPassword ? "text" : "password"}
+            inputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="toggle password visibility"
-                    onClick={toggleShowPassword}
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}
                     edge="end"
                   >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
@@ -124,7 +120,9 @@ export function LoginComponent(props) {
                 </InputAdornment>
               ),
             }}
-            autoComplete="new-password"
+            inputLabelProps={{ required: false }}
+            inputError={loginError !== ""}
+            autoComplete={"current-password"}
           />
         </div>
         {loginError !== "" && (
@@ -133,12 +131,7 @@ export function LoginComponent(props) {
           </div>
         )}
         <div className={classes.submitRow}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+          <Button fullWidth variant="contained" color="primary" type="submit">
             Sign In
           </Button>
         </div>
@@ -151,7 +144,7 @@ export function LoginComponent(props) {
           >
             New to Hobb.ee?{" "}
             <Link
-              style={{ color: "#E98F1C", textDecoration: "none" }}
+              style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
               to={"/register"}
             >
               Create an account
