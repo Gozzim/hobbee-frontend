@@ -86,7 +86,7 @@ function handleClick(event) {
 export function GroupPageView(props) {
   const classes = useStyles();
   const [joined, setJoined] = useState(false);
-  const tags = ["Sewing","Crafting","Cosplay"]
+  const tags = ["Sewing", "Crafting", "Cosplay"];
 
   if (joined) {
     return (
@@ -154,9 +154,9 @@ export function GroupPageView(props) {
                 </Typography>
               </div>
             </div>
-            <div style={{display: "flex"}}>
+            <div style={{ display: "flex" }}>
               {tags.map((x) => {
-                return <TagComponent title={x} key={x} hideDeleteIcon={true} />;
+                return <TagComponent title={x} key={x} />;
               })}
             </div>
           </div>
@@ -247,9 +247,9 @@ export function GroupPageView(props) {
             </Button>
           </div>
         </div>
-        <div style={{display: "flex"}}>
+        <div style={{ display: "flex" }}>
           {tags.map((x) => {
-            return <TagComponent title={x} key={x} hideDeleteIcon={true} />;
+            return <TagComponent title={x} key={x} />;
           })}
         </div>
         <div style={{ fontSize: "17px" }}>

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
-import { fetch } from "../redux/reducers/tagsReducer";
+import { fetchHobbyTags } from "../redux/reducers/tagsReducer";
 
 export function useTags() {
   const hobbies = useSelector((state) => state.tags.items);
@@ -8,7 +8,7 @@ export function useTags() {
 
   React.useEffect(() => {
     if (hobbies.length === 0) {
-      dispatch(fetch());
+      dispatch(fetchHobbyTags());
     }
   }, []);
 

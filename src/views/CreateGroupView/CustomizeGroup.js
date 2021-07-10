@@ -26,7 +26,6 @@ export function CustomizeGroup(props) {
   return (
     <div>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
-        {/* component (the semantic): how the heading is rendered; variant: how the heading looks */}
         Customize Group
       </Typography>
       <Typography variant="h6" component={"h2"} align={"center"} className={""}>
@@ -171,9 +170,8 @@ export function CustomizeGroup(props) {
                           className={"customizegroup-file"}
                           ref={fileInput}
                           onChange={(event) => {
-                            props.dispatch({
-                              type: "PIC",
-                              pic: event.target.value,
+                            props.setGroupForm((groupForm) => {
+                              return { ...groupForm, pic: event.target.value };
                             });
                           }}
                         />
@@ -243,32 +241,22 @@ export function CustomizeGroup(props) {
                 shrink: true,
               }}
               onChange={(event) => {
-                if (event.target.value < 1) {
-                  props.dispatch({
-                    type: "NUMBER_OF_PARTICIPANTS",
-                    participants: "",
-                  });
-                } else if (
-                  event.target.value === "1" &&
-                  props.state.participants === "2"
-                ) {
-                  props.dispatch({
-                    type: "NUMBER_OF_PARTICIPANTS",
-                    participants: "",
-                  });
-                } else if (event.target.value === "1") {
-                  props.dispatch({
-                    type: "NUMBER_OF_PARTICIPANTS",
-                    participants: "2",
-                  });
-                } else {
-                  props.dispatch({
-                    type: "NUMBER_OF_PARTICIPANTS",
-                    participants: event.target.value,
-                  });
-                }
+                props.setGroupForm((groupForm) => {
+                  if (parseInt(event.target.value, 10) < 1) {
+                    return { ...groupForm, participants: "" };
+                  } else if (
+                    event.target.value === "1" &&
+                    props.groupForm.participants === "2"
+                  ) {
+                    return { ...groupForm, participants: "" };
+                  } else if (event.target.value === "1") {
+                    return { ...groupForm, participants: "2" };
+                  } else {
+                    return { ...groupForm, participants: event.target.value };
+                  }
+                });
               }}
-              value={props.state.participants}
+              value={props.groupForm.participants}
             />
           </Grid>
           <Grid item xs={6} className={"border"}>
@@ -278,31 +266,41 @@ export function CustomizeGroup(props) {
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 margin="normal"
-                id="date-picker-dialog"
-                label="Date picker dialog"
-                //format="MM/dd/yyyy"
                 onChange={(date) => {
-                  props.dispatch({ type: "DATE", date: formatISO(date) });
+                  props.setGroupForm((groupForm) => {
+                    return { ...groupForm, date: formatISO(date) };
+                  });
                 }}
-                value={props.state.date}
+                value={props.groupForm.date}
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
               />
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
-                label="Time picker"
-                //  value={selectedDate}
                 onChange={(date) => {
-                  props.dispatch({ type: "DATE", date: formatISO(date) });
+                  props.setGroupForm((groupForm) => {
+                    return { ...groupForm, date: formatISO(date) };
+                  });
                 }}
-                value={props.state.date}
+                value={props.groupForm.date}
                 KeyboardButtonProps={{
                   "aria-label": "change time",
                 }}
               />
             </MuiPickersUtilsProvider>
+            <div>
+              <Button
+                className={"creategroup-nodatebutton"}
+                onClick={() => {
+                  props.setGroupForm((groupForm) => {
+                    return { ...groupForm, date: null };
+                  });
+                }}
+              >
+                No date
+              </Button>
+            </div>
           </Grid>
           <Grid item xs={6} className={"border"}>
             <Typography>Choose a specific location:</Typography>
@@ -315,9 +313,8 @@ export function CustomizeGroup(props) {
               className=""
               fullWidth
               onChange={(event) => {
-                props.dispatch({
-                  type: "LOCATION",
-                  location: event.target.value,
+                props.setGroupForm((groupForm) => {
+                  return { ...groupForm, location: event.target.value };
                 });
               }}
             />
@@ -327,16 +324,15 @@ export function CustomizeGroup(props) {
               Give a short description of the planned activity:
             </Typography>
           </Grid>
-          <Grid item xs={6}></Grid>
+          <Grid item xs={6} />
           <TextField
             multiline
             rows={6}
             variant="outlined"
             fullWidth
             onChange={(event) => {
-              props.dispatch({
-                type: "DESCRIPTION",
-                description: event.target.value,
+              props.setGroupForm((groupForm) => {
+                return { ...groupForm, description: event.target.value };
               });
             }}
           />
