@@ -11,6 +11,9 @@ import { Imprint } from "./views/Imprint";
 import { PrivacyPolicy } from "./views/PrivacyPolicy";
 import { ToS } from "./views/TermsOfService";
 import { ProfileView } from "./views/ProfileView";
+import { GroupPageView } from "./views/GroupPageView";
+import { PaymentPlanView } from "./views/PaymentPlanView";
+import {PaymentConfirmationView} from "./views/PaymentConfirmationView";
 
 // routes within the movie database example app
 // used for routing
@@ -37,12 +40,24 @@ export const routes = [
     component: InMyAreaView,
   },
   {
+    path: "/premium/payment-confirmation",
+    component: PaymentConfirmationView,
+  },
+  {
+    path: "/premium/payment-plan",
+    component: PaymentPlanView,
+  },
+  {
     path: "/premium",
     component: PremiumView,
   },
   {
     path: "/recommended",
     component: RecommendedView,
+  },
+  {
+    path: "/group-page",
+    component: GroupPageView,
   },
   {
     path: "/my-groups",
