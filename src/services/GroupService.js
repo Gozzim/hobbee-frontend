@@ -1,7 +1,7 @@
 import HttpService from "./HttpService";
 
-export async function createRequest(state) {
-  await HttpService.post("group/create", state);
+export async function createRequest(data) {
+  await HttpService.post("group/create", data);
 }
 
 export async function fetchGroups() {
