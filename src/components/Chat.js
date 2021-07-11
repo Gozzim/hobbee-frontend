@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
+import { ChatMessage } from "./ChatMessage";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -11,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
     },
     display: "inline-block",
   },
-  chatField: {
-    backgroundColor: "lightblue",
+  chat: {
+    backgroundColor: "#FFF3C2",
     width: "100%",
-    height: "560px",
+    borderRadius: "10px",
   },
   messageButtonDiv: {
     //flex: 1,
@@ -35,10 +36,65 @@ const useStyles = makeStyles((theme) => ({
  */
 export function Chat(props) {
   const classes = useStyles();
+  const items = [...Array(10 + 1).keys()].slice(1);
+  console.log(items);
 
   return (
     <div>
-      <div className={classes.chatField}>this will be a chat.</div>
+      <div className={classes.chat}>
+        <div className="scroller">
+          {items.map((x) => {
+            return <div>Hello, this is person {x.toString()}.</div>;
+          })}
+          <ChatMessage
+            isSystemMessage={true}
+            message="Kempec Halk created Table Tennis at TUM"
+          />
+          <ChatMessage
+            isSystemMessage={false}
+            name="Maja Schuknecht"
+            message="Howdy, I like big butts and I cannot lie. This much no I can't denyyyy."
+            time="08/07/2021 12:20"
+            isCurrentUser={true}
+          />
+          <ChatMessage
+            isSystemMessage={false}
+            name="Vanessa Krohn"
+            message="I like big butts too lol"
+            time="08/07/2021 12:21"
+            isCurrentUser={false}
+          />
+          <ChatMessage
+            isSystemMessage={true}
+            message="Ilias Asimakoupolos joined the chat. Say Hi!"
+          />
+          <ChatMessage
+            isSystemMessage={true}
+            message="Zaim Sari left the chat. Goodbye!"
+          />
+          <ChatMessage
+            isSystemMessage={false}
+            name="Ilias Asimakoupolos"
+            message="did I hear butts? butts are amaaaaze"
+            time="08/07/2021 12:25"
+            isCurrentUser={false}
+          />
+          <ChatMessage
+            isSystemMessage={false}
+            name="Maja Schuknecht"
+            message="bing bong butts"
+            time="08/07/2021 12:25"
+            isCurrentUser={true}
+          />
+          <ChatMessage
+            isSystemMessage={false}
+            name="Ilias Asimakoupolos"
+            message="I love butts"
+            time="08/07/2021 12:26"
+            isCurrentUser={false}
+          />
+        </div>
+      </div>
       <div style={{ display: "flex" }}>
         <form
           className={classes.inputField}
