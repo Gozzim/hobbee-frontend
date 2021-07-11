@@ -29,10 +29,9 @@ export function TagAutocomplete(props) {
       <IconButton
         onClick={() => {
           if (
-            autocompleteValue === null ||
-            props.value.includes(autocompleteValue._id)
+            autocompleteValue &&
+            !props.value.includes(autocompleteValue._id)
           ) {
-          } else {
             props.onChange([...props.value, autocompleteValue._id]);
           }
         }}

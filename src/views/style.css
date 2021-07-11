@@ -101,3 +101,7 @@
 .scroller-item {
   margin: 30px 0;
 }
+.creategroup-nodatebutton{
+  margin-top: 10px !important;
+  margin-left: -5px !important;
+}

@@ -21,22 +21,22 @@ export function CreateGroup(props) {
       </Typography>
       <TextField
         label="e.g. Table Tennis at TUM"
-        required={true}
+        required
         fullWidth
         variant="outlined"
         size="small"
         onChange={(event) => {
-          props.dispatch({
-            type: "SET_GROUP_NAME",
-            groupName: event.target.value,
+          props.setTouched((touched) => {
+            return { ...touched, groupName: true };
+          });
+          props.setGroupForm((groupForm) => {
+            return { ...groupForm, groupName: event.target.value };
           });
         }}
-        value={props.state.groupName.value}
-        error={
-          props.state.groupName.touched && props.state.groupName.value === ""
-        }
+        value={props.groupForm.groupName}
+        error={props.touched.groupName && props.groupForm.groupName === ""}
         helperText={
-          props.state.groupName.touched && props.state.groupName.value === ""
+          props.touched.groupName && props.groupForm.groupName === ""
             ? "Empty entry"
             : ""
         }
@@ -49,22 +49,22 @@ export function CreateGroup(props) {
       <TextField
         label="e.g. Munich, Germany"
         className=""
-        required={true}
+        required
         fullWidth
         variant="outlined"
         size="small"
         onChange={(event) => {
-          props.dispatch({
-            type: "SET_CITY",
-            city: event.target.value,
+          props.setTouched((touched) => {
+            return { ...touched, city: true };
+          });
+          props.setGroupForm((groupForm) => {
+            return { ...groupForm, city: event.target.value };
           });
         }}
-        value={props.state.city.value}
-        error={props.state.city.touched && props.state.city.value === ""}
+        value={props.groupForm.city}
+        error={props.touched.city && props.groupForm.city === ""}
         helperText={
-          props.state.city.touched && props.state.city.value === ""
-            ? "Empty entry"
-            : ""
+          props.touched.city && props.groupForm.city === "" ? "Empty entry" : ""
         }
       />
 
@@ -76,12 +76,11 @@ export function CreateGroup(props) {
         <RadioGroup
           className={"creategroup-radios"}
           onChange={(event) => {
-            props.dispatch({
-              type: "ONLINE_OFFLINE_BOTH",
-              how: event.target.value,
+            props.setGroupForm((groupForm) => {
+              return { ...groupForm, onOffline: event.target.value };
             });
           }}
-          value={props.state.how}
+          value={props.groupForm.onOffline}
         >
           <FormControlLabel value="online" control={<Radio />} label="Online" />
           <FormControlLabel
@@ -103,23 +102,43 @@ export function CreateGroup(props) {
 
       <TagAutocomplete
         onChange={(tags) => {
-          props.dispatch({
-            type: "TAGS",
-            tags: tags,
+          props.setTouched((touched) => {
+            return { ...touched, tags: true };
+          });
+          props.setGroupForm((groupForm) => {
+            return { ...groupForm, tags };
           });
         }}
-        value={props.state.tags.value}
-        error={props.state.tags.touched && props.state.tags.value.length === 0}
+        value={props.groupForm.tags}
+        error={props.touched.tags && props.groupForm.tags.length === 0}
         helperText={
-          props.state.tags.touched && props.state.tags.value.length === 0
+          props.touched.tags && props.groupForm.tags.length === 0
             ? "Empty entry"
             : ""
         }
       />
 
       <div className={"creategroup-tags"}>
-        {props.state.tags.value.map((x) => {
-          return <TagComponent id={x} key={x} />;
+        {props.groupForm.tags.map((x) => {
+          return (
+            <TagComponent
+              id={x}
+              key={x}
+              onDelete={() => {
+                props.setTouched((touched) => {
+                  return { ...touched, tags: true };
+                });
+                props.setGroupForm((groupForm) => {
+                  return {
+                    ...groupForm,
+                    tags: groupForm.tags.filter((tag) => {
+                      return x !== tag;
+                    }),
+                  };
+                });
+              }}
+            />
+          );
         })}
       </div>
     </>

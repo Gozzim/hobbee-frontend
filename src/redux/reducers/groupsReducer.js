@@ -1,36 +1,30 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchGroups } from "../../services/GroupService";
+import { fetchGroups as fetchGroupsFromBackend } from "../../services/GroupService";
+import { tagsReducer } from "./tagsReducer";
 
 const initialState = {
   items: [],
 };
 
-export const fetch = createAsyncThunk(
-  "groups/fetch",
-  async (_params, thunkAPI) => {
-    try {
-      const result = await fetchGroups();
-      return result.data;
-    } catch (e) {
-      switch (e.response.status) {
-        case 401:
-        case 404:
-          return thunkAPI.rejectWithValue("Incorrect username or password.");
-        default:
-          return thunkAPI.rejectWithValue(e.response.data.error);
-      }
-    }
-  }
-);
 const groupsSlice = createSlice({
   name: "groups",
   initialState,
-  extraReducers: {
-    [fetch.fulfilled]: (state, action) => {
+  reducers: {
+    groupsReducer: (state, action) => {
       state.items = action.payload;
     },
-    [fetch.rejected]: (state, action) => {},
   },
 });
+
+export const { groupsReducer } = groupsSlice.actions;
+
+export const fetchGroups = () => async (dispatch) => {
+  try {
+    const result = await fetchGroupsFromBackend();
+    dispatch(groupsReducer(result.data));
+  } catch (e) {
+    console.log(e.message);
+  }
+};
 
 export default groupsSlice.reducer;
