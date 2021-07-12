@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Autocomplete } from "@material-ui/lab";
-import hobbies from "../assets/hobbies.json";
 import { TagComponent } from "./TagComponent";
 import { TextField } from "@material-ui/core";
 
 export function HobbySelector(props) {
   const [selectedHobby, setSelectedHobby] = React.useState(null);
   const [tags, setTags] = React.useState([]);
+  const hobbies = [{_id: "0", title: "Placeholder"}];
 
   const isValidTag = (hobbyTag) => {
     // dummy
@@ -20,7 +20,6 @@ export function HobbySelector(props) {
       try {
         setTags([...tags, hobbyTag]);
         setSelectedHobby(null);
-        console.log(event.currentTarget.innerHTML);
       } catch (e) {
         console.log(e.message);
       }
@@ -28,7 +27,6 @@ export function HobbySelector(props) {
   };
 
   const onAddTag = (hobbyTag) => {
-    console.log(hobbyTag);
     if (hobbyTag && !tags.includes(hobbyTag)) {
       setSelectedHobby(hobbyTag);
       try {
