@@ -23,6 +23,9 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { SignInUpInput } from "./SignInUpInput";
 import { PasswordStrengthBar } from "./PasswordStrengthBar";
 import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
+import DateFnsUtils from "@date-io/date-fns";
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
+import { formatISO } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   usersignUpRoot: {
@@ -71,13 +74,13 @@ const initialErrors = {
 };
 
 export function SignUpComponent(props) {
-  // TODO: More of an ugly solution currently
   const classes = useStyles();
 
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
+  const [bday, setBday] = React.useState(null);
   const [hobbies, setHobbies] = React.useState([]);
   const [acceptedTOS, setAcceptedTOS] = React.useState(false);
 
@@ -110,7 +113,14 @@ export function SignUpComponent(props) {
     if (passError !== "" || nameError !== "" || mailError !== "") {
       return;
     }
-    props.onRegister(username, email, password, hobbies); // TODO: handle server response errors
+    try {
+      console.log(bday)
+      const date = formatISO(bday);
+      console.log(date)
+      props.onRegister(username, email, password, date, hobbies); // TODO: handle server response errors
+    } catch (e) {
+      console.log(e.message); // TODO: Date Error Handling
+    }
   };
 
   const onChangeUsername = (e) => {
@@ -158,6 +168,11 @@ export function SignUpComponent(props) {
         setPassError("");
       }
     }
+  };
+
+  const onChangeBday = (e) => {
+    console.log(e)
+    setBday(e);
   };
 
   return (
@@ -216,6 +231,23 @@ export function SignUpComponent(props) {
         {passwordStrength > 0 && (
           <PasswordStrengthBar passStrength={passwordStrength} />
         )}
+        <div className={classes.signUpRow}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker // TODO: picker icon position
+              disableFuture
+              fullWidth
+              required
+              variant={"inline"}
+              inputVariant={"outlined"}
+              id={"bday"}
+              label={"Date of birth"}
+              value={bday}
+              onChange={onChangeBday}
+              format={"dd.MM.yyyy"}
+              autoComplete={"bday"}
+            />
+          </MuiPickersUtilsProvider>
+        </div>
         <div className={classes.signUpRow}>
           <HobbySelector />
         </div>

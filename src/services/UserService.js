@@ -1,11 +1,18 @@
 import HttpService, { setToken } from "./HttpService";
 
-export async function registrationRequest(username, email, password, hobbies) {
+export async function registrationRequest(
+  username,
+  email,
+  password,
+  bday,
+  hobbies
+) {
   const resp = await HttpService.post("auth/register", {
     username: username,
     email: email,
     password: password,
-    hobbies: [...hobbies]
+    dateOfBirth: bday,
+    hobbies: [...hobbies],
   });
   return await processToken(resp.data.token);
 }
@@ -23,7 +30,7 @@ export async function logoutRequest() {
   return resp;
 }
 
-export async function fetchUser() {
+export async function fetchMe() {
   const resp = await HttpService.get("auth/me");
   // TODO: Token Refreshment
   const user = { ...resp };
@@ -33,5 +40,5 @@ export async function fetchUser() {
 async function processToken(token) {
   setToken(token);
 
-  return await fetchUser();
+  return await fetchMe();
 }
