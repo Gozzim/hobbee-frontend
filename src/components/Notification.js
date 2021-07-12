@@ -47,7 +47,7 @@ export function Notification(props) {
   };
 
   return (
-    <ListItem button dense className={classes.notification}>
+    <ListItem button dense className={classes.notification} onClick={() => props.onClickNotification(props.msgType, props.link)}>
       <ListItemIcon>{getNotificationIcon(props.msgType)}</ListItemIcon>
       <ListItemText primary={props.groupName} secondary={props.message} />
       <ListItemSecondaryAction>
@@ -62,6 +62,8 @@ export function Notification(props) {
 // attributes of props and their type
 Notification.propTypes = {
   groupName: PropTypes.string.isRequired,
+  onClickNotification: PropTypes.func.isRequired,
+  link: PropTypes.string,
   msgType: PropTypes.string,
   message: PropTypes.string,
   read: PropTypes.bool,
