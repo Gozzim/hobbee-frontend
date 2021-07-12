@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   AppBar,
+  Avatar,
   Button,
   IconButton,
   Toolbar,
@@ -122,7 +123,17 @@ export function Header(props) {
           onClick={(event) => setUserMenuAnchor(event.currentTarget)}
           color="inherit"
         >
-          <MenuIcon />
+          {user.isLoggedIn ? (
+            /*TODO: RenderUserAvatarFunction*/
+            <Avatar>
+              {user.user.avatar
+                ? "🐝"
+                : (user.user.username ? user.user.username[0] : "🍯")
+              }
+            </Avatar>
+          ) : (
+            <MenuIcon />
+          )}
         </IconButton>
       </Toolbar>
     </AppBar>

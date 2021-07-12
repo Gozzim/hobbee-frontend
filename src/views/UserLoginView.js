@@ -32,20 +32,10 @@ function UserLoginView(props) {
     props.dispatch(login({ username, password }));
   };
 
-  const onCancel = () => {
-    onAfterLogin();
-  };
-
-  const onSignUp = () => {
-    props.history.push("/register");
-  };
-
   return (
     <LoginComponent
       user={user}
-      onCancel={onCancel}
       onLogin={onLogin}
-      onSignUp={onSignUp}
     />
   );
 }
