@@ -15,7 +15,12 @@ const initialGroupFormState = {
   location: "",
   description: "",
 };
-const initialTouchedState = { groupName: false, city: false, tags: false };
+const initialTouchedState = {
+  groupName: false,
+  city: false,
+  tags: false,
+  pic: false,
+};
 
 export function CreateGroupView() {
   const [groupForm, setGroupForm] = React.useState(initialGroupFormState);
@@ -58,7 +63,14 @@ export function CreateGroupView() {
               ) {
                 setFormStep(1);
               } else {
-                setTouched({ groupName: true, city: true, tags: true });
+                setTouched((touched) => {
+                  return {
+                    ...touched,
+                    groupName: true,
+                    city: true,
+                    tags: true,
+                  };
+                });
               }
             }}
           >
@@ -83,7 +95,16 @@ export function CreateGroupView() {
             type="button"
             variant="contained"
             onClick={async () => {
-              await createRequest(groupForm);
+              if (groupForm.pic !== "") {
+                await createRequest(groupForm);
+              } else {
+                setTouched((touched) => {
+                  return {
+                    ...touched,
+                    pic: true,
+                  };
+                });
+              }
             }}
           >
             Create
