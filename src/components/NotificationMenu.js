@@ -7,10 +7,8 @@ import { Notification } from "./Notification";
 
 /*
  * TODO:
- *  - Map group to name
  *  - Mark as read button functionality
  *  - Mark all as read button functionality
- *  - Notification Routing
  *  - Filtering by read and unread
  */
 
@@ -25,18 +23,17 @@ const NotificationTypes = {
  * @param {props} props
  */
 function NotificationMenu(props) {
-  const onClickNotification = (notificationType) => {
-    //TODO
+  const onClickNotification = (msgType, linkId) => {
     props.onClose();
 
-    switch (notificationType) {
+    switch (msgType) {
       case NotificationTypes.CHAT:
       case NotificationTypes.REMINDER:
-        let groupId = 0; // dummy
-        props.history.push("/group-page/" + groupId);
+        props.history.push("/group/" + linkId);
         break;
       case NotificationTypes.FEEDBACK:
         //TODO
+        props.history.push("/feedback/" + linkId);
         break;
       default:
         break;
@@ -57,7 +54,9 @@ function NotificationMenu(props) {
       {props.notifications.map((notification) => (
         <Notification
           key={notification._id}
-          groupName={/*"TODO"*/ notification.group}
+          groupName={notification.group.groupName}
+          onClickNotification={onClickNotification}
+          link={(notification.notificationType === "Chat" || notification.notificationType === "Reminder") ? notification.group._id : "testId"}
           msgType={notification.notificationType}
           message={notification.content}
           read={notification.read}
