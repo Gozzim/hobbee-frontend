@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -12,6 +12,7 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
 import { SignInUpInput } from "./SignInUpInput";
+import { ForgotPasswordDialog } from "./ForgotPasswordDialog";
 
 const useStyles = makeStyles((theme) => ({
   userLoginRoot: {
@@ -45,18 +46,18 @@ const useStyles = makeStyles((theme) => ({
 
 /*
  * TODO:
- *  - Forgot Password
  *  - Add server response error handling
  *  - Fix error handling
  */
 export function LoginComponent(props) {
   const classes = useStyles();
 
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [loginError, setLoginError] = React.useState("");
+  const [loginError, setLoginError] = useState("");
+  const [forgotOpen, setForgotOpen] = useState(false);
 
   useEffect(() => {
     if (props.user.error) {
@@ -109,6 +110,7 @@ export function LoginComponent(props) {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
+                    tabIndex={"-1"}
                     aria-label="toggle password visibility"
                     onClick={() => {
                       setShowPassword(!showPassword);
@@ -151,7 +153,25 @@ export function LoginComponent(props) {
             </Link>
           </Typography>
         </div>
+        <div>
+          <Typography
+            className={classes.bottomSpacing}
+            align="center"
+            variant="body2"
+          >
+            <Link
+              style={{ textDecoration: "none", color: "inherit" }}
+              onClick={() => setForgotOpen(true)}
+            >
+              Forgot Password?
+            </Link>
+          </Typography>
+        </div>
       </form>
+      <ForgotPasswordDialog
+          open={forgotOpen}
+          onClose={() => setForgotOpen(false)}
+      />
     </div>
   );
 }

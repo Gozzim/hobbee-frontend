@@ -26,8 +26,22 @@ export async function loginRequest(username, password) {
 }
 
 export async function logoutRequest() {
-  const resp = await HttpService.post("auth/logout");
-  return resp;
+  return await HttpService.post("auth/logout");
+}
+
+export async function forgotPasswordRequest(email) {
+  return await HttpService.post("auth/forgot", {
+    email: email
+  });
+}
+
+export async function resetPasswordRequest(user, token, password) {
+  const resp = await HttpService.post("auth/reset", {
+    user: user,
+    token: token,
+    password: password
+  });
+  return await processToken(resp.data.token);
 }
 
 export async function fetchMe() {

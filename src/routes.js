@@ -11,6 +11,7 @@ import { Imprint } from "./views/Imprint";
 import { PrivacyPolicy } from "./views/PrivacyPolicy";
 import { ToS } from "./views/TermsOfService";
 import { ProfileView } from "./views/ProfileView";
+import ResetPasswordView from "./views/UserAuthentication/ResetPasswordView";
 import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PaymentPlanView";
 import {PaymentConfirmationView} from "./views/PaymentConfirmationView";
@@ -62,6 +63,11 @@ export const routes = [
   {
     path: "/my-groups",
     component: MyGroupsView,
+  },
+  {
+    exact: true,
+    path: "/password-reset/:user/:token",
+    component: ResetPasswordView,
   },
   {
     path: "/imprint",
