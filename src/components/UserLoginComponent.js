@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
 
 /*
  * TODO:
- *  - Forgot Password
  *  - Add server response error handling
  *  - Fix error handling
  */
@@ -111,6 +110,7 @@ export function LoginComponent(props) {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
+                    tabIndex={"-1"}
                     aria-label="toggle password visibility"
                     onClick={() => {
                       setShowPassword(!showPassword);

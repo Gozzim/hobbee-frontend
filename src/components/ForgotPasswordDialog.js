@@ -18,13 +18,18 @@ export function ForgotPasswordDialog(props) {
   const [finished, setFinished] = useState(false);
   const [error, setError] = useState("");
 
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     try {
       await forgotPasswordRequest(email);
       setError("");
       setFinished(true);
     } catch (e) {
-      setError(e.response.data.message);
+      if (e.response.status && e.response.status === 404) {
+        setError("No user with this email found")
+      } else {
+        setError(e.message)
+      }
     }
   };
 

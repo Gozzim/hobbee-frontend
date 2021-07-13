@@ -96,6 +96,7 @@ export function SignUpComponent(props) {
     endAdornment: (
       <InputAdornment position="end">
         <IconButton
+          tabIndex={"-1"}
           aria-label="toggle password visibility"
           onClick={() => {
             setShowPassword(!showPassword);

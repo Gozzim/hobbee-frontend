@@ -98,6 +98,6 @@ export const resetPassword = (user, token, password) => async (dispatch) => {
   } catch (e) {
     setToken(null);
   }
-}
+};
 
 export default userSlice.reducer;

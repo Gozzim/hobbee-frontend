@@ -11,9 +11,7 @@ import { Imprint } from "./views/Imprint";
 import { PrivacyPolicy } from "./views/PrivacyPolicy";
 import { ToS } from "./views/TermsOfService";
 import { ProfileView } from "./views/ProfileView";
-
-// routes within the movie database example app
-// used for routing
+import ResetPasswordView from "./views/UserAuthentication/ResetPasswordView";
 
 export const routes = [
   {
@@ -47,6 +45,11 @@ export const routes = [
   {
     path: "/my-groups",
     component: MyGroupsView,
+  },
+  {
+    exact: true,
+    path: "/password-reset/:user/:token",
+    component: ResetPasswordView,
   },
   {
     path: "/imprint",
