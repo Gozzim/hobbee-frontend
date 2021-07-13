@@ -1,30 +1,19 @@
 import React from "react";
 import { TagComponent } from "../../components/TagComponent";
 import {
-  Paper,
-  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
-  FormControlLabel,
-  Checkbox,
-  FormLabel,
-  FormControl,
-  RadioGroup,
-  Radio,
-  IconButton,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { Autocomplete } from "@material-ui/lab";
-import hobbies from "../../assets/hobbies.json";
-import AddIcon from "@material-ui/icons/Add";
+import { TagAutocomplete } from "../../components/TagAutocomplete";
 
 export function CreateGroup(props) {
-  const [autocompleteValue, setAutocompleteValue] = React.useState(null);
-
   return (
     <>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
-        {/* component (the semantic): how the heading is rendered; variant: how the heading looks */}
         Create Group
       </Typography>
       <Typography className={"creategroup-padding"}>
@@ -32,17 +21,25 @@ export function CreateGroup(props) {
       </Typography>
       <TextField
         label="e.g. Table Tennis at TUM"
-        required={true}
+        required
         fullWidth
         variant="outlined"
         size="small"
         onChange={(event) => {
-          props.dispatch({
-            type: "SET_GROUP_NAME",
-            groupName: event.target.value,
+          props.setTouched((touched) => {
+            return { ...touched, groupName: true };
+          });
+          props.setGroupForm((groupForm) => {
+            return { ...groupForm, groupName: event.target.value };
           });
         }}
-        value={props.state.groupName}
+        value={props.groupForm.groupName}
+        error={props.touched.groupName && props.groupForm.groupName === ""}
+        helperText={
+          props.touched.groupName && props.groupForm.groupName === ""
+            ? "Empty entry"
+            : ""
+        }
       />
 
       <Typography className={"creategroup-padding"}>
@@ -52,17 +49,23 @@ export function CreateGroup(props) {
       <TextField
         label="e.g. Munich, Germany"
         className=""
-        required={true}
+        required
         fullWidth
         variant="outlined"
         size="small"
         onChange={(event) => {
-          props.dispatch({
-            type: "SET_CITY",
-            city: event.target.value,
+          props.setTouched((touched) => {
+            return { ...touched, city: true };
+          });
+          props.setGroupForm((groupForm) => {
+            return { ...groupForm, city: event.target.value };
           });
         }}
-        value={props.state.city}
+        value={props.groupForm.city}
+        error={props.touched.city && props.groupForm.city === ""}
+        helperText={
+          props.touched.city && props.groupForm.city === "" ? "Empty entry" : ""
+        }
       />
 
       <Typography className={"creategroup-padding"}>
@@ -73,11 +76,11 @@ export function CreateGroup(props) {
         <RadioGroup
           className={"creategroup-radios"}
           onChange={(event) => {
-            props.dispatch({
-              type: "ONLINE_OFFLINE_BOTH",
-              how: event.target.value,
+            props.setGroupForm((groupForm) => {
+              return { ...groupForm, onOffline: event.target.value };
             });
           }}
+          value={props.groupForm.onOffline}
         >
           <FormControlLabel value="online" control={<Radio />} label="Online" />
           <FormControlLabel
@@ -97,39 +100,45 @@ export function CreateGroup(props) {
         Choose some tags, so that other users can find your group:
       </Typography>
 
+      <TagAutocomplete
+        onChange={(tags) => {
+          props.setTouched((touched) => {
+            return { ...touched, tags: true };
+          });
+          props.setGroupForm((groupForm) => {
+            return { ...groupForm, tags };
+          });
+        }}
+        value={props.groupForm.tags}
+        error={props.touched.tags && props.groupForm.tags.length === 0}
+        helperText={
+          props.touched.tags && props.groupForm.tags.length === 0
+            ? "Empty entry"
+            : ""
+        }
+      />
+
       <div className={"creategroup-tags"}>
-        <Autocomplete
-          id="combo-box-demo"
-          options={hobbies.map((x) => {
-            return x.title;
-          })}
-          onChange={(event, autocompleteValue) =>
-            setAutocompleteValue(autocompleteValue)
-          }
-          value={autocompleteValue}
-          style={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} variant="outlined" />}
-        />
-        <IconButton
-          onClick={() => {
-            if (
-              props.state.tags.includes(autocompleteValue) ||
-              autocompleteValue === null
-            ) {
-            } else {
-              props.dispatch({
-                type: "TAGS",
-                tags: [...props.state.tags, autocompleteValue],
-              });
-            }
-          }}
-        >
-          <AddIcon />
-        </IconButton>
-      </div>
-      <div className={"creategroup-tags"}>
-        {props.state.tags.map((x) => {
-          return <TagComponent title={x} key={x} />;
+        {props.groupForm.tags.map((x) => {
+          return (
+            <TagComponent
+              id={x}
+              key={x}
+              onDelete={() => {
+                props.setTouched((touched) => {
+                  return { ...touched, tags: true };
+                });
+                props.setGroupForm((groupForm) => {
+                  return {
+                    ...groupForm,
+                    tags: groupForm.tags.filter((tag) => {
+                      return x !== tag;
+                    }),
+                  };
+                });
+              }}
+            />
+          );
         })}
       </div>
     </>

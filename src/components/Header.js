@@ -55,11 +55,16 @@ const useStyles = makeStyles((theme) => ({
  */
 export function Header(props) {
   const classes = useStyles();
-  const user = useSelector((state) => {return state.user});
-  const notifications = useSelector((state) => {return state.notification});
+  const user = useSelector((state) => {
+    return state.user;
+  });
+  const notifications = useSelector((state) => {
+    return state.notification;
+  });
 
   const [userMenuAnchor, setUserMenuAnchor] = React.useState(null);
-  const [notificationMenuAnchor, setNotificationMenuAnchor] = React.useState(null);
+  const [notificationMenuAnchor, setNotificationMenuAnchor] =
+    React.useState(null);
 
   return (
     <AppBar position="sticky">
@@ -76,7 +81,7 @@ export function Header(props) {
       />
       <Toolbar className={classes.toolbar}>
         <Link className={"linkDefault"} to={"/"}>
-          <img src={HobbeeIcon} height={55} />
+          <img src={HobbeeIcon} height={55} alt="hobb.ee logo" />
         </Link>
         <Typography className={classes.title} variant="h5" color="inherit" />
         <Link className={"linkDefault"} to={"/recommended"}>
@@ -89,11 +94,13 @@ export function Header(props) {
             IN MY AREA
           </Button>
         </Link>
-        <Link className={"linkDefault"} to={"/my-groups"}>
-          <Button className={classes.navButton} type="button">
-            MY GROUPS
-          </Button>
-        </Link>
+        {user.isLoggedIn && (
+          <Link className={"linkDefault"} to={"/my-groups"}>
+            <Button className={classes.navButton} type="button">
+              MY GROUPS
+            </Button>
+          </Link>
+        )}
         <Link className={"linkDefault"} to={"/create-group"}>
           <Button className={classes.createGroupButton} type="button">
             CREATE GROUP

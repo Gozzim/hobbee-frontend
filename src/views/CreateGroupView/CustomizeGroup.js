@@ -1,17 +1,7 @@
 import React from "react";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  Darkroom,
-  Canvas,
-  History,
-  Toolbar,
-  FilePicker,
-  CropMenu,
-} from "react-darkroom";
+import { Darkroom, Canvas } from "react-darkroom";
 import ImageIcon from "@material-ui/icons/Image";
-import LocalCafeIcon from "@material-ui/icons/LocalCafe";
-import DesktopMacIcon from "@material-ui/icons/DesktopMac";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -19,39 +9,29 @@ import {
 } from "@material-ui/pickers";
 import {
   Grid,
-  Slider,
-  Paper,
   Button,
   TextField,
   Typography,
-  FormControlLabel,
-  Checkbox,
   Card,
   CardContent,
   Avatar,
+  FormHelperText,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import { formatISO } from "date-fns";
+import { getFileUrl, uploadRequest } from "../../services/FileService";
+
+const examplePics = [
+  "60ec51d7e0edf15bb9e1993a",
+  "60ec52095fd7f45c7aaf7909",
+  "60ec5220db5ec95c854a253d",
+];
 
 export function CustomizeGroup(props) {
-  const [participants, setParticipants] = React.useState("");
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date("2021-07-25T21:11:54")
-  );
   const fileInput = React.useRef();
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  let hasFile = false;
-
-  function onFileChange() {}
 
   return (
     <div>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
-        {/* component (the semantic): how the heading is rendered; variant: how the heading looks */}
         Customize Group
       </Typography>
       <Typography variant="h6" component={"h2"} align={"center"} className={""}>
@@ -180,26 +160,43 @@ export function CustomizeGroup(props) {
                       }}
                     >
                       <div>
-                        <div className={"imageIcon"}>
-                          <ImageIcon color={"disabled"} fontSize={"inherit"} />
-                        </div>
-                        <Typography
-                          className={"selectImageText"}
-                          color={"textSecondary"}
-                          align={"center"}
-                          variant={"h6"}
-                        >
-                          Select image
-                        </Typography>
+                        {props.groupForm.pic ? (
+                          <img src={getFileUrl(props.groupForm.pic)} />
+                        ) : (
+                          <>
+                            <div className={"imageIcon"}>
+                              <ImageIcon
+                                color={"disabled"}
+                                fontSize={"inherit"}
+                              />
+                            </div>
+                            <Typography
+                              className={"selectImageText"}
+                              color={"textSecondary"}
+                              align={"center"}
+                              variant={"h6"}
+                            >
+                              Select image
+                            </Typography>
+                          </>
+                        )}
                         <input
                           type={"file"}
                           className={"customizegroup-file"}
                           ref={fileInput}
-                          onChange={(event) => {
-                            props.dispatch({
-                              type: "PIC",
-                              pic: event.target.value,
+                          onChange={async (event) => {
+                            props.setTouched((touched) => {
+                              return { ...touched, pic: true };
                             });
+
+                            const file = event.target.files[0];
+                            if (file) {
+                              const response = await uploadRequest(file);
+
+                              props.setGroupForm((groupForm) => {
+                                return { ...groupForm, pic: response.data.id };
+                              });
+                            }
                           }}
                         />
                       </div>
@@ -210,20 +207,43 @@ export function CustomizeGroup(props) {
             </Darkroom>
           </Grid>
           <Grid item xs={6}>
-            <Typography>Upload or choose a picture:</Typography>
+            <Typography>Upload or choose a profile picture:</Typography>
             <div className={"customizegroup-filename"}>
-              [no file uploaded yet]
+              {props.groupForm.pic === "" && props.touched.pic ? (
+                <FormHelperText error>
+                  You need to upload or to select a picture
+                </FormHelperText>
+              ) : null}
             </div>
             <div className={"customizegroup-avatare"}>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <LocalCafeIcon />
-              </Avatar>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <WbSunnyIcon />
-              </Avatar>
-              <Avatar variant="square" className={"customizegroup-avatar"}>
-                <DesktopMacIcon />
-              </Avatar>
+              {examplePics.map((id) => {
+                return (
+                  <div
+                    key={id}
+                    onClick={() => {
+                      props.setGroupForm((groupForm) => {
+                        return { ...groupForm, pic: id };
+                      });
+                      fileInput.current.value = "";
+                    }}
+                  >
+                    <Avatar
+                      variant="square"
+                      className={
+                        props.groupForm.pic === id
+                          ? "customizegroup-avatar selectedAvatar"
+                          : "customizegroup-avatar"
+                      }
+                      src={getFileUrl(id)}
+                      onChange={() => {
+                        props.setTouched((touched) => {
+                          return { ...touched, pic: true };
+                        });
+                      }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </Grid>
 
@@ -260,32 +280,22 @@ export function CustomizeGroup(props) {
                 shrink: true,
               }}
               onChange={(event) => {
-                if (event.target.value < 1) {
-                  props.dispatch({
-                    type: "NUMBER_OF_PARTICIPANTS",
-                    participants: "",
-                  });
-                } else if (
-                  event.target.value === "1" &&
-                  props.state.participants === "2"
-                ) {
-                  props.dispatch({
-                    type: "NUMBER_OF_PARTICIPANTS",
-                    participants: "",
-                  });
-                } else if (event.target.value === "1") {
-                  props.dispatch({
-                    type: "NUMBER_OF_PARTICIPANTS",
-                    participants: "2",
-                  });
-                } else {
-                  props.dispatch({
-                    type: "NUMBER_OF_PARTICIPANTS",
-                    participants: event.target.value,
-                  });
-                }
+                props.setGroupForm((groupForm) => {
+                  if (parseInt(event.target.value, 10) < 1) {
+                    return { ...groupForm, participants: "" };
+                  } else if (
+                    event.target.value === "1" &&
+                    props.groupForm.participants === "2"
+                  ) {
+                    return { ...groupForm, participants: "" };
+                  } else if (event.target.value === "1") {
+                    return { ...groupForm, participants: "2" };
+                  } else {
+                    return { ...groupForm, participants: event.target.value };
+                  }
+                });
               }}
-              value={props.state.participants}
+              value={props.groupForm.participants}
             />
           </Grid>
           <Grid item xs={6} className={"border"}>
@@ -295,31 +305,41 @@ export function CustomizeGroup(props) {
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 margin="normal"
-                id="date-picker-dialog"
-                label="Date picker dialog"
-                //format="MM/dd/yyyy"
                 onChange={(date) => {
-                  props.dispatch({ type: "DATE", date: formatISO(date) });
+                  props.setGroupForm((groupForm) => {
+                    return { ...groupForm, date: formatISO(date) };
+                  });
                 }}
-                value={props.state.date}
+                value={props.groupForm.date}
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
               />
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
-                label="Time picker"
-                //  value={selectedDate}
                 onChange={(date) => {
-                  props.dispatch({ type: "DATE", date: formatISO(date) });
+                  props.setGroupForm((groupForm) => {
+                    return { ...groupForm, date: formatISO(date) };
+                  });
                 }}
-                value={props.state.date}
+                value={props.groupForm.date}
                 KeyboardButtonProps={{
                   "aria-label": "change time",
                 }}
               />
             </MuiPickersUtilsProvider>
+            <div>
+              <Button
+                className={"creategroup-nodatebutton"}
+                onClick={() => {
+                  props.setGroupForm((groupForm) => {
+                    return { ...groupForm, date: null };
+                  });
+                }}
+              >
+                No date
+              </Button>
+            </div>
           </Grid>
           <Grid item xs={6} className={"border"}>
             <Typography>Choose a specific location:</Typography>
@@ -332,9 +352,8 @@ export function CustomizeGroup(props) {
               className=""
               fullWidth
               onChange={(event) => {
-                props.dispatch({
-                  type: "LOCATION",
-                  location: event.target.value,
+                props.setGroupForm((groupForm) => {
+                  return { ...groupForm, location: event.target.value };
                 });
               }}
             />
@@ -344,17 +363,15 @@ export function CustomizeGroup(props) {
               Give a short description of the planned activity:
             </Typography>
           </Grid>
-          <Grid item xs={6}></Grid>
+          <Grid item xs={6} />
           <TextField
-            id="outlined-multiline-static"
             multiline
             rows={6}
             variant="outlined"
             fullWidth
             onChange={(event) => {
-              props.dispatch({
-                type: "DESCRIPTION",
-                description: event.target.value,
+              props.setGroupForm((groupForm) => {
+                return { ...groupForm, description: event.target.value };
               });
             }}
           />

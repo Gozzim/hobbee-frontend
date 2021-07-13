@@ -6,7 +6,7 @@ stages:
 build:
   stage: build
   only:
-    - master
+    - main
     - develop
     - merge_requests
   script:
