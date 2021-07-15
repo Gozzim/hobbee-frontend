@@ -31,34 +31,18 @@ import { isUsernameAvailable } from "../services/UserService";
 import { PasswordEye } from "./PasswordEye";
 import { setAuthError } from "../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
-  usersignUpRoot: {
+  userSignUpRoot: {
     margin: "auto",
     width: "60%",
   },
-  bottomSpacing: {
-    paddingTop: theme.spacing(2),
-  },
-  signUpRow: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    "&:last-child": {
-      paddingBottom: theme.spacing(0),
+  submitButton: {
+    backgroundColor: HOBBEE_ORANGE,
+    "&:hover": {
+      backgroundColor: HOBBEE_YELLOW,
     },
-    "&:first-child": {
-      paddingTop: theme.spacing(0),
-    },
-  },
-  submitRow: {
-    "& button": {
-      backgroundColor: HOBBEE_ORANGE,
-      "&:hover": {
-        backgroundColor: HOBBEE_YELLOW,
-      },
-    },
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -201,7 +185,7 @@ export function SignUpComponent(props) {
   };
 
   return (
-    <div className={classes.usersignUpRoot}>
+    <div className={classes.userSignUpRoot}>
       <div>
         <img src={HobbeeIcon} width={"100%"} alt={"logo"} />
         <Typography variant="h4" align="center">
@@ -209,182 +193,185 @@ export function SignUpComponent(props) {
         </Typography>
       </div>
       <form onSubmit={onSubmit}>
-        <div className={classes.signUpRow}>
-          <SignInUpInput
-            id={"username"}
-            label={"Username"}
-            fieldValue={registerState.username}
-            changeFunc={onChangeUsername}
-            inputError={registerError.username !== ""}
-            errorMessage={registerError.username}
-            autoComplete={"username"}
-          />
-        </div>
-        <div className={classes.signUpRow}>
-          <SignInUpInput
-            id={"email"}
-            label={"Email"}
-            fieldValue={registerState.email}
-            changeFunc={onChangeEmail}
-            inputError={registerError.email !== ""}
-            errorMessage={registerError.email}
-            autoComplete={"email"}
-          />
-        </div>
-        <div className={classes.signUpRow}>
-          <SignInUpInput
-            id={"password"}
-            label={"Password"}
-            fieldValue={registerState.password}
-            changeFunc={onChangePassword}
-            fieldType={showPassword ? "text" : "password"}
-            inputProps={{
-              endAdornment: (
-                <PasswordEye
-                  onClickEye={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                  isShown={showPassword}
-                />
-              ),
-            }}
-            inputError={registerError.password !== ""}
-            errorMessage={registerError.password}
-            autoComplete={"new-password"}
-          />
-        </div>
-        <div className={classes.signUpRow}>
-          <SignInUpInput
-            id={"password2"}
-            label={"Repeat Password"}
-            fieldValue={registerState.confirmPassword}
-            changeFunc={onChangeConfirmPassword}
-            fieldType={showPassword ? "text" : "password"}
-            inputProps={{
-              endAdornment: (
-                <PasswordEye
-                  onClickEye={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                  isShown={showPassword}
-                />
-              ),
-            }}
-            inputError={
-              registerError.password !== "" &&
-              registerState.confirmPassword !== ""
-            }
-            autoComplete={"new-password"}
-          />
-        </div>
-        {passwordStrength > 0 && (
-          <PasswordStrengthBar passStrength={passwordStrength} />
-        )}
-        <div className={classes.signUpRow}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              disableFuture
-              fullWidth
-              required
-              variant={"inline"}
-              inputVariant={"outlined"}
-              id={"bday"}
-              label={"Date of birth"}
-              value={registerState.bday}
-              onChange={onChangeBday}
-              format={"dd.MM.yyyy"}
-              KeyboardButtonProps={{ edge: "end" }}
-              autoComplete={"bday"}
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
+            <SignInUpInput
+              id={"username"}
+              label={"Username"}
+              fieldValue={registerState.username}
+              changeFunc={onChangeUsername}
+              inputError={registerError.username !== ""}
+              errorMessage={registerError.username}
+              autoComplete={"username"}
             />
-          </MuiPickersUtilsProvider>
-        </div>
-        <div className={classes.signUpRow}>
-          <TagAutocomplete
-            onChange={(tags) => {
-              changeRegisterState({ hobbies: tags });
-            }}
-            value={registerState.hobbies}
-          />
-          <div className={"creategroup-tags"}>
-            {registerState.hobbies.map((x) => {
-              return (
-                <TagComponent
-                  id={x}
-                  key={x}
-                  onDelete={() => {
-                    changeRegisterState({
-                      hobbies: registerState.hobbies.filter((tag) => {
-                        return x !== tag;
-                      }),
-                    });
-                  }}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div className={classes.signUpRow}>
-          <FormControl>
-            <FormControlLabel
-              control={<Checkbox required color="primary" />}
-              label={
-                <>
-                  I agree to Hobb.ee's{" "}
-                  <Link
-                    style={{ textDecoration: "underline", color: "black" }}
-                    to={"/tos"}
-                    target={"_blank"}
-                    rel={"noopener noreferrer"}
-                  >
-                    terms of service
-                  </Link>{" "}
-                  and{" "}
-                  <Link
-                    style={{ textDecoration: "underline", color: "black" }}
-                    to={"/privacy"}
-                    target={"_blank"}
-                    rel={"noopener noreferrer"}
-                  >
-                    privacy policy
-                  </Link>
-                  . *
-                </>
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"email"}
+              label={"Email"}
+              fieldValue={registerState.email}
+              changeFunc={onChangeEmail}
+              inputError={registerError.email !== ""}
+              errorMessage={registerError.email}
+              autoComplete={"email"}
+            />
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"password"}
+              label={"Password"}
+              fieldValue={registerState.password}
+              changeFunc={onChangePassword}
+              fieldType={showPassword ? "text" : "password"}
+              inputProps={{
+                endAdornment: (
+                  <PasswordEye
+                    onClickEye={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                    isShown={showPassword}
+                  />
+                ),
+              }}
+              inputError={registerError.password !== ""}
+              errorMessage={registerError.password}
+              autoComplete={"new-password"}
+            />
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"password2"}
+              label={"Repeat Password"}
+              fieldValue={registerState.confirmPassword}
+              changeFunc={onChangeConfirmPassword}
+              fieldType={showPassword ? "text" : "password"}
+              inputProps={{
+                endAdornment: (
+                  <PasswordEye
+                    onClickEye={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                    isShown={showPassword}
+                  />
+                ),
+              }}
+              inputError={
+                registerError.password !== "" &&
+                registerState.confirmPassword !== ""
               }
+              autoComplete={"new-password"}
             />
-          </FormControl>
-        </div>
-        {registerError.general ? (
-          <div className={classes.signUpRow}>
-            <Typography color="error">{registerError.general}</Typography>
-          </div>
-        ) : null}
-        <div className={classes.submitRow}>
-          <Button
-            fullWidth
-            size={"large"}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
-            Create Account
-          </Button>
-        </div>
-        <Divider key={"divider"} />
-        <div>
-          <Typography
-            className={classes.bottomSpacing}
-            align="center"
-            style={{ fontWeight: "bold" }}
-          >
-            Already got a Hobb.ee Account?{" "}
-            <Link
-              style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
-              to={"/login"}
+          </Grid>
+          {passwordStrength > 0 && (
+            <Grid item>
+              <PasswordStrengthBar passStrength={passwordStrength} />
+            </Grid>
+          )}
+          <Grid item>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableFuture
+                fullWidth
+                required
+                variant={"inline"}
+                inputVariant={"outlined"}
+                id={"bday"}
+                label={"Date of birth"}
+                value={registerState.bday}
+                onChange={onChangeBday}
+                format={"dd.MM.yyyy"}
+                KeyboardButtonProps={{ edge: "end" }}
+                autoComplete={"bday"}
+              />
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item>
+            <TagAutocomplete
+              onChange={(tags) => {
+                changeRegisterState({ hobbies: tags });
+              }}
+              value={registerState.hobbies}
+            />
+            <div className={"creategroup-tags"}>
+              {registerState.hobbies.map((x) => {
+                return (
+                  <TagComponent
+                    id={x}
+                    key={x}
+                    onDelete={() => {
+                      changeRegisterState({
+                        hobbies: registerState.hobbies.filter((tag) => {
+                          return x !== tag;
+                        }),
+                      });
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </Grid>
+          <Grid item>
+            <FormControl>
+              <FormControlLabel
+                control={<Checkbox required color="primary" />}
+                label={
+                  <>
+                    I agree to Hobb.ee's{" "}
+                    <Link
+                      style={{ textDecoration: "underline", color: "black" }}
+                      to={"/tos"}
+                      target={"_blank"}
+                      rel={"noopener noreferrer"}
+                    >
+                      terms of service
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      style={{ textDecoration: "underline", color: "black" }}
+                      to={"/privacy"}
+                      target={"_blank"}
+                      rel={"noopener noreferrer"}
+                    >
+                      privacy policy
+                    </Link>
+                    . *
+                  </>
+                }
+              />
+            </FormControl>
+          </Grid>
+          {registerError.general ? (
+            <Grid item>
+              <Typography color="error">{registerError.general}</Typography>
+            </Grid>
+          ) : null}
+          <Grid item>
+            <Button
+              fullWidth
+              className={classes.submitButton}
+              size={"large"}
+              variant="contained"
+              color="primary"
+              type="submit"
             >
-              Login here
-            </Link>
-          </Typography>
-        </div>
+              Create Account
+            </Button>
+          </Grid>
+          <Grid item>
+            <Divider key={"divider"} />
+          </Grid>
+          <Grid item>
+            <Typography align="center" style={{ fontWeight: "bold" }}>
+              Already got a Hobb.ee Account?{" "}
+              <Link
+                style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
+                to={"/login"}
+              >
+                Login here
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
       </form>
     </div>
   );

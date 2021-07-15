@@ -9,34 +9,18 @@ import { ForgotPasswordDialog } from "./ForgotPasswordDialog";
 import { PasswordEye } from "./PasswordEye";
 import { useDispatch } from "react-redux";
 import { setAuthError } from "../redux/reducers/userReducer";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   userLoginRoot: {
     margin: "auto",
     width: "60%",
   },
-  bottomSpacing: {
-    paddingTop: theme.spacing(2),
-  },
-  loginRow: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    "&:last-child": {
-      paddingBottom: theme.spacing(0),
+  submitButton: {
+    backgroundColor: HOBBEE_ORANGE,
+    "&:hover": {
+      backgroundColor: HOBBEE_YELLOW,
     },
-    "&:first-child": {
-      paddingTop: theme.spacing(0),
-    },
-  },
-  submitRow: {
-    "& button": {
-      backgroundColor: HOBBEE_ORANGE,
-      "&:hover": {
-        backgroundColor: HOBBEE_YELLOW,
-      },
-    },
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -79,83 +63,85 @@ export function LoginComponent(props) {
 
   return (
     <div className={classes.userLoginRoot}>
-      <div className={classes.loginRow}>
+      <div>
         <img src={HobbeeIcon} width={"100%"} alt={"logo"} />
       </div>
       <form onSubmit={onSubmit}>
-        <div className={classes.loginRow}>
-          <SignInUpInput
-            id={"username"}
-            label={"Username or Email"}
-            fieldValue={username}
-            changeFunc={onChangeUsername}
-            inputLabelProps={{ required: false }}
-            inputError={loginError !== ""}
-            autoComplete={"username"}
-          />
-        </div>
-        <div className={classes.loginRow}>
-          <SignInUpInput
-            id={"password"}
-            label={"Password"}
-            fieldValue={password}
-            changeFunc={onChangePassword}
-            fieldType={showPassword ? "text" : "password"}
-            inputProps={{
-              endAdornment: (
-                <PasswordEye
-                  onClickEye={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                  isShown={showPassword}
-                />
-              ),
-            }}
-            inputLabelProps={{ required: false }}
-            inputError={loginError !== ""}
-            autoComplete={"current-password"}
-          />
-        </div>
-        {loginError !== "" && (
-          <div className={classes.loginRow}>
-            <Typography color="error">{loginError}</Typography>
-          </div>
-        )}
-        <div className={classes.submitRow}>
-          <Button fullWidth variant="contained" color="primary" type="submit">
-            Sign In
-          </Button>
-        </div>
-        <Divider key={"divider"} />
-        <div>
-          <Typography
-            className={classes.bottomSpacing}
-            align="center"
-            style={{ fontWeight: "bold" }}
-          >
-            New to Hobb.ee?{" "}
-            <Link
-              style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
-              to={"/register"}
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
+            <SignInUpInput
+              id={"username"}
+              label={"Username or Email"}
+              fieldValue={username}
+              changeFunc={onChangeUsername}
+              inputLabelProps={{ required: false }}
+              inputError={loginError !== ""}
+              autoComplete={"username"}
+            />
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"password"}
+              label={"Password"}
+              fieldValue={password}
+              changeFunc={onChangePassword}
+              fieldType={showPassword ? "text" : "password"}
+              inputProps={{
+                endAdornment: (
+                  <PasswordEye
+                    onClickEye={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                    isShown={showPassword}
+                  />
+                ),
+              }}
+              inputLabelProps={{ required: false }}
+              inputError={loginError !== ""}
+              autoComplete={"current-password"}
+            />
+          </Grid>
+          {loginError !== "" && (
+            <Grid item>
+              <Typography color="error">{loginError}</Typography>
+            </Grid>
+          )}
+          <Grid item>
+            <Button
+              fullWidth
+              className={classes.submitButton}
+              variant="contained"
+              color="primary"
+              type="submit"
             >
-              Create an account
-            </Link>
-          </Typography>
-        </div>
-        <div>
-          <Typography
-            className={classes.bottomSpacing}
-            align="center"
-            variant="body2"
-          >
-            <Link
-              style={{ textDecoration: "none", color: "inherit" }}
-              onClick={() => setForgotOpen(true)}
-            >
-              Forgot Password?
-            </Link>
-          </Typography>
-        </div>
+              Sign In
+            </Button>
+          </Grid>
+          <Grid item>
+            <Divider key={"divider"} />
+          </Grid>
+          <Grid item>
+            <Typography align="center" style={{ fontWeight: "bold" }}>
+              New to Hobb.ee?{" "}
+              <Link
+                style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
+                to={"/register"}
+              >
+                Create an account
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography align="center" variant="body2">
+              <Link
+                style={{ textDecoration: "none", color: "inherit" }}
+                onClick={() => setForgotOpen(true)}
+              >
+                Forgot Password?
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
       </form>
       <ForgotPasswordDialog
         open={forgotOpen}
