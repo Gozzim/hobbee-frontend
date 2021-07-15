@@ -14,8 +14,11 @@ export async function fetchGroup(data) {
 }
 
 export async function joinGroup(data) {
-  console.log("groupservice 1");
   await setToken(getToken());
-  console.log("groupservice 2");
   return HttpService.post("group/join-group/" + data);
+}
+
+export async function leaveGroup(data) {
+  await setToken(getToken());
+  return HttpService.post("group/leave-group/" + data);
 }

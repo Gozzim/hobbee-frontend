@@ -14,7 +14,7 @@ import { Button, IconButton } from "@material-ui/core";
 import { Chat } from "../components/Chat";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import { TagComponent } from "../components/TagComponent";
-import { joinGroup, fetchGroup } from "../services/GroupService";
+import { joinGroup, leaveGroup, fetchGroup } from "../services/GroupService";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -109,33 +109,25 @@ export function GroupPageView(props) {
     const thisGroup = await fetchGroup("60eac733995d842558cf257b");
     setGroup(thisGroup.data);
     //check to see if user is in group
-    console.log("joined: "+joined);
-    console.log("location: "+thisGroup.data.location);
     if(!joined && (typeof thisGroup.data.location !== 'undefined')) {
       setJoined(true);
     }
-    console.log("useeffect happened - joined: "+joined)
   }, [joined]);
-  console.log('I bims ein log:' + group);
-  //console.log("setting joined true");
-  //setJoined(true);
-  //console.log("setting joined false");
-  //setJoined(false);
+  console.log(group);
 
 
   async function handleJoin() {
-    console.log("joingroup frontend");
+    console.log("Joining Group");
     const result = await joinGroup("60eac733995d842558cf257b");
-    console.log(result);
+    console.log(result.data);
     setJoined(true);
   }
 
   async function handleLeave() {
-    //setJoined(false);
-    console.log("joingroup frontend");
-    const result = await joinGroup("60eac733995d842558cf257b");
-    console.log(result);
-    setJoined(true);
+    console.log("Leaving Group");
+    const result = await leaveGroup("60eac733995d842558cf257b");
+    console.log(result.data);
+    setJoined(false);
   }
 
 
