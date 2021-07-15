@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -6,11 +6,8 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  IconButton,
-  InputAdornment,
   Typography,
 } from "@material-ui/core";
-import { HobbySelector } from "./HobbySelectorComponent";
 import {
   getPasswordStrength,
   isValidEmail,
@@ -19,305 +16,362 @@ import {
 } from "../validators/UserDataValidator";
 import { Link } from "react-router-dom";
 import HobbeeIcon from "../assets/hobbee_white.svg";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { SignInUpInput } from "./SignInUpInput";
 import { PasswordStrengthBar } from "./PasswordStrengthBar";
-import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
+import { ERRORS, HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
 import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import { formatISO } from "date-fns";
+import { TagAutocomplete } from "./TagAutocomplete";
+import { TagComponent } from "./TagComponent";
+import { isUsernameAvailable } from "../services/UserService";
+import { PasswordEye } from "./PasswordEye";
+import { setAuthError } from "../redux/reducers/userReducer";
+import { useDispatch } from "react-redux";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
-  usersignUpRoot: {
+  userSignUpRoot: {
     margin: "auto",
     width: "60%",
   },
-  bottomSpacing: {
-    paddingTop: theme.spacing(2),
-  },
-  signUpRow: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    "&:last-child": {
-      paddingBottom: theme.spacing(0),
+  submitButton: {
+    backgroundColor: HOBBEE_ORANGE,
+    "&:hover": {
+      backgroundColor: HOBBEE_YELLOW,
     },
-    "&:first-child": {
-      paddingTop: theme.spacing(0),
-    },
-  },
-  submitRow: {
-    "& button": {
-      backgroundColor: HOBBEE_ORANGE,
-      "&:hover": {
-        backgroundColor: HOBBEE_YELLOW,
-      },
-    },
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(2),
   },
 }));
 
-const initialPasswordState = {
-  pending: false,
+const initialRegisterState = {
+  username: "",
   email: "",
   password: "",
   confirmPassword: "",
+  bday: null,
   hobbies: [],
-  acceptTOS: false,
-  errors: false,
 };
 
 const initialErrors = {
-  mail: null,
-  name: null,
-  pass: null,
+  general: "", //TODO
+  email: "",
+  username: "",
+  password: "",
 };
 
 export function SignUpComponent(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const [username, setUsername] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [password2, setPassword2] = React.useState("");
-  const [bday, setBday] = React.useState(null);
-  const [hobbies, setHobbies] = React.useState([]);
-  const [acceptedTOS, setAcceptedTOS] = React.useState(false);
+  const [registerError, setRegisterError] = useState(initialErrors);
+  const [registerState, setRegisterState] = useState(initialRegisterState);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
 
-  const [passError, setPassError] = React.useState("");
-  const [nameError, setNameError] = React.useState("");
-  const [mailError, setMailError] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [passwordStrength, setPasswordStrength] = React.useState(0);
-  const [registerError, setRegisterError] = React.useState(initialErrors); //TODO
-  const [passwordState, setPasswordState] = React.useState(initialPasswordState); //TODO
+  useEffect(() => {
+    if (props.user.error) {
+      changeRegisterError({
+        general:
+          "Something went wrong. Maybe you already have a Hobb.ee account.",
+      });
+      dispatch(setAuthError(null));
+    }
+  }, [props.user.error]);
 
-  const passEye = {
-    endAdornment: (
-      <InputAdornment position="end">
-        <IconButton
-          tabIndex={"-1"}
-          aria-label="toggle password visibility"
-          onClick={() => {
-            setShowPassword(!showPassword);
-          }}
-          edge="end"
-        >
-          {showPassword ? <Visibility /> : <VisibilityOff />}
-        </IconButton>
-      </InputAdornment>
-    ),
+  const changeRegisterError = (fieldWithValue) => {
+    setRegisterError({
+      ...registerError,
+      ...fieldWithValue,
+    });
+  };
+
+  const changeRegisterState = (fieldWithValue) => {
+    setRegisterState({
+      ...registerState,
+      ...fieldWithValue,
+    });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (passError !== "" || nameError !== "" || mailError !== "") {
+    if (
+      registerError.password !== "" ||
+      registerError.username !== "" ||
+      registerError.email !== ""
+    ) {
       return;
     }
     try {
-      console.log(bday)
-      const date = formatISO(bday);
-      console.log(date)
-      props.onRegister(username, email, password, date, hobbies); // TODO: handle server response errors
+      const date = formatISO(registerState.bday);
+      props.onRegister(
+        registerState.username,
+        registerState.email,
+        registerState.password,
+        date,
+        registerState.hobbies
+      );
     } catch (e) {
-      console.log(e.message); // TODO: Date Error Handling
+      changeRegisterError({
+        general:
+          "Oops, something went wrong. Please try again or contact our support.",
+      });
     }
   };
 
-  const onChangeUsername = (e) => {
-    setUsername(e.target.value);
+  const onChangeUsername = async (e) => {
+    changeRegisterState({ username: e.target.value });
     if (e.target.value !== "" && !isValidUsername(e.target.value)) {
-      setNameError("Invalid Username");
+      changeRegisterError({ username: "Invalid username" });
     } else {
-      setNameError("");
+      const usernameUsedResp = await isUsernameAvailable(e.target.value);
+      if (!usernameUsedResp.isUsernameAvailable) {
+        changeRegisterError({ username: "Username already in use" });
+      } else {
+        changeRegisterError({ username: "" });
+      }
     }
   };
 
   const onChangeEmail = (e) => {
-    setEmail(e.target.value);
+    changeRegisterState({ email: e.target.value });
     if (e.target.value !== "" && !isValidEmail(e.target.value.toLowerCase())) {
-      setMailError("Invalid Email");
+      changeRegisterError({ email: "Invalid Email" });
     } else {
-      setMailError("");
+      changeRegisterError({ email: "" });
     }
   };
 
   const onChangePassword = (e) => {
-    setPassword(e.target.value);
+    changeRegisterState({ password: e.target.value });
     // TODO: Fix ugly if statements
     if (e.target.value === "") {
-      setPassError("");
+      changeRegisterError({ password: "" });
     } else if (!isValidPassword(e.target.value)) {
-      setPassError("Invalid Password");
-    } else if (password2 !== "" && password2 !== e.target.value) {
-      setPassError("Passwords do not match.");
+      changeRegisterError({
+        password: ERRORS.weakPassword,
+      });
+    } else if (
+      registerState.confirmPassword !== "" &&
+      registerState.confirmPassword !== e.target.value
+    ) {
+      changeRegisterError({ password: "Passwords do not match" });
     } else {
-      setPassError("");
+      changeRegisterError({ password: "" });
     }
     setPasswordStrength(getPasswordStrength(e.target.value));
   };
 
-  const onChangePassword2 = (e) => {
-    setPassword2(e.target.value);
+  const onChangeConfirmPassword = (e) => {
+    changeRegisterState({ confirmPassword: e.target.value });
     // TODO: Fix ugly if statements
-    if (password !== "") {
-      if (password !== e.target.value && e.target.value !== "") {
-        setPassError("Passwords do not match.");
-      } else if (!isValidPassword(password)) {
-        setPassError("Invalid Password");
+    if (registerState.password !== "") {
+      if (registerState.password !== e.target.value && e.target.value !== "") {
+        changeRegisterError({ password: "Passwords do not match" });
+      } else if (!isValidPassword(registerState.password)) {
+        changeRegisterError({
+          password: ERRORS.weakPassword,
+        });
       } else {
-        setPassError("");
+        changeRegisterError({ password: "" });
       }
     }
   };
 
   const onChangeBday = (e) => {
-    console.log(e)
-    setBday(e);
+    changeRegisterState({ bday: e });
   };
 
   return (
-    <div className={classes.usersignUpRoot}>
+    <div className={classes.userSignUpRoot}>
       <div>
-        <img src={HobbeeIcon} width={"100%"} />
+        <img src={HobbeeIcon} width={"100%"} alt={"logo"} />
         <Typography variant="h4" align="center">
           Let's Bee Active!
         </Typography>
       </div>
       <form onSubmit={onSubmit}>
-        <div className={classes.signUpRow}>
-          <SignInUpInput
-            id={"username"}
-            label={"Username"}
-            fieldValue={username}
-            changeFunc={onChangeUsername}
-            inputError={nameError !== ""}
-            autoComplete={"username"}
-          />
-        </div>
-        <div className={classes.signUpRow}>
-          <SignInUpInput
-            id={"email"}
-            label={"Email"}
-            fieldValue={email}
-            changeFunc={onChangeEmail}
-            inputError={mailError !== ""}
-            autoComplete={"email"}
-          />
-        </div>
-        <div className={classes.signUpRow}>
-          <SignInUpInput
-            id={"password"}
-            label={"Password"}
-            fieldValue={password}
-            changeFunc={onChangePassword}
-            fieldType={showPassword ? "text" : "password"}
-            inputProps={passEye}
-            inputError={passError !== ""}
-            autoComplete={"new-password"}
-          />
-        </div>
-        <div className={classes.signUpRow}>
-          <SignInUpInput
-            id={"password2"}
-            label={"Repeat Password"}
-            fieldValue={password2}
-            changeFunc={onChangePassword2}
-            fieldType={showPassword ? "text" : "password"}
-            inputProps={passEye}
-            inputError={passError !== "" && password2 !== ""}
-            autoComplete={"new-password"}
-          />
-        </div>
-        {passwordStrength > 0 && (
-          <PasswordStrengthBar passStrength={passwordStrength} />
-        )}
-        <div className={classes.signUpRow}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker // TODO: picker icon position
-              disableFuture
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
+            <SignInUpInput
+              id={"username"}
+              label={"Username"}
+              fieldValue={registerState.username}
+              changeFunc={onChangeUsername}
+              inputError={registerError.username !== ""}
+              errorMessage={registerError.username}
+              autoComplete={"username"}
+            />
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"email"}
+              label={"Email"}
+              fieldValue={registerState.email}
+              changeFunc={onChangeEmail}
+              inputError={registerError.email !== ""}
+              errorMessage={registerError.email}
+              autoComplete={"email"}
+            />
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"password"}
+              label={"Password"}
+              fieldValue={registerState.password}
+              changeFunc={onChangePassword}
+              fieldType={showPassword ? "text" : "password"}
+              inputProps={{
+                endAdornment: (
+                  <PasswordEye
+                    onClickEye={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                    isShown={showPassword}
+                  />
+                ),
+              }}
+              inputError={registerError.password !== ""}
+              errorMessage={registerError.password}
+              autoComplete={"new-password"}
+            />
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"password2"}
+              label={"Repeat Password"}
+              fieldValue={registerState.confirmPassword}
+              changeFunc={onChangeConfirmPassword}
+              fieldType={showPassword ? "text" : "password"}
+              inputProps={{
+                endAdornment: (
+                  <PasswordEye
+                    onClickEye={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                    isShown={showPassword}
+                  />
+                ),
+              }}
+              inputError={
+                registerError.password !== "" &&
+                registerState.confirmPassword !== ""
+              }
+              autoComplete={"new-password"}
+            />
+          </Grid>
+          {passwordStrength > 0 && (
+            <Grid item>
+              <PasswordStrengthBar passStrength={passwordStrength} />
+            </Grid>
+          )}
+          <Grid item>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableFuture
+                fullWidth
+                required
+                variant={"inline"}
+                inputVariant={"outlined"}
+                id={"bday"}
+                label={"Date of birth"}
+                value={registerState.bday}
+                onChange={onChangeBday}
+                format={"dd.MM.yyyy"}
+                KeyboardButtonProps={{ edge: "end" }}
+                autoComplete={"bday"}
+              />
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item>
+            <TagAutocomplete
+              onChange={(tags) => {
+                changeRegisterState({ hobbies: tags });
+              }}
+              value={registerState.hobbies}
+            />
+            <div className={"creategroup-tags"}>
+              {registerState.hobbies.map((x) => {
+                return (
+                  <TagComponent
+                    id={x}
+                    key={x}
+                    onDelete={() => {
+                      changeRegisterState({
+                        hobbies: registerState.hobbies.filter((tag) => {
+                          return x !== tag;
+                        }),
+                      });
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </Grid>
+          <Grid item>
+            <FormControl>
+              <FormControlLabel
+                control={<Checkbox required color="primary" />}
+                label={
+                  <>
+                    I agree to Hobb.ee's{" "}
+                    <Link
+                      style={{ textDecoration: "underline", color: "black" }}
+                      to={"/tos"}
+                      target={"_blank"}
+                      rel={"noopener noreferrer"}
+                    >
+                      terms of service
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      style={{ textDecoration: "underline", color: "black" }}
+                      to={"/privacy"}
+                      target={"_blank"}
+                      rel={"noopener noreferrer"}
+                    >
+                      privacy policy
+                    </Link>
+                    . *
+                  </>
+                }
+              />
+            </FormControl>
+          </Grid>
+          {registerError.general ? (
+            <Grid item>
+              <Typography color="error">{registerError.general}</Typography>
+            </Grid>
+          ) : null}
+          <Grid item>
+            <Button
               fullWidth
-              required
-              variant={"inline"}
-              inputVariant={"outlined"}
-              id={"bday"}
-              label={"Date of birth"}
-              value={bday}
-              onChange={onChangeBday}
-              format={"dd.MM.yyyy"}
-              autoComplete={"bday"}
-            />
-          </MuiPickersUtilsProvider>
-        </div>
-        <div className={classes.signUpRow}>
-          <HobbySelector />
-        </div>
-        <div className={classes.signUpRow}>
-          <FormControl
-            required //TODO
-            error={!acceptedTOS}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={acceptedTOS}
-                  onChange={(e) => setAcceptedTOS(e.target.checked)}
-                  color="primary"
-                />
-              }
-              label={
-                <>
-                  I agree to Hobb.ee's{" "}
-                  <Link
-                    style={{ textDecoration: "underline", color: "black" }}
-                    to={"/tos"}
-                    target={"_blank"}
-                    rel={"noopener noreferrer"}
-                  >
-                    terms of service
-                  </Link>{" "}
-                  and{" "}
-                  <Link
-                    style={{ textDecoration: "underline", color: "black" }}
-                    to={"/privacy"}
-                    target={"_blank"}
-                    rel={"noopener noreferrer"}
-                  >
-                    privacy policy
-                  </Link>
-                  .
-                </>
-              }
-            />
-          </FormControl>
-        </div>
-        <div className={classes.submitRow}>
-          <Button
-            fullWidth
-            size={"large"}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
-            Create Account
-          </Button>
-        </div>
-        <Divider key={"divider"} />
-        <div>
-          <Typography
-            className={classes.bottomSpacing}
-            align="center"
-            style={{ fontWeight: "bold" }}
-          >
-            Already got a Hobb.ee Account?{" "}
-            <Link
-              style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
-              to={"/login"}
+              className={classes.submitButton}
+              size={"large"}
+              variant="contained"
+              color="primary"
+              type="submit"
             >
-              Login here
-            </Link>
-          </Typography>
-        </div>
+              Create Account
+            </Button>
+          </Grid>
+          <Grid item>
+            <Divider key={"divider"} />
+          </Grid>
+          <Grid item>
+            <Typography align="center" style={{ fontWeight: "bold" }}>
+              Already got a Hobb.ee Account?{" "}
+              <Link
+                style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
+                to={"/login"}
+              >
+                Login here
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
       </form>
     </div>
   );
