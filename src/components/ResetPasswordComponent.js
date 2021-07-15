@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Button,
-    IconButton,
-    InputAdornment,
     Typography,
 } from "@material-ui/core";
 import {
     getPasswordStrength,
     isValidPassword,
 } from "../validators/UserDataValidator";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { SignInUpInput } from "./SignInUpInput";
 import { PasswordStrengthBar } from "./PasswordStrengthBar";
 import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../redux/reducers/userReducer";
+import { PasswordEye } from "./PasswordEye";
 
 const useStyles = makeStyles((theme) => ({
     resetPassRoot: {
@@ -66,23 +64,6 @@ export function ResetPasswordComponent(props) {
     const [passwordStrength, setPasswordStrength] = useState(0);
 
     const [error, setError] = useState("");
-
-    const passEye = {
-        endAdornment: (
-            <InputAdornment position="end">
-                <IconButton
-                    tabIndex={"-1"}
-                    aria-label="toggle password visibility"
-                    onClick={() => {
-                        setShowPassword(!showPassword);
-                    }}
-                    edge="end"
-                >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-            </InputAdornment>
-        ),
-    };
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -144,7 +125,16 @@ export function ResetPasswordComponent(props) {
                         fieldValue={password}
                         changeFunc={onChangePassword}
                         fieldType={showPassword ? "text" : "password"}
-                        inputProps={passEye}
+                        inputProps={{
+                            endAdornment: (
+                                <PasswordEye
+                                    onClickEye={() => {
+                                        setShowPassword(!showPassword);
+                                    }}
+                                    isShown={showPassword}
+                                />
+                            ),
+                        }}
                         inputError={passError !== ""}
                         autoComplete={"new-password"}
                     />
@@ -156,7 +146,16 @@ export function ResetPasswordComponent(props) {
                         fieldValue={password2}
                         changeFunc={onChangePassword2}
                         fieldType={showPassword ? "text" : "password"}
-                        inputProps={passEye}
+                        inputProps={{
+                            endAdornment: (
+                                <PasswordEye
+                                    onClickEye={() => {
+                                        setShowPassword(!showPassword);
+                                    }}
+                                    isShown={showPassword}
+                                />
+                            ),
+                        }}
                         inputError={passError !== "" && password2 !== ""}
                         autoComplete={"new-password"}
                     />

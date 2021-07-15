@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Button,
-  Divider,
-  IconButton,
-  InputAdornment,
-  Typography,
-} from "@material-ui/core";
+import { Button, Divider, Typography } from "@material-ui/core";
 import HobbeeIcon from "../assets/hobbee_white.svg";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
 import { SignInUpInput } from "./SignInUpInput";
 import { ForgotPasswordDialog } from "./ForgotPasswordDialog";
+import { PasswordEye } from "./PasswordEye";
+import { useDispatch } from "react-redux";
+import { setAuthError } from "../redux/reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({
   userLoginRoot: {
@@ -47,10 +43,10 @@ const useStyles = makeStyles((theme) => ({
 /*
  * TODO:
  *  - Add server response error handling
- *  - Fix error handling
  */
 export function LoginComponent(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -61,11 +57,10 @@ export function LoginComponent(props) {
 
   useEffect(() => {
     if (props.user.error) {
-      setLoginError(props.user.error);
-    } else {
-      setLoginError("");
+      setLoginError("Invalid login credentials");
+      dispatch(setAuthError(null));
     }
-  }, [props.user]);
+  }, [props.user.error]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -108,18 +103,12 @@ export function LoginComponent(props) {
             fieldType={showPassword ? "text" : "password"}
             inputProps={{
               endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    tabIndex={"-1"}
-                    aria-label="toggle password visibility"
-                    onClick={() => {
-                      setShowPassword(!showPassword);
-                    }}
-                    edge="end"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
+                <PasswordEye
+                  onClickEye={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                  isShown={showPassword}
+                />
               ),
             }}
             inputLabelProps={{ required: false }}
@@ -169,8 +158,8 @@ export function LoginComponent(props) {
         </div>
       </form>
       <ForgotPasswordDialog
-          open={forgotOpen}
-          onClose={() => setForgotOpen(false)}
+        open={forgotOpen}
+        onClose={() => setForgotOpen(false)}
       />
     </div>
   );

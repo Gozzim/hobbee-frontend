@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -6,8 +6,6 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  IconButton,
-  InputAdornment,
   Typography,
 } from "@material-ui/core";
 import {
@@ -18,16 +16,21 @@ import {
 } from "../validators/UserDataValidator";
 import { Link } from "react-router-dom";
 import HobbeeIcon from "../assets/hobbee_white.svg";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { SignInUpInput } from "./SignInUpInput";
 import { PasswordStrengthBar } from "./PasswordStrengthBar";
-import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
+import { ERRORS, HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
 import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import { formatISO } from "date-fns";
 import { TagAutocomplete } from "./TagAutocomplete";
 import { TagComponent } from "./TagComponent";
 import { isUsernameAvailable } from "../services/UserService";
+import { PasswordEye } from "./PasswordEye";
+import { setAuthError } from "../redux/reducers/userReducer";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   usersignUpRoot: {
@@ -60,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const initialRegisterState = {
-  pending: false,
   username: "",
   email: "",
   password: "",
@@ -70,74 +72,81 @@ const initialRegisterState = {
 };
 
 const initialErrors = {
-  general: "",
-  mail: "",
-  name: "",
-  pass: "",
+  general: "", //TODO
+  email: "",
+  username: "",
+  password: "",
 };
 
 export function SignUpComponent(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const [registerError, setRegisterError] = React.useState(initialErrors);
-  const [registerState, setRegisterState] = React.useState(initialRegisterState);
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [passwordStrength, setPasswordStrength] = React.useState(0);
+  const [registerError, setRegisterError] = useState(initialErrors);
+  const [registerState, setRegisterState] = useState(initialRegisterState);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  useEffect(() => {
+    if (props.user.error) {
+      changeRegisterError({
+        general:
+          "Something went wrong. Maybe you already have a Hobb.ee account.",
+      });
+      dispatch(setAuthError(null));
+    }
+  }, [props.user.error]);
 
   const changeRegisterError = (fieldWithValue) => {
     setRegisterError({
       ...registerError,
-      ...fieldWithValue
-    })
+      ...fieldWithValue,
+    });
   };
 
   const changeRegisterState = (fieldWithValue) => {
     setRegisterState({
       ...registerState,
-      ...fieldWithValue
-    })
-  };
-
-  const passEye = {
-    endAdornment: (
-      <InputAdornment position="end">
-        <IconButton
-          tabIndex={"-1"}
-          aria-label="toggle password visibility"
-          onClick={() => {
-            setShowPassword(!showPassword);
-          }}
-          edge="end"
-        >
-          {showPassword ? <Visibility /> : <VisibilityOff />}
-        </IconButton>
-      </InputAdornment>
-    ),
+      ...fieldWithValue,
+    });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (registerError.pass !== "" || registerError.name !== "" || registerError.mail !== "") {
+    if (
+      registerError.password !== "" ||
+      registerError.username !== "" ||
+      registerError.email !== ""
+    ) {
       return;
     }
     try {
       const date = formatISO(registerState.bday);
-      props.onRegister(registerState.username, registerState.email, registerState.password, date, registerState.hobbies); // TODO: handle server response errors
+      props.onRegister(
+        registerState.username,
+        registerState.email,
+        registerState.password,
+        date,
+        registerState.hobbies
+      );
     } catch (e) {
-      console.log(e.message); // TODO: Date Error Handling
+      changeRegisterError({
+        general:
+          "Oops, something went wrong. Please try again or contact our support.",
+      });
     }
   };
 
   const onChangeUsername = async (e) => {
     changeRegisterState({ username: e.target.value });
     if (e.target.value !== "" && !isValidUsername(e.target.value)) {
-      changeRegisterError({name: "Invalid username"});
+      changeRegisterError({ username: "Invalid username" });
     } else {
       const usernameUsedResp = await isUsernameAvailable(e.target.value);
       if (!usernameUsedResp.isUsernameAvailable) {
-        changeRegisterError({name: "Username already in use"});
+        changeRegisterError({ username: "Username already in use" });
       } else {
-        changeRegisterError({name: ""});
+        changeRegisterError({ username: "" });
       }
     }
   };
@@ -145,9 +154,9 @@ export function SignUpComponent(props) {
   const onChangeEmail = (e) => {
     changeRegisterState({ email: e.target.value });
     if (e.target.value !== "" && !isValidEmail(e.target.value.toLowerCase())) {
-      changeRegisterError({mail: "Invalid Email"});
+      changeRegisterError({ email: "Invalid Email" });
     } else {
-      changeRegisterError({mail: ""});
+      changeRegisterError({ email: "" });
     }
   };
 
@@ -155,27 +164,34 @@ export function SignUpComponent(props) {
     changeRegisterState({ password: e.target.value });
     // TODO: Fix ugly if statements
     if (e.target.value === "") {
-      changeRegisterError({pass: ""});
+      changeRegisterError({ password: "" });
     } else if (!isValidPassword(e.target.value)) {
-      changeRegisterError({pass: "Passwords must be at least 6 characters long, contain upper & lower case letters and at least one number or special character"});
-    } else if (registerState.confirmPassword !== "" && registerState.confirmPassword !== e.target.value) {
-      changeRegisterError({pass: "Passwords do not match"});
+      changeRegisterError({
+        password: ERRORS.weakPassword,
+      });
+    } else if (
+      registerState.confirmPassword !== "" &&
+      registerState.confirmPassword !== e.target.value
+    ) {
+      changeRegisterError({ password: "Passwords do not match" });
     } else {
-      changeRegisterError({pass: ""});
+      changeRegisterError({ password: "" });
     }
     setPasswordStrength(getPasswordStrength(e.target.value));
   };
 
-  const onChangePassword2 = (e) => {
+  const onChangeConfirmPassword = (e) => {
     changeRegisterState({ confirmPassword: e.target.value });
     // TODO: Fix ugly if statements
     if (registerState.password !== "") {
       if (registerState.password !== e.target.value && e.target.value !== "") {
-        changeRegisterError({pass: "Passwords do not match"});
+        changeRegisterError({ password: "Passwords do not match" });
       } else if (!isValidPassword(registerState.password)) {
-        changeRegisterError({pass: "Passwords must be at least 6 characters long, contain upper & lower case letters and at least one number or special character"});
+        changeRegisterError({
+          password: ERRORS.weakPassword,
+        });
       } else {
-        changeRegisterError({pass: ""});
+        changeRegisterError({ password: "" });
       }
     }
   };
@@ -199,8 +215,8 @@ export function SignUpComponent(props) {
             label={"Username"}
             fieldValue={registerState.username}
             changeFunc={onChangeUsername}
-            inputError={registerError.name !== ""}
-            errorMessage={registerError.name}
+            inputError={registerError.username !== ""}
+            errorMessage={registerError.username}
             autoComplete={"username"}
           />
         </div>
@@ -210,8 +226,8 @@ export function SignUpComponent(props) {
             label={"Email"}
             fieldValue={registerState.email}
             changeFunc={onChangeEmail}
-            inputError={registerError.mail !== ""}
-            errorMessage={registerError.mail}
+            inputError={registerError.email !== ""}
+            errorMessage={registerError.email}
             autoComplete={"email"}
           />
         </div>
@@ -222,9 +238,18 @@ export function SignUpComponent(props) {
             fieldValue={registerState.password}
             changeFunc={onChangePassword}
             fieldType={showPassword ? "text" : "password"}
-            inputProps={passEye}
-            inputError={registerError.pass !== ""}
-            errorMessage={registerError.pass}
+            inputProps={{
+              endAdornment: (
+                <PasswordEye
+                  onClickEye={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                  isShown={showPassword}
+                />
+              ),
+            }}
+            inputError={registerError.password !== ""}
+            errorMessage={registerError.password}
             autoComplete={"new-password"}
           />
         </div>
@@ -233,10 +258,22 @@ export function SignUpComponent(props) {
             id={"password2"}
             label={"Repeat Password"}
             fieldValue={registerState.confirmPassword}
-            changeFunc={onChangePassword2}
+            changeFunc={onChangeConfirmPassword}
             fieldType={showPassword ? "text" : "password"}
-            inputProps={passEye}
-            inputError={registerError.pass !== "" && registerState.confirmPassword !== ""}
+            inputProps={{
+              endAdornment: (
+                <PasswordEye
+                  onClickEye={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                  isShown={showPassword}
+                />
+              ),
+            }}
+            inputError={
+              registerError.password !== "" &&
+              registerState.confirmPassword !== ""
+            }
             autoComplete={"new-password"}
           />
         </div>
@@ -264,7 +301,7 @@ export function SignUpComponent(props) {
         <div className={classes.signUpRow}>
           <TagAutocomplete
             onChange={(tags) => {
-              changeRegisterState({hobbies: tags})
+              changeRegisterState({ hobbies: tags });
             }}
             value={registerState.hobbies}
           />
@@ -275,9 +312,11 @@ export function SignUpComponent(props) {
                   id={x}
                   key={x}
                   onDelete={() => {
-                    changeRegisterState({hobbies: registerState.hobbies.filter((tag) => {
+                    changeRegisterState({
+                      hobbies: registerState.hobbies.filter((tag) => {
                         return x !== tag;
-                      })})
+                      }),
+                    });
                   }}
                 />
               );
@@ -314,6 +353,11 @@ export function SignUpComponent(props) {
             />
           </FormControl>
         </div>
+        {registerError.general ? (
+          <div className={classes.signUpRow}>
+            <Typography color="error">{registerError.general}</Typography>
+          </div>
+        ) : null}
         <div className={classes.submitRow}>
           <Button
             fullWidth
