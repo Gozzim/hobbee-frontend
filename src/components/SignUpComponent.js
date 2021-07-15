@@ -10,7 +10,6 @@ import {
   InputAdornment,
   Typography,
 } from "@material-ui/core";
-import { HobbySelector } from "./HobbySelectorComponent";
 import {
   getPasswordStrength,
   isValidEmail,
@@ -26,6 +25,8 @@ import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import { formatISO } from "date-fns";
+import { TagAutocomplete } from "./TagAutocomplete";
+import { TagComponent } from "./TagComponent";
 
 const useStyles = makeStyles((theme) => ({
   usersignUpRoot: {
@@ -82,7 +83,6 @@ export function SignUpComponent(props) {
   const [password2, setPassword2] = React.useState("");
   const [bday, setBday] = React.useState(null);
   const [hobbies, setHobbies] = React.useState([]);
-  const [acceptedTOS, setAcceptedTOS] = React.useState(false);
 
   const [passError, setPassError] = React.useState("");
   const [nameError, setNameError] = React.useState("");
@@ -124,7 +124,7 @@ export function SignUpComponent(props) {
     }
   };
 
-  const onChangeUsername = (e) => {
+  const onChangeUsername = async (e) => {
     setUsername(e.target.value);
     if (e.target.value !== "" && !isValidUsername(e.target.value)) {
       setNameError("Invalid Username");
@@ -179,7 +179,7 @@ export function SignUpComponent(props) {
   return (
     <div className={classes.usersignUpRoot}>
       <div>
-        <img src={HobbeeIcon} width={"100%"} />
+        <img src={HobbeeIcon} width={"100%"} alt={"logo"} />
         <Typography variant="h4" align="center">
           Let's Bee Active!
         </Typography>
@@ -192,6 +192,7 @@ export function SignUpComponent(props) {
             fieldValue={username}
             changeFunc={onChangeUsername}
             inputError={nameError !== ""}
+            errorMessage={nameError}
             autoComplete={"username"}
           />
         </div>
@@ -202,6 +203,7 @@ export function SignUpComponent(props) {
             fieldValue={email}
             changeFunc={onChangeEmail}
             inputError={mailError !== ""}
+            errorMessage={mailError}
             autoComplete={"email"}
           />
         </div>
@@ -214,6 +216,7 @@ export function SignUpComponent(props) {
             fieldType={showPassword ? "text" : "password"}
             inputProps={passEye}
             inputError={passError !== ""}
+            errorMessage={passError}
             autoComplete={"new-password"}
           />
         </div>
@@ -234,7 +237,7 @@ export function SignUpComponent(props) {
         )}
         <div className={classes.signUpRow}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker // TODO: picker icon position
+            <KeyboardDatePicker
               disableFuture
               fullWidth
               required
@@ -245,26 +248,40 @@ export function SignUpComponent(props) {
               value={bday}
               onChange={onChangeBday}
               format={"dd.MM.yyyy"}
+              KeyboardButtonProps={{ edge: "end" }}
               autoComplete={"bday"}
             />
           </MuiPickersUtilsProvider>
         </div>
         <div className={classes.signUpRow}>
-          <HobbySelector />
+          <TagAutocomplete
+            onChange={(tags) => {
+              setHobbies(tags);
+            }}
+            value={hobbies}
+          />
+          <div className={"creategroup-tags"}>
+            {hobbies.map((x) => {
+              return (
+                <TagComponent
+                  id={x}
+                  key={x}
+                  onDelete={() => {
+                    setHobbies(
+                      hobbies.filter((tag) => {
+                        return x !== tag;
+                      })
+                    );
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
         <div className={classes.signUpRow}>
-          <FormControl
-            required //TODO
-            error={!acceptedTOS}
-          >
+          <FormControl>
             <FormControlLabel
-              control={
-                <Checkbox
-                  checked={acceptedTOS}
-                  onChange={(e) => setAcceptedTOS(e.target.checked)}
-                  color="primary"
-                />
-              }
+              control={<Checkbox required color="primary" />}
               label={
                 <>
                   I agree to Hobb.ee's{" "}
@@ -285,7 +302,7 @@ export function SignUpComponent(props) {
                   >
                     privacy policy
                   </Link>
-                  .
+                  . *
                 </>
               }
             />
