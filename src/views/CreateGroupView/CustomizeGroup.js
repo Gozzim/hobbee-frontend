@@ -15,14 +15,20 @@ import {
   Card,
   CardContent,
   Avatar,
+  FormHelperText,
 } from "@material-ui/core";
 import { formatISO } from "date-fns";
-import examplepic1 from "../../assets/examplepic1.jpg";
-import examplepic2 from "../../assets/examplepic2.jpg";
-import examplepic3 from "../../assets/examplepic3.jpg";
+import { getFileUrl, uploadRequest } from "../../services/FileService";
+
+const examplePics = [
+  "60ec51d7e0edf15bb9e1993a",
+  "60ec52095fd7f45c7aaf7909",
+  "60ec5220db5ec95c854a253d",
+];
 
 export function CustomizeGroup(props) {
   const fileInput = React.useRef();
+
   return (
     <div>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
@@ -154,25 +160,43 @@ export function CustomizeGroup(props) {
                       }}
                     >
                       <div>
-                        <div className={"imageIcon"}>
-                          <ImageIcon color={"disabled"} fontSize={"inherit"} />
-                        </div>
-                        <Typography
-                          className={"selectImageText"}
-                          color={"textSecondary"}
-                          align={"center"}
-                          variant={"h6"}
-                        >
-                          Select image
-                        </Typography>
+                        {props.groupForm.pic ? (
+                          <img src={getFileUrl(props.groupForm.pic)} />
+                        ) : (
+                          <>
+                            <div className={"imageIcon"}>
+                              <ImageIcon
+                                color={"disabled"}
+                                fontSize={"inherit"}
+                              />
+                            </div>
+                            <Typography
+                              className={"selectImageText"}
+                              color={"textSecondary"}
+                              align={"center"}
+                              variant={"h6"}
+                            >
+                              Select image
+                            </Typography>
+                          </>
+                        )}
                         <input
                           type={"file"}
                           className={"customizegroup-file"}
                           ref={fileInput}
-                          onChange={(event) => {
-                            props.setGroupForm((groupForm) => {
-                              return { ...groupForm, pic: event.target.value };
+                          onChange={async (event) => {
+                            props.setTouched((touched) => {
+                              return { ...touched, pic: true };
                             });
+
+                            const file = event.target.files[0];
+                            if (file) {
+                              const response = await uploadRequest(file);
+
+                              props.setGroupForm((groupForm) => {
+                                return { ...groupForm, pic: response.data.id };
+                              });
+                            }
                           }}
                         />
                       </div>
@@ -183,28 +207,43 @@ export function CustomizeGroup(props) {
             </Darkroom>
           </Grid>
           <Grid item xs={6}>
-            <Typography>Upload or choose a picture:</Typography>
+            <Typography>Upload or choose a profile picture:</Typography>
             <div className={"customizegroup-filename"}>
-              [no file uploaded yet]
+              {props.groupForm.pic === "" && props.touched.pic ? (
+                <FormHelperText error>
+                  You need to upload or to select a picture
+                </FormHelperText>
+              ) : null}
             </div>
             <div className={"customizegroup-avatare"}>
-              <div>
-                <Avatar
-                  variant="square"
-                  className={"customizegroup-avatar"}
-                  src={examplepic1}
-                />
-              </div>
-              <Avatar
-                variant="square"
-                className={"customizegroup-avatar"}
-                src={examplepic2}
-              />
-              <Avatar
-                variant="square"
-                className={"customizegroup-avatar"}
-                src={examplepic3}
-              />
+              {examplePics.map((id) => {
+                return (
+                  <div
+                    key={id}
+                    onClick={() => {
+                      props.setGroupForm((groupForm) => {
+                        return { ...groupForm, pic: id };
+                      });
+                      fileInput.current.value = "";
+                    }}
+                  >
+                    <Avatar
+                      variant="square"
+                      className={
+                        props.groupForm.pic === id
+                          ? "customizegroup-avatar selectedAvatar"
+                          : "customizegroup-avatar"
+                      }
+                      src={getFileUrl(id)}
+                      onChange={() => {
+                        props.setTouched((touched) => {
+                          return { ...touched, pic: true };
+                        });
+                      }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </Grid>
 

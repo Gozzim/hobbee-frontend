@@ -1,14 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Button, TextField, Typography } from "@material-ui/core";
+import {
+  Button,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Typography,
+} from "@material-ui/core";
+import HobbeeIcon from "../assets/hobbee_white.svg";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { Link } from "react-router-dom";
+import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../shared/Constants";
+import { SignInUpInput } from "./SignInUpInput";
+import { ForgotPasswordDialog } from "./ForgotPasswordDialog";
 
 const useStyles = makeStyles((theme) => ({
   userLoginRoot: {
     margin: "auto",
+    width: "60%",
   },
-  loginPaper: {
-    width: "500px",
-    padding: theme.spacing(2),
+  bottomSpacing: {
+    paddingTop: theme.spacing(2),
   },
   loginRow: {
     paddingTop: theme.spacing(1),
@@ -20,26 +32,32 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: theme.spacing(0),
     },
   },
-  loginButtons: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  loginButton: {
-    marginLeft: theme.spacing(1),
+  submitRow: {
+    "& button": {
+      backgroundColor: HOBBEE_ORANGE,
+      "&:hover": {
+        backgroundColor: HOBBEE_YELLOW,
+      },
+    },
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
-/**
- * For user login
- * @param {props} props
+/*
+ * TODO:
+ *  - Add server response error handling
+ *  - Fix error handling
  */
 export function LoginComponent(props) {
   const classes = useStyles();
 
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [loginError, setLoginError] = React.useState("");
+  const [loginError, setLoginError] = useState("");
+  const [forgotOpen, setForgotOpen] = useState(false);
 
   useEffect(() => {
     if (props.user.error) {
@@ -49,7 +67,7 @@ export function LoginComponent(props) {
     }
   }, [props.user]);
 
-  const onLogin = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     props.onLogin(username, password);
   };
@@ -66,50 +84,94 @@ export function LoginComponent(props) {
 
   return (
     <div className={classes.userLoginRoot}>
-      <Paper className={classes.loginPaper} component="form">
+      <div className={classes.loginRow}>
+        <img src={HobbeeIcon} width={"100%"} alt={"logo"} />
+      </div>
+      <form onSubmit={onSubmit}>
         <div className={classes.loginRow}>
-          <TextField
-            label="Username"
-            fullWidth
-            value={username}
-            onChange={onChangeUsername}
-            error={loginError !== ""}
+          <SignInUpInput
+            id={"username"}
+            label={"Username or Email"}
+            fieldValue={username}
+            changeFunc={onChangeUsername}
+            inputLabelProps={{ required: false }}
+            inputError={loginError !== ""}
+            autoComplete={"username"}
           />
         </div>
         <div className={classes.loginRow}>
-          <TextField
-            label="Password"
-            fullWidth
-            value={password}
-            onChange={onChangePassword}
-            error={loginError !== ""}
-            type="password"
+          <SignInUpInput
+            id={"password"}
+            label={"Password"}
+            fieldValue={password}
+            changeFunc={onChangePassword}
+            fieldType={showPassword ? "text" : "password"}
+            inputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    tabIndex={"-1"}
+                    aria-label="toggle password visibility"
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            inputLabelProps={{ required: false }}
+            inputError={loginError !== ""}
+            autoComplete={"current-password"}
           />
         </div>
-        {loginError !== "" ? (
+        {loginError !== "" && (
           <div className={classes.loginRow}>
             <Typography color="error">{loginError}</Typography>
           </div>
-        ) : null}
-        <div className={classes.loginRow + " " + classes.loginButtons}>
-          <Button onClick={props.onSignUp}>Not Registered yet?</Button>
-          <div>
-            <Button className={classes.loginButton} onClick={props.onCancel}>
-              Cancel
-            </Button>
-            <Button
-              className={classes.loginButton}
-              variant="contained"
-              color="primary"
-              onClick={onLogin}
-              disabled={username === "" || password === ""}
-              type="submit"
-            >
-              Login
-            </Button>
-          </div>
+        )}
+        <div className={classes.submitRow}>
+          <Button fullWidth variant="contained" color="primary" type="submit">
+            Sign In
+          </Button>
         </div>
-      </Paper>
+        <Divider key={"divider"} />
+        <div>
+          <Typography
+            className={classes.bottomSpacing}
+            align="center"
+            style={{ fontWeight: "bold" }}
+          >
+            New to Hobb.ee?{" "}
+            <Link
+              style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
+              to={"/register"}
+            >
+              Create an account
+            </Link>
+          </Typography>
+        </div>
+        <div>
+          <Typography
+            className={classes.bottomSpacing}
+            align="center"
+            variant="body2"
+          >
+            <Link
+              style={{ textDecoration: "none", color: "inherit" }}
+              onClick={() => setForgotOpen(true)}
+            >
+              Forgot Password?
+            </Link>
+          </Typography>
+        </div>
+      </form>
+      <ForgotPasswordDialog
+          open={forgotOpen}
+          onClose={() => setForgotOpen(false)}
+      />
     </div>
   );
 }
