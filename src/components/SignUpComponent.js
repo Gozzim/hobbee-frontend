@@ -27,6 +27,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/picker
 import { formatISO } from "date-fns";
 import { TagAutocomplete } from "./TagAutocomplete";
 import { TagComponent } from "./TagComponent";
+import { isUsernameAvailable } from "../services/UserService";
 
 const useStyles = makeStyles((theme) => ({
   usersignUpRoot: {
@@ -129,7 +130,12 @@ export function SignUpComponent(props) {
     if (e.target.value !== "" && !isValidUsername(e.target.value)) {
       setNameError("Invalid Username");
     } else {
-      setNameError("");
+      const usernameUsedResp = await isUsernameAvailable(e.target.value);
+      if (!usernameUsedResp.isUsernameAvailable) {
+        setNameError("Username already in use");
+      } else {
+        setNameError("");
+      }
     }
   };
 
