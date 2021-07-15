@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export function Chat(props) {
   const classes = useStyles();
   const items = [...Array(10 + 1).keys()].slice(1);
-  console.log(items);
+  //console.log(items);
 
   return (
     <div>

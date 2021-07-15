@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
@@ -14,6 +14,7 @@ import { Button, IconButton } from "@material-ui/core";
 import { Chat } from "../components/Chat";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import { TagComponent } from "../components/TagComponent";
+import { joinGroup, fetchGroup } from "../services/GroupService";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -83,10 +84,61 @@ function handleClick(event) {
   console.info("You clicked a breadcrumb.");
 }
 
+const initialState = {
+  _id: "",
+  groupName: "",
+  groupOwner: "",
+  groupMembers: [],
+  city: "",
+  onOffline: "both",
+  tags: [],
+  pic: "",
+  participants: "",
+  date: null,
+  location: undefined,
+  description: "",
+};
+
+
 export function GroupPageView(props) {
   const classes = useStyles();
   const [joined, setJoined] = useState(false);
-  const tags = ["Sewing", "Crafting", "Cosplay"];
+  const [group, setGroup] = useState(initialState);
+
+  useEffect(async () => {
+    const thisGroup = await fetchGroup("60eac733995d842558cf257b");
+    setGroup(thisGroup.data);
+    //check to see if user is in group
+    console.log("joined: "+joined);
+    console.log("location: "+thisGroup.data.location);
+    if(!joined && (typeof thisGroup.data.location !== 'undefined')) {
+      setJoined(true);
+    }
+    console.log("useeffect happened - joined: "+joined)
+  }, [joined]);
+  console.log('I bims ein log:' + group);
+  //console.log("setting joined true");
+  //setJoined(true);
+  //console.log("setting joined false");
+  //setJoined(false);
+
+
+  async function handleJoin() {
+    console.log("joingroup frontend");
+    const result = await joinGroup("60eac733995d842558cf257b");
+    console.log(result);
+    setJoined(true);
+  }
+
+  async function handleLeave() {
+    //setJoined(false);
+    console.log("joingroup frontend");
+    const result = await joinGroup("60eac733995d842558cf257b");
+    console.log(result);
+    setJoined(true);
+  }
+
+
 
   if (joined) {
     return (
@@ -120,10 +172,10 @@ export function GroupPageView(props) {
             </div>
             <div className={classes.infoJoined}>
               <Typography variant="h4" color="inherit">
-                Table Tennis at TUM
+                {group.groupName}
               </Typography>
               <IconButton
-                onClick={() => setJoined(false)}
+                onClick={() => handleLeave()}
                 color="inherit"
                 className={classes.leaveButton}
               >
@@ -132,31 +184,38 @@ export function GroupPageView(props) {
               <div className={classes.detailsItem}>
                 <UserIcon style={{ fill: "#32210B" }} />
                 <Typography variant="h6" className={classes.detailsItemText}>
-                  Group Owner
+                  {group.groupOwner.username}
                 </Typography>
               </div>
               <div className={classes.detailsItem}>
                 <EventIcon style={{ fill: "#32210B" }} />
                 <Typography variant="h6" className={classes.detailsItemText}>
-                  Mi, 09.06.2021 21:00 Uhr
+                  {new Date(group.date).toLocaleString("en-GB", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </Typography>
               </div>
               <div className={classes.detailsItem}>
                 <LocationIcon style={{ fill: "#32210B" }} />
                 <Typography variant="h6" className={classes.detailsItemText}>
-                  Arcisstr. 21, 80800 Munich
+                  {group.location}
                 </Typography>
               </div>
               <div className={classes.detailsItem}>
                 <GroupIcon style={{ fill: "#32210B" }} />
                 <Typography variant="h6" className={classes.detailsItemText}>
-                  5/7
+                  {group.groupMembers.length}/{group.participants}
                 </Typography>
               </div>
             </div>
             <div style={{ display: "flex" }}>
-              {tags.map((x) => {
-                return <TagComponent title={x} key={x} />;
+              {group.tags.map((x) => {
+                return <TagComponent id={x} />;
               })}
             </div>
           </div>
@@ -212,44 +271,51 @@ export function GroupPageView(props) {
           </div>
           <div className={classes.infoNotJoined}>
             <Typography variant="h4" color="inherit">
-              Table Tennis at TUM
+              {group.groupName}
             </Typography>
             <div className={classes.detailsItem}>
               <UserIcon style={{ fill: "#32210B" }} />
               <Typography variant="h6" className={classes.detailsItemText}>
-                Group Owner
+                {group.groupOwner.username}
               </Typography>
             </div>
             <div className={classes.detailsItem}>
               <EventIcon style={{ fill: "#32210B" }} />
               <Typography variant="h6" className={classes.detailsItemText}>
-                Mi, 09.06.2021 21:00 Uhr
+                {new Date(group.date).toLocaleString("en-GB", {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </Typography>
             </div>
             <div className={classes.detailsItem}>
               <LocationIcon style={{ fill: "#32210B" }} />
               <Typography variant="h6" className={classes.detailsItemText}>
-                Munich
+                {group.city}
               </Typography>
             </div>
             <div className={classes.detailsItem}>
               <GroupIcon style={{ fill: "#32210B" }} />
               <Typography variant="h6" className={classes.detailsItemText}>
-                5/7
+                {group.groupMembers.length}/{group.participants}
               </Typography>
             </div>
             <Button
               className={classes.joinButton}
               type="button"
-              onClick={() => setJoined(true)}
+              onClick={() => handleJoin()}
             >
               JOIN GROUP
             </Button>
           </div>
         </div>
         <div style={{ display: "flex" }}>
-          {tags.map((x) => {
-            return <TagComponent title={x} key={x} />;
+          {group.tags.map((x) => {
+            return <TagComponent id={x} />;
           })}
         </div>
         <div style={{ fontSize: "17px" }}>
