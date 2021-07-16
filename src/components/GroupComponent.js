@@ -1,12 +1,12 @@
-import * as React from "react";
+import * as React from 'react';
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
-import GroupIcon from "@material-ui/icons/Group";
-import ExploreIcon from "@material-ui/icons/Explore";
-import EventIcon from "@material-ui/icons/Event";
+import GroupIcon from '@material-ui/icons/Group';
+import ExploreIcon from '@material-ui/icons/Explore';
+import EventIcon from '@material-ui/icons/Event';
 import {ButtonBase, Grid, Typography} from "@material-ui/core";
-import DummyGroupImage from "../assets/bee_cream.png";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   icons: {
@@ -31,53 +31,49 @@ const useStyles = makeStyles((theme) => ({
     width: 128,
     height: 128,
     textAlign: 'center',
-    margin: 'auto',
   },
 }));
+
 
 export function GroupComponent(props) {
   const classes = useStyles();
 
-  const title = "This is your Default group";
-  const city = "Munich";
-  const time = new Date("July 19, 2021 13:37");
-  const currentMembers = 5;
-  const maxMembers = 7;
-  //const groupImage = image
+  const currentMembers = props.group.members.length;
+  const maxMembers = props.group.participants;
+  const groupImage = props.group.image
 
   return (
     <Paper className={classes.paper}>
-      <h3> {title} </h3>
-
-      <Grid item>
-        <ButtonBase className={classes.img}>
-          <img className={classes.img} alt="image" src={DummyGroupImage}/>
-        </ButtonBase>
-      </Grid>
-
-      <Grid item>
-        <Typography>
-          <ExploreIcon/> {city}
-        </Typography>
-      </Grid>
-
-      <Grid item>
-        <Typography>
-          <EventIcon/> Date: {time.toLocaleDateString()}{" "}
-        </Typography>
-      </Grid>
-
-      <Grid item>
-        <Typography>
-          <AccessTimeIcon/> {time.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Typography>
-          <GroupIcon fontSize={"medium"}/> Members: {currentMembers}/{maxMembers}
-        </Typography>
+      <h3> {props.group.groupName} </h3>
+      <Grid justify="center"
+            alignItems="center">
+        <Grid item>
+          <ButtonBase className={classes.image}>
+            <img className={classes.img} src={groupImage}/>
+          </ButtonBase>
+        </Grid>
+        <Grid item>
+          <Typography>
+            <p><ExploreIcon/> {props.group.city} </p>
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography>
+            <p><EventIcon/> {props.group.time.to.LocaleDateString()}</p>
+            <p><AccessTimeIcon/> {props.group.time.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography>
+            <GroupIcon fontSize={"medium"}/> {currentMembers}/{maxMembers}
+          </Typography>
+        </Grid>
       </Grid>
 
     </Paper>
   );
 }
+
+GroupComponent.propTypes = {
+  group: PropTypes.object.isRequired,
+};

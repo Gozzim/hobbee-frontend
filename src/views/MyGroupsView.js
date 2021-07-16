@@ -1,13 +1,15 @@
 import React from "react";
-import {GroupResultsComponentDemo} from "../components/GroupResultsComponentDemo";
+import { MyGroupsResultsComponent } from "../components/MyGroupsResultsComponent";
 
+/**
+ * For my groups
+ * @param {props} props
+ */
 export function MyGroupsView(props) {
   return (
     <div>
-      
-      <center><h1> YOUR GROUPS </h1></center>
 
-      <GroupResultsComponentDemo/>
+      <MyGroupsResultsComponent/>
 
     </div>
   );

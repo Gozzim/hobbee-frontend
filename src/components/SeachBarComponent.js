@@ -42,7 +42,7 @@ export function SearchBarComponent(props) {
 
   const classes = useStyles()
 
-  const [autocompleteValue, setAutocompleteValue] = React.useState(null);
+  //const [autocompleteValue, setAutocompleteValue] = React.useState(null);
 
   const searchString = "What do you like doing?"
 

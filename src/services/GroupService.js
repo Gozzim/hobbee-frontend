@@ -7,3 +7,7 @@ export async function createRequest(data) {
 export async function fetchGroups() {
   return await HttpService.get("group/groups");
 }
+
+export async function fetchMyGroups() {
+  return await HttpService.get("/group/mine");
+}

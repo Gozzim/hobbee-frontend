@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchGroups as fetchGroupsFromBackend } from "../../services/GroupService";
+import { fetchGroups as fetchGroupsFromBackend, fetchMyGroups } from "../../services/GroupService";
 import { tagsReducer } from "./tagsReducer";
 
 const initialState = {
@@ -24,6 +24,16 @@ export const fetchGroups = () => async (dispatch) => {
     dispatch(groupsReducer(result.data));
   } catch (e) {
     console.log(e.message);
+  }
+};
+
+export const getMyGroups = () => async (dispatch) => {
+  try {
+    const result = await fetchMyGroups();
+    console.log(result.data)
+    dispatch(groupsReducer(result.data));
+  } catch (e) {
+    console.log(e.message); //TODO
   }
 };
 
