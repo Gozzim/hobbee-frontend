@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import { ChatMessage } from "./ChatMessage";
+import socketIOClient from "socket.io-client";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -34,17 +35,44 @@ const useStyles = makeStyles((theme) => ({
  * For having an internal scroll container
  * @param {props} props
  */
+
 export function Chat(props) {
   const classes = useStyles();
   const items = [...Array(10 + 1).keys()].slice(1);
   //console.log(items);
 
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  const [socket, setSocket] = useState(undefined);
+
+
+  //connect socket
+  useEffect(() => {
+    const io = socketIOClient("http://localhost:4000/");
+    console.log("step 1")
+    io.on("return user message", (data) => {
+      console.log(messages)
+      console.log(data);
+      console.log("step 3")
+      setMessages(messages => [...messages, data]);
+    });
+    setSocket(io);
+  }, []);
+
+
+  const sendMessage = () => {
+    console.log(input);
+    socket.emit("new user message", input);
+    setInput("");
+  };
+
   return (
     <div>
       <div className={classes.chat}>
         <div className="scroller">
-          {items.map((x) => {
-            return <div>Hello, this is person {x.toString()}.</div>;
+          {messages.map((x) => {
+            return <div>{x}</div>;
           })}
           <ChatMessage
             isSystemMessage={true}
@@ -106,10 +134,16 @@ export function Chat(props) {
             id="outlined-basic"
             label="Send a message"
             variant="outlined"
+            value={input}
+            onInput={(e) => setInput(e.target.value)}
           />
         </form>
         <div className={classes.messageButtonDiv}>
-          <Button type="button" className={classes.messageButton}>
+          <Button
+            type="button"
+            className={classes.messageButton}
+            onClick={() => sendMessage()}
+          >
             SEND
           </Button>
         </div>

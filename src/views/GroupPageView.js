@@ -15,6 +15,8 @@ import { Chat } from "../components/Chat";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import { TagComponent } from "../components/TagComponent";
 import { joinGroup, leaveGroup, fetchGroup } from "../services/GroupService";
+import {useSelector} from "react-redux";
+
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -104,6 +106,15 @@ export function GroupPageView(props) {
   const classes = useStyles();
   const [joined, setJoined] = useState(false);
   const [group, setGroup] = useState(initialState);
+  const user = useSelector((state) => {
+    return state.user;
+  });
+ if (user.isLoggedIn) {
+   console.log(user.user._id)
+   console.log("sada")
+ } else {
+   console.log("nope")
+ }
 
   useEffect(async () => {
     const thisGroup = await fetchGroup("60eac733995d842558cf257b");
@@ -207,7 +218,11 @@ export function GroupPageView(props) {
             </div>
             <div style={{ display: "flex" }}>
               {group.tags.map((x) => {
-                return <TagComponent id={x} />;
+                return (
+                    <div style={{marginRight: "10px"}}>
+                      <TagComponent id={x} />
+                    </div>
+                );
               })}
             </div>
           </div>
@@ -307,7 +322,11 @@ export function GroupPageView(props) {
         </div>
         <div style={{ display: "flex" }}>
           {group.tags.map((x) => {
-            return <TagComponent id={x} />;
+            return (
+                <div style={{marginRight: "10px"}}>
+                  <TagComponent id={x} />
+                </div>
+            );
           })}
         </div>
         <div style={{ fontSize: "17px" }}>
