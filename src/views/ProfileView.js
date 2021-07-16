@@ -1,14 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import {Link} from "react-router-dom";
+import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import HobbeeIcon from "../assets/bee_cream.png";
 import TextField from "@material-ui/core/TextField";
-import { GroupComponent } from "../components/GroupComponent";
-import { GroupComponentVertical } from "../components/GroupComponentVertical";
-import { TagComponent } from "../components/TagComponent";
-import { TagAutocomplete } from "../components/TagAutocomplete";
+import {TagComponent} from "../components/TagComponent";
+import {TagAutocomplete} from "../components/TagAutocomplete";
+import {GroupResultsComponentDemo} from "../components/GroupResultsComponentDemo"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +48,7 @@ export function ProfileView(props) {
         <Grid item xs={1} sm={3}>
           <Paper className={classes.paper} elevation={1}>
             <Link className={"linkDefault"} to={"/profile"}>
-              <img src={HobbeeIcon} height={200} alt={"Profile"} />
+              <img src={HobbeeIcon} height={200} alt={"Profile"}/>
             </Link>
           </Paper>
         </Grid>
@@ -61,7 +60,7 @@ export function ProfileView(props) {
                 <Paper className={classes.paper}>
                   My name is:
                   <form className={classes.root} autoComplete="off">
-                    <TextField id="outlined-required" label={name} />
+                    <TextField id="outlined-required" label={name}/>
                   </form>
                 </Paper>
               </Grid>
@@ -69,7 +68,7 @@ export function ProfileView(props) {
                 <Paper className={classes.paper}>
                   My mail is:
                   <form className={classes.root} noValidate autoComplete="off">
-                    <TextField id="standard-basic" label={mail} />
+                    <TextField id="standard-basic" label={mail}/>
                   </form>
                 </Paper>
               </Grid>
@@ -77,7 +76,7 @@ export function ProfileView(props) {
                 <Paper className={classes.paper}>
                   My birthday is:
                   <form className={classes.root} noValidate autoComplete="off">
-                    <TextField id="standard-basic" label={birthday} />
+                    <TextField id="standard-basic" label={birthday}/>
                   </form>
                 </Paper>
               </Grid>
@@ -85,7 +84,7 @@ export function ProfileView(props) {
                 <Paper className={classes.paper}>
                   Default Location:
                   <form className={classes.root} noValidate autoComplete="off">
-                    <TextField id="standard-basic" label={city} />
+                    <TextField id="standard-basic" label={city}/>
                   </form>
                 </Paper>
               </Grid>
@@ -98,7 +97,7 @@ export function ProfileView(props) {
 
       <Grid container spacing={2}>
         {tags.map((x) => {
-          return <TagComponent id={x} key={x} />;
+          return <TagComponent id={x} key={x}/>;
         })}
 
         <Grid item>
@@ -113,41 +112,7 @@ export function ProfileView(props) {
 
       <h3> These are your groups: </h3>
 
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <GroupComponent />
-        </Grid>
-        <Grid item xs={4}>
-          <GroupComponent />
-        </Grid>
-        <Grid item xs={4}>
-          <GroupComponent />
-        </Grid>
-        <Grid item xs={3}>
-          <GroupComponentVertical />
-        </Grid>
-        <Grid item xs={3}>
-          <GroupComponentVertical />
-        </Grid>
-        <Grid item xs={3}>
-          <GroupComponentVertical />
-        </Grid>
-        <Grid item xs={3}>
-          <GroupComponentVertical />
-        </Grid>
-        <Grid item xs={3}>
-          <GroupComponentVertical />
-        </Grid>
-        <Grid item xs={3}>
-          <GroupComponentVertical />
-        </Grid>
-        <Grid item xs={3}>
-          <GroupComponentVertical />
-        </Grid>
-        <Grid item xs={3}>
-          <GroupComponentVertical />
-        </Grid>
-      </Grid>
+      <GroupResultsComponentDemo/>
     </div>
   );
 }
