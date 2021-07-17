@@ -1,16 +1,17 @@
 import React from "react";
-import UserLoginView from "./views/UserLoginView";
-import SignUpView from "./views/SignUpView";
+import SignInView from "./views/UserAuthentication/SignInView";
+import SignUpView from "./views/UserAuthentication/SignUpView";
 import { CreateGroupView } from "./views/CreateGroupView";
 import { HomeView } from "./views/HomeView";
 import { InMyAreaView } from "./views/InMyAreaView";
 import { PremiumView } from "./views/PremiumView";
 import { RecommendedView } from "./views/RecommendedView";
 import { MyGroupsView } from "./views/MyGroupsView";
-import { Imprint } from "./views/Imprint";
-import { PrivacyPolicy } from "./views/PrivacyPolicy";
-import { ToS } from "./views/TermsOfService";
+import { Imprint } from "./views/Legal/Imprint";
+import { PrivacyPolicy } from "./views/Legal/PrivacyPolicy";
+import { ToS } from "./views/Legal/TermsOfService";
 import { ProfileView } from "./views/ProfileView";
+import ResetPasswordView from "./views/UserAuthentication/ResetPasswordView";
 import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PaymentPlanView";
 import {PaymentConfirmationView} from "./views/PaymentConfirmationView";
@@ -25,7 +26,7 @@ export const routes = [
   },
   {
     path: "/login",
-    component: UserLoginView,
+    component: SignInView,
   },
   {
     path: "/register",
@@ -62,6 +63,11 @@ export const routes = [
   {
     path: "/my-groups",
     component: MyGroupsView,
+  },
+  {
+    exact: true,
+    path: "/password-reset/:user/:token",
+    component: ResetPasswordView,
   },
   {
     path: "/imprint",
