@@ -198,6 +198,7 @@ export function CustomizeGroup(props) {
                               });
                             }
                           }}
+                          accept={".jpg, .jpeg, .png"}
                         />
                       </div>
                     </Button>
