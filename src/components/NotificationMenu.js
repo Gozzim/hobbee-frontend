@@ -9,7 +9,6 @@ import { Notification } from "./Notification";
  * TODO:
  *  - Mark as read button functionality
  *  - Mark all as read button functionality
- *  - Filtering by read and unread
  */
 
 const NotificationTypes = {
@@ -54,12 +53,12 @@ function NotificationMenu(props) {
       {props.notifications.map((notification) => (
         <Notification
           key={notification._id}
+          id={notification._id}
           groupName={notification.group.groupName}
           onClickNotification={onClickNotification}
           link={(notification.notificationType === "Chat" || notification.notificationType === "Reminder") ? notification.group._id : "testId"}
           msgType={notification.notificationType}
           message={notification.content}
-          read={notification.read}
         />
       ))}
       <Divider key="divider" />
