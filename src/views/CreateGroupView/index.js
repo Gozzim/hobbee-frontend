@@ -26,7 +26,7 @@ const initialTouchedState = {
 export function CreateGroupView() {
   const [groupForm, setGroupForm] = React.useState(initialGroupFormState);
   const [touched, setTouched] = React.useState(initialTouchedState);
-  const [formStep, setFormStep] = React.useState(0);
+  const [formStep, setFormStep] = React.useState(1);
 
   return (
     <RequireLoggedIn>

@@ -1,21 +1,23 @@
-import React from "react";
 import DateFnsUtils from "@date-io/date-fns";
-import { Darkroom, Canvas } from "react-darkroom";
+import React from "react";
+import AvatarEditor from "react-avatar-editor";
 import ImageIcon from "@material-ui/icons/Image";
 import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import {
-  Grid,
+  Avatar,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  FormHelperText,
+  Grid,
+  Slider,
   TextField,
   Typography,
-  Card,
-  CardContent,
-  Avatar,
-  FormHelperText,
 } from "@material-ui/core";
 import { formatISO } from "date-fns";
 import { getFileUrl, uploadRequest } from "../../services/FileService";
@@ -28,6 +30,29 @@ const examplePics = [
 
 export function CustomizeGroup(props) {
   const fileInput = React.useRef();
+  const [temporaryImage, setTemporaryImage] = React.useState(null);
+  const [scale, setScale] = React.useState(1);
+  const avatarEditor = React.useRef();
+
+  const handleClose = () => {
+    setTemporaryImage(null);
+  };
+
+  const handleSave = () => {
+    if (avatarEditor.current) {
+      const image = avatarEditor.current.getImage();
+      image.toBlob(async (blob) => {
+        const response = await uploadRequest(blob);
+
+        props.setGroupForm((groupForm) => {
+          return { ...groupForm, pic: response.data.id };
+        });
+        setTemporaryImage(null);
+      }, "image/png");
+    }
+  };
+
+  console.log(temporaryImage);
 
   return (
     <div>
@@ -40,172 +65,104 @@ export function CustomizeGroup(props) {
       <div className={"customizegroup-grid"}>
         <Grid container spacing={6}>
           <Grid item xs={6}>
-            <Darkroom>
-              {/*<Toolbar>*/}
-              {/*  <button*/}
-              {/*    onClick={selectFile}*/}
-              {/*    data-tipsy="Select Image"*/}
-              {/*    className="tipsy tipsy--s"*/}
-              {/*  >*/}
-              {/*    <span className="icon icon-image" />*/}
-              {/*    <input*/}
-              {/*      type="file"*/}
-              {/*      ref="fileselect"*/}
-              {/*      onChange={onFileChange}*/}
-              {/*      style={{ display: "none" }}*/}
-              {/*    />*/}
-              {/*  </button>*/}
-              {/*  <History*/}
-              {/*    step={this.state.step}*/}
-              {/*    length={this.state.thread.length - 1}*/}
-              {/*  >*/}
-              {/*    <button*/}
-              {/*      action="back"*/}
-              {/*      onClick={this.onUndo}*/}
-              {/*      ifEmpty="disable"*/}
-              {/*      data-tipsy="Undo"*/}
-              {/*      className="tipsy tipsy--sw"*/}
-              {/*    >*/}
-              {/*      <span className="icon icon-undo2" />*/}
-              {/*    </button>*/}
-              {/*    <button*/}
-              {/*      action="forward"*/}
-              {/*     // onClick={onRedo}*/}
-              {/*      ifEmpty="disable"*/}
-              {/*      data-tipsy="Redo"*/}
-              {/*      className="tipsy tipsy--sw"*/}
-              {/*    >*/}
-              {/*      <span className="icon icon-redo2" />*/}
-              {/*    </button>*/}
-              {/*  </History>*/}
-              {/*  <button*/}
-              {/*    disabled={!hasFile}*/}
-              {/*    onClick={this.onRotateLeft}*/}
-              {/*    data-tipsy="Rotate Left"*/}
-              {/*    className="tipsy tipsy--sw"*/}
-              {/*  >*/}
-              {/*    <span className="icon icon-undo" />*/}
-              {/*  </button>*/}
-              {/*  <button*/}
-              {/*    disabled={!hasFile}*/}
-              {/*    onClick={this.onRotateRight}*/}
-              {/*    data-tipsy="Rotate Right"*/}
-              {/*    className="tipsy tipsy--sw"*/}
-              {/*  >*/}
-              {/*    <span className="icon icon-redo" />*/}
-              {/*  </button>*/}
-              {/*  <CropMenu isCropping={crop}>*/}
-              {/*    <button*/}
-              {/*      disabled={!hasFile}*/}
-              {/*      data-showOnlyWhen="croppingIsOff"*/}
-              {/*      onClick={this.onCropStart}*/}
-              {/*      data-tipsy="Crop"*/}
-              {/*      className="tipsy tipsy--sw"*/}
-              {/*    >*/}
-              {/*      <span className="icon icon-crop" />*/}
-              {/*    </button>*/}
-              {/*    <button*/}
-              {/*      disabled={!hasFile}*/}
-              {/*      data-showOnlyWhen="croppingIsOn"*/}
-              {/*      style={{ color: "cyan" }}*/}
-              {/*    >*/}
-              {/*      <span className="icon icon-crop" />*/}
-              {/*    </button>*/}
-              {/*    <button*/}
-              {/*      disabled={!hasFile}*/}
-              {/*      data-showOnlyWhen="croppingIsOn"*/}
-              {/*      onClick={this.onCropConfirm}*/}
-              {/*      style={{ color: "green" }}*/}
-              {/*      data-tipsy="Confirm"*/}
-              {/*      className="tipsy tipsy--sw"*/}
-              {/*    >*/}
-              {/*      <span className="icon icon-checkmark" />*/}
-              {/*    </button>*/}
-              {/*    <button*/}
-              {/*      disabled={!hasFile}*/}
-              {/*      data-showOnlyWhen="croppingIsOn"*/}
-              {/*      onClick={this.onCropCancel}*/}
-              {/*      style={{ color: "red" }}*/}
-              {/*      data-tipsy="Cancel"*/}
-              {/*      className="tipsy tipsy--sw"*/}
-              {/*    >*/}
-              {/*      <span className="icon icon-cross" />*/}
-              {/*    </button>*/}
-              {/*  </CropMenu>*/}
-              {/*  <button*/}
-              {/*    disabled={!hasFile}*/}
-              {/*    onClick={this.onSave}*/}
-              {/*    data-tipsy="Save"*/}
-              {/*    className="tipsy tipsy--sw"*/}
-              {/*  >*/}
-              {/*    <span className="icon icon-floppy-disk" />*/}
-              {/*  </button>*/}
-              {/*</Toolbar>*/}
-              <Card className={"cardImage"}>
-                <CardContent className={"cardImage"}>
-                  <Canvas
-                    // ref="canvasWrapper"
-                    // crop={crop}
-                    // source={source}
-                    // angle={angle}
-                    // width={canvasWidth}
-                    // height={canvasHeight}
-                    width={300}
-                    height={220}
-                  >
-                    <Button
-                      className={"customizegroup-ButtonCard"}
-                      onClick={() => {
-                        fileInput.current.click();
-                      }}
-                    >
-                      <div>
-                        {props.groupForm.pic ? (
-                          <img src={getFileUrl(props.groupForm.pic)} />
-                        ) : (
-                          <>
-                            <div className={"imageIcon"}>
-                              <ImageIcon
-                                color={"disabled"}
-                                fontSize={"inherit"}
-                              />
-                            </div>
-                            <Typography
-                              className={"selectImageText"}
-                              color={"textSecondary"}
-                              align={"center"}
-                              variant={"h6"}
-                            >
-                              Select image
-                            </Typography>
-                          </>
-                        )}
-                        <input
-                          type={"file"}
-                          className={"customizegroup-file"}
-                          ref={fileInput}
-                          onChange={async (event) => {
-                            props.setTouched((touched) => {
-                              return { ...touched, pic: true };
-                            });
-
-                            const file = event.target.files[0];
-                            if (file) {
-                              const response = await uploadRequest(file);
-
-                              props.setGroupForm((groupForm) => {
-                                return { ...groupForm, pic: response.data.id };
-                              });
-                            }
-                          }}
-                          accept={".jpg, .jpeg, .png"}
-                        />
+            <Dialog open={temporaryImage !== null} onClose={handleClose}>
+              <DialogContent>
+                <AvatarEditor
+                  image={temporaryImage}
+                  scale={scale}
+                  width={300}
+                  height={220}
+                  border={50}
+                  color={[0, 0, 0, 0.6]}
+                  rotate={0}
+                  ref={avatarEditor}
+                />
+                <Slider
+                  min={0.1}
+                  max={5}
+                  step={0.1}
+                  value={scale}
+                  onChange={(_event, value) => {
+                    setScale(value);
+                  }}
+                  aria-labelledby="continuous-slider"
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleSave} color="primary" autoFocus>
+                  Save
+                </Button>
+              </DialogActions>
+            </Dialog>
+            {props.groupForm.pic ? (
+              <Button
+                onClick={() => {
+                  fileInput.current.click();
+                }}
+              >
+                <img
+                  width={300}
+                  height={220}
+                  src={getFileUrl(props.groupForm.pic)}
+                />
+              </Button>
+            ) : (
+              <Button
+                className={"customizegroup-ButtonCard"}
+                onClick={() => {
+                  fileInput.current.click();
+                }}
+              >
+                <div>
+                  {props.groupForm.pic ? null : (
+                    // <img src={getFileUrl(props.groupForm.pic)} />
+                    <>
+                      <div className={"imageIcon"}>
+                        <ImageIcon color={"disabled"} fontSize={"inherit"} />
                       </div>
-                    </Button>
-                  </Canvas>
-                </CardContent>
-              </Card>
-            </Darkroom>
+                      <Typography
+                        className={"selectImageText"}
+                        color={"textSecondary"}
+                        align={"center"}
+                        variant={"h6"}
+                      >
+                        Select image
+                      </Typography>
+                    </>
+                  )}
+                </div>
+              </Button>
+            )}
+            <input
+              type={"file"}
+              className={"customizegroup-file"}
+              ref={fileInput}
+              onChange={async (event) => {
+                props.setTouched((touched) => {
+                  return { ...touched, pic: true };
+                });
+
+                const file = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.addEventListener(
+                  "load",
+                  function () {
+                    // convert image file to base64 string
+                    setTemporaryImage(reader.result);
+                  },
+                  false
+                );
+
+                if (file) {
+                  reader.readAsDataURL(file);
+                }
+              }}
+              accept={".jpg, .jpeg, .png"}
+            />
           </Grid>
           <Grid item xs={6}>
             <Typography>Upload or choose a profile picture:</Typography>
