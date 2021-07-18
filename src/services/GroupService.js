@@ -1,4 +1,4 @@
-import HttpService, {getToken, setToken} from "./HttpService";
+import HttpService, { getToken, setToken } from "./HttpService";
 
 export async function createRequest(data) {
   await HttpService.post("group/create", data);
@@ -21,4 +21,9 @@ export async function joinGroup(data) {
 export async function leaveGroup(data) {
   await setToken(getToken());
   return HttpService.post("group/leave-group/" + data);
+}
+
+export async function fetchProcessedGroupChat(data) {
+  await setToken(getToken());
+  return await HttpService.get("group/group-chat/" + data);
 }

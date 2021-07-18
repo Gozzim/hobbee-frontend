@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import { ChatMessage } from "./ChatMessage";
-import socketIOClient from "socket.io-client";
+import { useSelector } from "react-redux";
+import { fetchProcessedGroupChat } from "../services/GroupService";
+import { io } from "../services/SocketService";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -38,33 +40,58 @@ const useStyles = makeStyles((theme) => ({
 
 export function Chat(props) {
   const classes = useStyles();
-  const items = [...Array(10 + 1).keys()].slice(1);
-  //console.log(items);
+
+  const user = useSelector((state) => {
+    return state.user;
+  });
+  const groupID = props.groupID;
 
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const [socket, setSocket] = useState(undefined);
-
+  //get initial chat
+  useEffect(async () => {
+    const thisGroupChat = await fetchProcessedGroupChat(groupID);
+    setMessages(thisGroupChat.data);
+  }, []);
 
   //connect socket
   useEffect(() => {
-    const io = socketIOClient("http://localhost:4000/");
-    console.log("step 1")
-    io.on("return user message", (data) => {
-      console.log(messages)
-      console.log(data);
-      console.log("step 3")
-      setMessages(messages => [...messages, data]);
+    //reconnect chat sockets if db disconnects for a short time
+    io.on("disconnect", async () => {
+      for (let i = 0; i < 10; i++) {
+        await new Promise((r) => setTimeout(r, 1000));
+        io.emit("room", groupID);
+      }
     });
-    setSocket(io);
+    io.on("return message", (data) => {
+      setMessages(data);
+    });
+    io.emit("room", groupID);
   }, []);
 
-
   const sendMessage = () => {
-    console.log(input);
-    socket.emit("new user message", input);
+    io.emit("new user message", {
+      sender: user.user._id,
+      message: input,
+      timestamp: Date.now(),
+      isSystemMessage: false,
+      groupId: groupID,
+    });
     setInput("");
+  };
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage();
   };
 
   return (
@@ -72,55 +99,19 @@ export function Chat(props) {
       <div className={classes.chat}>
         <div className="scroller">
           {messages.map((x) => {
-            return <div>{x}</div>;
+            const currentUser = x.sender === user.user._id;
+            return (
+              <ChatMessage
+                isSystemMessage={x.isSystemMessage}
+                name={x.senderName || null}
+                message={x.message}
+                time={x.timestamp}
+                key={x._id}
+                isCurrentUser={currentUser}
+              />
+            );
           })}
-          <ChatMessage
-            isSystemMessage={true}
-            message="Kempec Halk created Table Tennis at TUM"
-          />
-          <ChatMessage
-            isSystemMessage={false}
-            name="Maja Schuknecht"
-            message="Howdy, I like big butts and I cannot lie. This much no I can't denyyyy."
-            time="08/07/2021 12:20"
-            isCurrentUser={true}
-          />
-          <ChatMessage
-            isSystemMessage={false}
-            name="Vanessa Krohn"
-            message="I like big butts too lol"
-            time="08/07/2021 12:21"
-            isCurrentUser={false}
-          />
-          <ChatMessage
-            isSystemMessage={true}
-            message="Ilias Asimakoupolos joined the chat. Say Hi!"
-          />
-          <ChatMessage
-            isSystemMessage={true}
-            message="Zaim Sari left the chat. Goodbye!"
-          />
-          <ChatMessage
-            isSystemMessage={false}
-            name="Ilias Asimakoupolos"
-            message="did I hear butts? butts are amaaaaze"
-            time="08/07/2021 12:25"
-            isCurrentUser={false}
-          />
-          <ChatMessage
-            isSystemMessage={false}
-            name="Maja Schuknecht"
-            message="bing bong butts"
-            time="08/07/2021 12:25"
-            isCurrentUser={true}
-          />
-          <ChatMessage
-            isSystemMessage={false}
-            name="Ilias Asimakoupolos"
-            message="I love butts"
-            time="08/07/2021 12:26"
-            isCurrentUser={false}
-          />
+          <div ref={messagesEndRef} />
         </div>
       </div>
       <div style={{ display: "flex" }}>
@@ -129,6 +120,7 @@ export function Chat(props) {
           noValidate
           autoComplete="off"
           style={{ flex: 3 }}
+          onSubmit={handleSubmit}
         >
           <TextField
             id="outlined-basic"

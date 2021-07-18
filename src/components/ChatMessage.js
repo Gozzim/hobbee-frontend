@@ -26,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     fontFamily: "Roboto",
     fontSize: "14px",
+    marginTop: "5px",
+    marginBottom: "5px",
   },
   left: {
     marginLeft: "20px",
