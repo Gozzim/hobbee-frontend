@@ -15,7 +15,6 @@ const initialOptions = {
 function PayPalCheckout(props) {
 
     const onApprove = async (order) => {
-        console.log(order)
         try {
             await sendPremiumRequest(order); //TODO
             props.history.push("/premium/payment-confirmation"); //TODO
@@ -43,16 +42,16 @@ function PayPalCheckout(props) {
     return (
         <PayPalScriptProvider options={initialOptions}>
             <PayPalButtons
-                style={{ layout: "horizontal" }}
+                style={{ layout: "horizontal", label: "pay", tagline: false }}
                 createSubscription={(data, actions) => {
                     return actions.subscription.create({
                         plan_id: props.planId
                     });
                 }}
-
                 onApprove={onApprove}
                 onCancel={onCancel}
                 onError={onError}
+                forceReRender={[props.planId]}
             />
         </PayPalScriptProvider>
     );

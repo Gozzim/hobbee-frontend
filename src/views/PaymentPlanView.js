@@ -4,10 +4,9 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import MUILink from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { Button, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
-import {Link} from "react-router-dom";
+import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import PayPalCheckout from "../components/PayPalCheckout";
-import { SUBSCRIPTION_PLAN } from "../shared/Constants";
+import { HOBBEE_BLUE, HOBBEE_BROWN, HOBBEE_ORANGE, HOBBEE_YELLOW, SUBSCRIPTION_PLAN } from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -37,12 +36,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "20px",
     marginBottom: "40px",
     width: "100%",
-    backgroundColor: "#FFCC00",
+    backgroundColor: HOBBEE_YELLOW,
     fontSize: 15,
     padding: "20px",
     "&:hover": {
-      backgroundColor: "#1CE9E3",
-      color: "#32210B",
+      backgroundColor: HOBBEE_BLUE,
+      color: HOBBEE_BROWN,
     },
   },
   optionDescriptor: {
@@ -69,14 +68,10 @@ function handleClick(event) {
 export function PaymentPlanView(props) {
   const classes = useStyles();
 
-  console.log(props)
-
-  const [selectedValue, setSelectedValue] = React.useState('a');
+  const [selectedValue, setSelectedValue] = React.useState(SUBSCRIPTION_PLAN.advanced);
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
-    console.log("target value: "+event.target.value);
-    console.log("state: "+selectedValue);
   };
 
   return (
@@ -156,7 +151,7 @@ export function PaymentPlanView(props) {
               position: "absolute",
               top: "255px",
               left: "50%",
-              backgroundColor: "#E98F1C",
+              backgroundColor: HOBBEE_ORANGE,
               width: "auto",
               textAlign: "center",
               padding: "10px",
