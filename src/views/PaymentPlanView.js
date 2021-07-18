@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Button, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import {Link} from "react-router-dom";
+import PayPalCheckout from "../components/PayPalCheckout";
+import { SUBSCRIPTION_PLAN } from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -67,6 +69,8 @@ function handleClick(event) {
 export function PaymentPlanView(props) {
   const classes = useStyles();
 
+  console.log(props)
+
   const [selectedValue, setSelectedValue] = React.useState('a');
 
   const handleChange = (event) => {
@@ -98,66 +102,76 @@ export function PaymentPlanView(props) {
         >
           Hobb.ee PREMIUM
         </Typography>
-        <RadioGroup className={"creategroup-radios"} style={{ position: "relative" }}>
+        <RadioGroup
+          className={"creategroup-radios"}
+          style={{ position: "relative" }}
+        >
           <FormControlLabel
             value="1-month"
-            control={<BlueRadio
-                checked={selectedValue === 'a'}
+            control={
+              <BlueRadio
+                checked={selectedValue === SUBSCRIPTION_PLAN.standard}
                 onChange={handleChange}
-                value="a"
+                value={SUBSCRIPTION_PLAN.standard}
                 name="radio-button-demo"
-            />}
+              />
+            }
             label="1 Month"
             className={classes.planBox}
           />
-          <div className={classes.optionDescriptor} style={{top: "25px"}}>2€/Month</div>
+          <div className={classes.optionDescriptor} style={{ top: "25px" }}>
+            2€/Month
+          </div>
           <FormControlLabel
             value="3-months"
-            control={<BlueRadio
-                checked={selectedValue === 'b'}
+            control={
+              <BlueRadio
+                checked={selectedValue === SUBSCRIPTION_PLAN.advanced}
                 onChange={handleChange}
-                value="b"
+                value={SUBSCRIPTION_PLAN.advanced}
                 name="radio-button-demo"
-            />}
+              />
+            }
             label="3 Months"
             className={classes.planBox}
           />
-          <div className={classes.optionDescriptor} style={{top: "145px"}}>1.75€/Month</div>
+          <div className={classes.optionDescriptor} style={{ top: "145px" }}>
+            1.75€/Month
+          </div>
           <FormControlLabel
             value="12-months"
-            control={<BlueRadio
-                checked={selectedValue === 'c'}
+            control={
+              <BlueRadio
+                checked={selectedValue === SUBSCRIPTION_PLAN.elite}
                 onChange={handleChange}
-                value="c"
+                value={SUBSCRIPTION_PLAN.elite}
                 name="radio-button-demo"
-            />}
+              />
+            }
             label="12 Months"
             className={classes.planBox}
           />
           <div
-              style={{
-                position: "absolute",
-                top: "255px",
-                left: "50%",
-                backgroundColor: "#E98F1C",
-                width: "auto",
-                textAlign: "center",
-                padding: "10px",
-                transform: "translate(-50%, 0)",
-                borderRadius: "5px",
-              }}
+            style={{
+              position: "absolute",
+              top: "255px",
+              left: "50%",
+              backgroundColor: "#E98F1C",
+              width: "auto",
+              textAlign: "center",
+              padding: "10px",
+              transform: "translate(-50%, 0)",
+              borderRadius: "5px",
+            }}
           >
             Recommended
           </div>
-          <div className={classes.optionDescriptor} style={{top: "265px"}}>1.50€/Month</div>
+          <div className={classes.optionDescriptor} style={{ top: "265px" }}>
+            1.50€/Month
+          </div>
         </RadioGroup>
 
-        <Link className={"linkDefault"} to={"/premium/payment-confirmation"}>
-          <Button className={classes.choosePlanButton} type="button">
-            PROCEED TO CHECKOUT
-          </Button>
-        </Link>
-
+        <PayPalCheckout planId={selectedValue} />
       </div>
     </div>
   );

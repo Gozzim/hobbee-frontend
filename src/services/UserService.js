@@ -60,7 +60,7 @@ export async function fetchMe() {
   return user;
 }
 
-async function processToken(token) {
+export async function processToken(token) {
   setToken(token);
 
   return await fetchMe();
