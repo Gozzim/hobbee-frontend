@@ -7,17 +7,21 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import GroupImage from "../assets/test.png";
 import "../views/style.css";
 import UserIcon from "@material-ui/icons/AccountCircle";
-import EditIcon from "@material-ui/icons/Edit";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
 import GroupIcon from "@material-ui/icons/PeopleAlt";
-import { Button, IconButton } from "@material-ui/core";
+import {Button, IconButton} from "@material-ui/core";
 import { Chat } from "../components/Chat";
+import { EditGroupDialog } from "../components/EditGroupDialog";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import { TagComponent } from "../components/TagComponent";
-import { joinGroup, leaveGroup, fetchGroup } from "../services/GroupService";
+import { joinGroupRequest, leaveGroupRequest, fetchGroup } from "../services/GroupService";
 import { io } from "../services/SocketService";
 import Tooltip from "@material-ui/core/Tooltip";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -124,10 +128,13 @@ const initialState = {
 };
 
 export function GroupPageView(props) {
-  const groupId = props.match.params.id;
   const classes = useStyles();
+  const groupId = props.match.params.id;
   const [joined, setJoined] = useState(false);
   const [group, setGroup] = useState(initialState);
+  const user = useSelector((state) => {
+    return state.user;
+  });
 
   useEffect(async () => {
     const thisGroup = await fetchGroup(groupId);
@@ -149,7 +156,7 @@ export function GroupPageView(props) {
 
   async function handleJoin() {
     console.log("Joining Group");
-    const result = await joinGroup(groupId);
+    const result = await joinGroupRequest(groupId);
     console.log(result.data);
     setJoined(true);
     io.emit("new system message", {
@@ -159,15 +166,13 @@ export function GroupPageView(props) {
 
   async function handleLeave() {
     console.log("Leaving Group");
-    const result = await leaveGroup(groupId);
+    const result = await leaveGroupRequest(groupId);
     console.log(result.data);
     setJoined(false);
     io.emit("new system message", {
       groupId: groupId,
     });
   }
-
-  async function editGroup() {}
 
   if (joined) {
     return (
@@ -212,15 +217,11 @@ export function GroupPageView(props) {
                   <ExitIcon />
                 </IconButton>
               </CustomTooltip>
-              <CustomTooltip title="Edit Group">
-                <IconButton
-                  onClick={() => editGroup()}
-                  color="inherit"
-                  className={classes.editButton}
-                >
-                  <EditIcon />
-                </IconButton>
-              </CustomTooltip>
+              {user.user && group.groupOwner._id === user.user._id ? (
+                  <div className={classes.editButton}>
+                    <EditGroupDialog group={group} setGroup={setGroup} />
+                  </div>
+              ) : null}
               <div className={classes.detailsItem}>
                 <CustomTooltip title="Group Owner">
                   <UserIcon style={{ fill: "#32210B" }} />
@@ -265,9 +266,27 @@ export function GroupPageView(props) {
                 )}
               </div>
               <div className={classes.detailsItem}>
-                <CustomTooltip title="Group Members">
-                  <GroupIcon style={{ fill: "#32210B" }} />
-                </CustomTooltip>
+                <PopupState variant="popover" popupId="demo-popup-menu">
+                  {(popupState) => (
+                    <React.Fragment>
+                      <CustomTooltip title="Group Members">
+                        <GroupIcon
+                          style={{ fill: "#32210B", cursor: "pointer" }}
+                          {...bindTrigger(popupState)}
+                        />
+                      </CustomTooltip>
+                      <Menu {...bindMenu(popupState)}>
+                        {group.groupMembers.map((member) => {
+                          return (
+                            <MenuItem onClick={popupState.close}>
+                              {member.username}
+                            </MenuItem>
+                          );
+                        })}
+                      </Menu>
+                    </React.Fragment>
+                  )}
+                </PopupState>
                 <Typography variant="h6" className={classes.detailsItemText}>
                   {group.groupMembers.length}/{group.participants}
                 </Typography>

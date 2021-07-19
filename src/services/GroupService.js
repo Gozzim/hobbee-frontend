@@ -1,7 +1,7 @@
 import HttpService, { getToken, setToken } from "./HttpService";
 
 export async function createRequest(data) {
-  await HttpService.post("group/create", data);
+  return await HttpService.post("group/create", data);
 }
 
 export async function fetchGroups() {
@@ -13,17 +13,22 @@ export async function fetchGroup(data) {
   return await HttpService.get("group/group/" + data);
 }
 
-export async function joinGroup(data) {
+export async function joinGroupRequest(data) {
   await setToken(getToken());
-  return HttpService.post("group/join-group/" + data);
+  return await HttpService.post("group/join/" + data);
 }
 
-export async function leaveGroup(data) {
+export async function leaveGroupRequest(data) {
   await setToken(getToken());
-  return HttpService.post("group/leave-group/" + data);
+  return await HttpService.post("group/leave/" + data);
+}
+
+export async function editGroupRequest(data) {
+  await setToken(getToken());
+  return await HttpService.post("group/edit/" + data._id, data);
 }
 
 export async function fetchProcessedGroupChat(data) {
   await setToken(getToken());
-  return await HttpService.get("group/group-chat/" + data);
+  return await HttpService.get("group/chat/" + data);
 }
