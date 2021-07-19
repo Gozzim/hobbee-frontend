@@ -30,13 +30,13 @@ export async function logoutRequest() {
 }
 
 export async function forgotPasswordRequest(email) {
-  return await HttpService.post("auth/forgot", {
+  return await HttpService.post("user/forgot", {
     email: email
   });
 }
 
 export async function resetPasswordRequest(user, token, password) {
-  const resp = await HttpService.post("auth/reset", {
+  const resp = await HttpService.post("user/reset", {
     user: user,
     token: token,
     password: password
@@ -54,7 +54,7 @@ export async function isUsernameAvailable(username) {
 }
 
 export async function fetchMe() {
-  const resp = await HttpService.get("auth/me");
+  const resp = await HttpService.get("user/me");
   // TODO: Token Refreshment
   const user = { ...resp };
   return user;
