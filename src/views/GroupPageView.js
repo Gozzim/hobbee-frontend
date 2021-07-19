@@ -152,6 +152,9 @@ export function GroupPageView(props) {
     const result = await joinGroup(groupId);
     console.log(result.data);
     setJoined(true);
+    io.emit("new system message", {
+      groupId: groupId,
+    });
   }
 
   async function handleLeave() {
@@ -159,6 +162,9 @@ export function GroupPageView(props) {
     const result = await leaveGroup(groupId);
     console.log(result.data);
     setJoined(false);
+    io.emit("new system message", {
+      groupId: groupId,
+    });
   }
 
   async function editGroup() {}
