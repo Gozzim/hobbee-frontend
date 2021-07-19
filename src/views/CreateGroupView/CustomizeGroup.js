@@ -2,21 +2,26 @@ import DateFnsUtils from "@date-io/date-fns";
 import React from "react";
 import AvatarEditor from "react-avatar-editor";
 import ImageIcon from "@material-ui/icons/Image";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import ScheduleIcon from "@material-ui/icons/Schedule";
+import PublishIcon from "@material-ui/icons/Publish";
+
 import {
   KeyboardDatePicker,
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import {
-  Avatar,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   FormHelperText,
   Grid,
+  IconButton,
   Slider,
   TextField,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { formatISO } from "date-fns";
@@ -118,7 +123,6 @@ export function CustomizeGroup(props) {
               >
                 <div>
                   {props.groupForm.pic ? null : (
-                    // <img src={getFileUrl(props.groupForm.pic)} />
                     <>
                       <div className={"imageIcon"}>
                         <ImageIcon color={"disabled"} fontSize={"inherit"} />
@@ -129,7 +133,7 @@ export function CustomizeGroup(props) {
                         align={"center"}
                         variant={"h6"}
                       >
-                        Select image
+                        Upload image
                       </Typography>
                     </>
                   )}
@@ -165,7 +169,16 @@ export function CustomizeGroup(props) {
             />
           </Grid>
           <Grid item xs={6}>
-            <Typography>Upload or choose a profile picture:</Typography>
+            <Typography>
+              Upload or choose a profile picture:
+              <IconButton
+                onClick={() => {
+                  fileInput.current.click();
+                }}
+              >
+                <PublishIcon />
+              </IconButton>
+            </Typography>
             <div className={"customizegroup-filename"}>
               {props.groupForm.pic === "" && props.touched.pic ? (
                 <FormHelperText error>
@@ -176,29 +189,20 @@ export function CustomizeGroup(props) {
             <div className={"customizegroup-avatare"}>
               {examplePics.map((id) => {
                 return (
-                  <div
-                    key={id}
-                    onClick={() => {
-                      props.setGroupForm((groupForm) => {
-                        return { ...groupForm, pic: id };
-                      });
-                      fileInput.current.value = "";
-                    }}
-                  >
-                    <Avatar
-                      variant="square"
-                      className={
-                        props.groupForm.pic === id
-                          ? "customizegroup-avatar selectedAvatar"
-                          : "customizegroup-avatar"
-                      }
-                      src={getFileUrl(id)}
-                      onChange={() => {
+                  <div className="customizegroup-avatar-container" key={id}>
+                    <Button
+                      onClick={() => {
                         props.setTouched((touched) => {
                           return { ...touched, pic: true };
                         });
+                        props.setGroupForm((groupForm) => {
+                          return { ...groupForm, pic: id };
+                        });
+                        fileInput.current.value = "";
                       }}
-                    />
+                    >
+                      <img width={130} height={95} src={getFileUrl(id)} />
+                    </Button>
                   </div>
                 );
               })}
@@ -261,43 +265,48 @@ export function CustomizeGroup(props) {
           </Grid>
           <Grid item xs={6} className={"border"}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                margin="normal"
-                onChange={(date) => {
-                  props.setGroupForm((groupForm) => {
-                    return { ...groupForm, date: formatISO(date) };
-                  });
-                }}
-                value={props.groupForm.date}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-              <KeyboardTimePicker
-                margin="normal"
-                onChange={(date) => {
-                  props.setGroupForm((groupForm) => {
-                    return { ...groupForm, date: formatISO(date) };
-                  });
-                }}
-                value={props.groupForm.date}
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-              />
+              <div className={"customizegroup-datetime-container"}>
+                <KeyboardDatePicker
+                  margin="normal"
+                  onChange={(date) => {
+                    props.setGroupForm((groupForm) => {
+                      return { ...groupForm, date: formatISO(date) };
+                    });
+                  }}
+                  value={props.groupForm.date}
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+                <KeyboardTimePicker
+                  keyboardIcon={<ScheduleIcon />}
+                  margin="normal"
+                  onChange={(date) => {
+                    props.setGroupForm((groupForm) => {
+                      return { ...groupForm, date: formatISO(date) };
+                    });
+                  }}
+                  value={props.groupForm.date}
+                  KeyboardButtonProps={{
+                    "aria-label": "change time",
+                  }}
+                />
+                <Tooltip title="Reset date">
+                  <IconButton
+                    al
+                    className={"creategroup-nodatebutton"}
+                    onClick={() => {
+                      props.setGroupForm((groupForm) => {
+                        return { ...groupForm, date: null };
+                      });
+                    }}
+                    disabled={!props.groupForm.date}
+                  >
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
             </MuiPickersUtilsProvider>
-            <div>
-              <Button
-                className={"creategroup-nodatebutton"}
-                onClick={() => {
-                  props.setGroupForm((groupForm) => {
-                    return { ...groupForm, date: null };
-                  });
-                }}
-              >
-                No date
-              </Button>
-            </div>
           </Grid>
           <Grid item xs={6} className={"border"}>
             <Typography>Choose a specific location:</Typography>
