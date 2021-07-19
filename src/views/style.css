@@ -55,13 +55,11 @@
 .customizegroup-avatare {
   display: flex;
 }
-.customizegroup-avatar {
-  margin-top: 45px;
-  margin-right: 25px;
-  width: 136px !important;
-  height: 110px !important;
-  border: 1px solid dimgray;
+.customizegroup-avatar-container {
+  margin-top: 63px;
+  padding-right: 5px;
 }
+
 .selectedAvatar{
   border: 5px outset #1ce9e3 !important;
 }
@@ -99,4 +97,9 @@
 .creategroup-nodatebutton{
   margin-top: 10px !important;
   margin-left: -5px !important;
+}
+.customizegroup-datetime-container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
 }

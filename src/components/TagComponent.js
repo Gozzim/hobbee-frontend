@@ -11,6 +11,8 @@ export function TagComponent(props) {
   const colorindex = index % colors.length;
   const color = colors[colorindex];
 
+  if (!hobbies[index]) return null;
+
   return (
     <div>
       <Chip
