@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect } from "react";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import MUILink from "@material-ui/core/Link";
@@ -7,6 +7,7 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import GroupImage from "../assets/test.png";
 import "../views/style.css";
 import UserIcon from "@material-ui/icons/AccountCircle";
+import EditIcon from "@material-ui/icons/Edit";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
 import GroupIcon from "@material-ui/icons/PeopleAlt";
@@ -14,16 +15,19 @@ import { Button, IconButton } from "@material-ui/core";
 import { Chat } from "../components/Chat";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import { TagComponent } from "../components/TagComponent";
+import { joinGroup, leaveGroup, fetchGroup } from "../services/GroupService";
+import { io } from "../services/SocketService";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
-    marginTop: "20px",
+    marginTop: "0px",
     "& > * + *": {
       marginTop: theme.spacing(2),
     },
   },
   pageContent: {
-    marginTop: "50px",
+    marginTop: "30px",
     display: "flex",
   },
   picture: {
@@ -76,6 +80,19 @@ const useStyles = makeStyles((theme) => ({
     right: 50,
     top: -5,
   },
+  editButton: {
+    position: "absolute",
+    right: 50,
+    top: 205,
+  },
+  fab: {
+    margin: theme.spacing(2),
+  },
+  absolute: {
+    position: "absolute",
+    bottom: theme.spacing(2),
+    right: theme.spacing(3),
+  },
 }));
 
 function handleClick(event) {
@@ -83,10 +100,74 @@ function handleClick(event) {
   console.info("You clicked a breadcrumb.");
 }
 
+const CustomTooltip = withStyles((theme) => ({
+  tooltip: {
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    margin: 0,
+  },
+}))(Tooltip);
+
+const initialState = {
+  _id: "",
+  groupName: "",
+  groupOwner: "",
+  groupMembers: [],
+  city: "",
+  onOffline: "both",
+  tags: [],
+  pic: "",
+  participants: "",
+  date: null,
+  location: undefined,
+  description: "",
+};
+
 export function GroupPageView(props) {
+  const groupId = props.match.params.id;
   const classes = useStyles();
   const [joined, setJoined] = useState(false);
-  const tags = ["Sewing", "Crafting", "Cosplay"];
+  const [group, setGroup] = useState(initialState);
+
+  useEffect(async () => {
+    const thisGroup = await fetchGroup(groupId);
+    setGroup(thisGroup.data);
+    if (thisGroup.data.chat) {
+      setJoined(true);
+    }
+  }, [joined]);
+  console.log(group);
+
+  //connect socket
+  useEffect(async () => {
+    io.on("return message", async (data) => {
+      const thisGroup = await fetchGroup(groupId);
+      setGroup(thisGroup.data);
+    });
+    return () => io.destroy();
+  }, []);
+
+  async function handleJoin() {
+    console.log("Joining Group");
+    const result = await joinGroup(groupId);
+    console.log(result.data);
+    setJoined(true);
+    io.emit("new system message", {
+      groupId: groupId,
+    });
+  }
+
+  async function handleLeave() {
+    console.log("Leaving Group");
+    const result = await leaveGroup(groupId);
+    console.log(result.data);
+    setJoined(false);
+    io.emit("new system message", {
+      groupId: groupId,
+    });
+  }
+
+  async function editGroup() {}
 
   if (joined) {
     return (
@@ -120,64 +201,94 @@ export function GroupPageView(props) {
             </div>
             <div className={classes.infoJoined}>
               <Typography variant="h4" color="inherit">
-                Table Tennis at TUM
+                {group.groupName}
               </Typography>
-              <IconButton
-                onClick={() => setJoined(false)}
-                color="inherit"
-                className={classes.leaveButton}
-              >
-                <ExitIcon />
-              </IconButton>
+              <CustomTooltip title="Leave Group">
+                <IconButton
+                  onClick={() => handleLeave()}
+                  color="inherit"
+                  className={classes.leaveButton}
+                >
+                  <ExitIcon />
+                </IconButton>
+              </CustomTooltip>
+              <CustomTooltip title="Edit Group">
+                <IconButton
+                  onClick={() => editGroup()}
+                  color="inherit"
+                  className={classes.editButton}
+                >
+                  <EditIcon />
+                </IconButton>
+              </CustomTooltip>
               <div className={classes.detailsItem}>
-                <UserIcon style={{ fill: "#32210B" }} />
+                <CustomTooltip title="Group Owner">
+                  <UserIcon style={{ fill: "#32210B" }} />
+                </CustomTooltip>
                 <Typography variant="h6" className={classes.detailsItemText}>
-                  Group Owner
+                  {group.groupOwner.username}
                 </Typography>
               </div>
               <div className={classes.detailsItem}>
-                <EventIcon style={{ fill: "#32210B" }} />
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  Mi, 09.06.2021 21:00 Uhr
-                </Typography>
+                <CustomTooltip title="Date">
+                  <EventIcon style={{ fill: "#32210B" }} />
+                </CustomTooltip>
+                {group.date && !group.date.length == 0 ? (
+                  <Typography variant="h6" className={classes.detailsItemText}>
+                    {new Date(group.date).toLocaleString("en-GB", {
+                      weekday: "short",
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </Typography>
+                ) : (
+                  <Typography variant="h6" className={classes.detailsItemText}>
+                    to be determined
+                  </Typography>
+                )}
               </div>
               <div className={classes.detailsItem}>
-                <LocationIcon style={{ fill: "#32210B" }} />
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  Arcisstr. 21, 80800 Munich
-                </Typography>
+                <CustomTooltip title="Location">
+                  <LocationIcon style={{ fill: "#32210B" }} />
+                </CustomTooltip>
+                {!group.location == "" ? (
+                  <Typography variant="h6" className={classes.detailsItemText}>
+                    {group.location}
+                  </Typography>
+                ) : (
+                  <Typography variant="h6" className={classes.detailsItemText}>
+                    {group.city}
+                  </Typography>
+                )}
               </div>
               <div className={classes.detailsItem}>
-                <GroupIcon style={{ fill: "#32210B" }} />
+                <CustomTooltip title="Group Members">
+                  <GroupIcon style={{ fill: "#32210B" }} />
+                </CustomTooltip>
                 <Typography variant="h6" className={classes.detailsItemText}>
-                  5/7
+                  {group.groupMembers.length}/{group.participants}
                 </Typography>
               </div>
             </div>
             <div style={{ display: "flex" }}>
-              {tags.map((x) => {
-                return <TagComponent title={x} key={x} />;
+              {group.tags.map((x) => {
+                return (
+                  <div style={{ marginRight: "10px" }}>
+                    <TagComponent id={x} key={x} />
+                  </div>
+                );
               })}
             </div>
           </div>
           <div className={classes.chat}>
-            <Chat />
+            <Chat groupID={groupId} />
           </div>
         </div>
-
         <div style={{ fontSize: "17px" }}>
-          <p>
-            Failure to comply will result in disqualification. Lorem ipsum dolor
-            sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-            amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-            diam nonumy eirmod tempor invidunt ut labore et dolore magna
-            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
-            duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-            sanctus est Lorem ipsum dolor sit amet.
-          </p>
+          <p>{group.description}</p>
         </div>
       </div>
     );
@@ -212,59 +323,73 @@ export function GroupPageView(props) {
           </div>
           <div className={classes.infoNotJoined}>
             <Typography variant="h4" color="inherit">
-              Table Tennis at TUM
+              {group.groupName}
             </Typography>
             <div className={classes.detailsItem}>
-              <UserIcon style={{ fill: "#32210B" }} />
+              <CustomTooltip title="Group Owner">
+                <UserIcon style={{ fill: "#32210B" }} />
+              </CustomTooltip>
               <Typography variant="h6" className={classes.detailsItemText}>
-                Group Owner
+                {group.groupOwner.username}
               </Typography>
             </div>
             <div className={classes.detailsItem}>
-              <EventIcon style={{ fill: "#32210B" }} />
+              <CustomTooltip title="Date">
+                <EventIcon style={{ fill: "#32210B" }} />
+              </CustomTooltip>
+              {group.date && !group.date.length == 0 ? (
+                <Typography variant="h6" className={classes.detailsItemText}>
+                  {new Date(group.date).toLocaleString("en-GB", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Typography>
+              ) : (
+                <Typography variant="h6" className={classes.detailsItemText}>
+                  to be determined
+                </Typography>
+              )}
+            </div>
+            <div className={classes.detailsItem}>
+              <CustomTooltip title="City">
+                <LocationIcon style={{ fill: "#32210B" }} />
+              </CustomTooltip>
               <Typography variant="h6" className={classes.detailsItemText}>
-                Mi, 09.06.2021 21:00 Uhr
+                {group.city}
               </Typography>
             </div>
             <div className={classes.detailsItem}>
-              <LocationIcon style={{ fill: "#32210B" }} />
+              <CustomTooltip title="Group Members">
+                <GroupIcon style={{ fill: "#32210B" }} />
+              </CustomTooltip>
               <Typography variant="h6" className={classes.detailsItemText}>
-                Munich
-              </Typography>
-            </div>
-            <div className={classes.detailsItem}>
-              <GroupIcon style={{ fill: "#32210B" }} />
-              <Typography variant="h6" className={classes.detailsItemText}>
-                5/7
+                {group.groupMembers.length}/{group.participants}
               </Typography>
             </div>
             <Button
               className={classes.joinButton}
               type="button"
-              onClick={() => setJoined(true)}
+              onClick={() => handleJoin()}
             >
               JOIN GROUP
             </Button>
           </div>
         </div>
         <div style={{ display: "flex" }}>
-          {tags.map((x) => {
-            return <TagComponent title={x} key={x} />;
+          {group.tags.map((x) => {
+            return (
+              <div style={{ marginRight: "10px" }}>
+                <TagComponent id={x} key={x} />
+              </div>
+            );
           })}
         </div>
         <div style={{ fontSize: "17px" }}>
-          <p>
-            Failure to comply will result in disqualification. Lorem ipsum dolor
-            sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-            amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-            diam nonumy eirmod tempor invidunt ut labore et dolore magna
-            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
-            duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-            sanctus est Lorem ipsum dolor sit amet.
-          </p>
+          <p>{group.description}</p>
         </div>
       </div>
     );

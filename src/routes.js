@@ -14,7 +14,7 @@ import { ProfileView } from "./views/ProfileView";
 import ResetPasswordView from "./views/UserAuthentication/ResetPasswordView";
 import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PaymentPlanView";
-import {PaymentConfirmationView} from "./views/PaymentConfirmationView";
+import { PaymentConfirmationView } from "./views/PaymentConfirmationView";
 
 // routes within the movie database example app
 // used for routing
@@ -57,7 +57,7 @@ export const routes = [
     component: RecommendedView,
   },
   {
-    path: "/group-page",
+    path: "/group-page/:id",
     component: GroupPageView,
   },
   {
