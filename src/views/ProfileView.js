@@ -1,13 +1,16 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import {makeStyles} from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import HobbeeIcon from "../assets/bee_cream.png";
 import TextField from "@material-ui/core/TextField";
-import {TagComponent} from "../components/TagComponent";
-import {TagAutocomplete} from "../components/TagAutocomplete";
-import {GroupResultsComponentDemo} from "../components/GroupResultsComponentDemo"
+import { GroupComponent } from "../components/GroupComponent";
+import { TagComponent } from "../components/TagComponent";
+import { TagAutocomplete } from "../components/TagAutocomplete";
+import { Editable } from "../components/Editable";
+import { useSelector } from "react-redux";
+import { MyGroupsResultsComponent } from "../components/MyGroupsResultsComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,80 +42,154 @@ export function ProfileView(props) {
   const mail = "jaina@gmail.com";
 
   const [tags, setTags] = React.useState([]);
+  const user = useSelector((state) => state.user.user);
+  const [formData, setFormData] = React.useState(user);
+
+  React.useEffect(() => {
+    setFormData(user);
+  }, [user]);
 
   return (
-    <div className={classes.root}>
-      <h1>Welcome to your profile, Jaina. Thanks for using Hobb.ee!</h1>
+    <Editable
+      render={(editing) => {
+        if (!formData) return null;
 
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={1} sm={3}>
-          <Paper className={classes.paper} elevation={1}>
-            <Link className={"linkDefault"} to={"/profile"}>
-              <img src={HobbeeIcon} height={200} alt={"Profile"}/>
-            </Link>
-          </Paper>
-        </Grid>
+        console.log(formData);
 
-        <Grid item xs={9}>
-          <Grid>
-            <Grid container spacing={2}>
-              <Grid item xs={3}>
-                <Paper className={classes.paper}>
-                  My name is:
-                  <form className={classes.root} autoComplete="off">
-                    <TextField id="outlined-required" label={name}/>
-                  </form>
+        return (
+          <div className={classes.root}>
+            <h1>
+              Welcome to your profile, {formData.username}. Thanks for using
+              Hobb.ee!
+            </h1>
+
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={1} sm={3}>
+                <Paper className={classes.paper} elevation={1}>
+                  <Link className={"linkDefault"} to={"/profile"}>
+                    <img src={HobbeeIcon} height={200} alt={"Profile"} />
+                  </Link>
                 </Paper>
               </Grid>
-              <Grid item xs={3}>
-                <Paper className={classes.paper}>
-                  My mail is:
-                  <form className={classes.root} noValidate autoComplete="off">
-                    <TextField id="standard-basic" label={mail}/>
-                  </form>
-                </Paper>
-              </Grid>
-              <Grid item xs={3}>
-                <Paper className={classes.paper}>
-                  My birthday is:
-                  <form className={classes.root} noValidate autoComplete="off">
-                    <TextField id="standard-basic" label={birthday}/>
-                  </form>
-                </Paper>
-              </Grid>
-              <Grid item xs={3}>
-                <Paper className={classes.paper}>
-                  Default Location:
-                  <form className={classes.root} noValidate autoComplete="off">
-                    <TextField id="standard-basic" label={city}/>
-                  </form>
-                </Paper>
+
+              <Grid item xs={9}>
+                <Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                      <Paper className={classes.paper}>
+                        My name is:
+                        <TextField
+                          id="outlined-required"
+                          value={formData.username}
+                          onChange={(event) => {
+                            setFormData((formData) => {
+                              return {
+                                ...formData,
+                                username: event.target.value,
+                              };
+                            });
+                          }}
+                          disabled={!editing}
+                        />
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Paper className={classes.paper}>
+                        My mail is:
+                        <form
+                          className={classes.root}
+                          noValidate
+                          autoComplete="off"
+                        >
+                          <TextField
+                            id="standard-basic"
+                            value={formData.email}
+                            disabled={!editing}
+                            onChange={(event) => {
+                              setFormData((formData) => {
+                                return {
+                                  ...formData,
+                                  email: event.target.value,
+                                };
+                              });
+                            }}
+                          />
+                        </form>
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Paper className={classes.paper}>
+                        My birthday is:
+                        <form
+                          className={classes.root}
+                          noValidate
+                          autoComplete="off"
+                        >
+                          <TextField
+                            id="standard-basic"
+                            value={formData.dateOfBirth}
+                            disabled={!editing}
+                            onChange={(event) => {
+                              setFormData((formData) => {
+                                return {
+                                  ...formData,
+                                  dateOfBirth: event.target.value,
+                                };
+                              });
+                            }}
+                          />
+                        </form>
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
 
-      <h3> These are your interests: </h3>
+            <h3> These are your interests: </h3>
 
-      <Grid container spacing={2}>
-        {tags.map((x) => {
-          return <TagComponent id={x} key={x}/>;
-        })}
+            <Grid container spacing={2}>
+              {formData.hobbies.map((x) => {
+                return (
+                  <TagComponent
+                    id={x}
+                    key={x}
+                    onDelete={
+                      editing
+                        ? () => {
+                            setFormData((formData) => {
+                              return {
+                                ...formData,
+                                hobbies: formData.hobbies.filter((hobby) => {
+                                  return x !== hobby;
+                                }),
+                              };
+                            });
+                          }
+                        : undefined
+                    }
+                  />
+                );
+              })}
 
-        <Grid item>
-          <TagAutocomplete
-            onChange={(tags) => {
-              setTags(tags);
-            }}
-            value={tags}
-          />
-        </Grid>
-      </Grid>
+              <Grid item>
+                {editing ? (
+                  <TagAutocomplete
+                    onChange={(hobbies) => {
+                      setFormData((formData) => {
+                        return { ...formData, hobbies };
+                      });
+                    }}
+                    value={formData.hobbies}
+                  />
+                ) : null}
+              </Grid>
+            </Grid>
 
-      <h3> These are your groups: </h3>
-
-      <GroupResultsComponentDemo/>
-    </div>
+            <MyGroupsResultsComponent />
+          </div>
+        );
+      }}
+    />
   );
 }
