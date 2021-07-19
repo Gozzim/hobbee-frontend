@@ -22,6 +22,7 @@ import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
 import HobbeeIcon from "../assets/hobbee_white.svg";
 import { useSelector } from "react-redux";
 import { NotificationBell } from "./NotificationBell";
+import { HOBBEE_ORANGE } from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     flexGrow: 1,
-    backgroundColor: "#E98F1C",
+    backgroundColor: HOBBEE_ORANGE,
   },
   leftNav: {
     display: "flex",
