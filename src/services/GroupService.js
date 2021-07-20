@@ -11,3 +11,7 @@ export async function fetchGroups() {
 export async function fetchMyGroups() {
   return await HttpService.get("/group/mine");
 }
+
+export async function fetchRecommendedGroups() {
+  return await HttpService.get("/group/recommended");
+}
