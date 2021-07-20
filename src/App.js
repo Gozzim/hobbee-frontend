@@ -7,7 +7,7 @@ import { routes } from "./routes";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { getToken, setToken } from "./services/HttpService";
-import { authUser } from "./redux/reducers/userReducer";
+import { authReady, authUser } from "./redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,12 +23,14 @@ export function App() {
   const dispatch = useDispatch();
 
   // set document title
-  useEffect(() => {
+  useEffect(async () => {
     document.title = "Hobb.ee";
     const token = getToken();
     if (token) {
       setToken(token);
       dispatch(authUser());
+    } else {
+      dispatch(authReady());
     }
   }, []);
 
