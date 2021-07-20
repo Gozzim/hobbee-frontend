@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: "left",
     color: "#32210B",
-    maxWidth: 280,
+    width: 280,
     "&:hover": {
       backgroundColor: "rgba(0, 0, 0, 0.04)",
       color: "#32210B",
