@@ -16,73 +16,85 @@ import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PaymentPlanView";
 import { PaymentConfirmationView } from "./views/PaymentConfirmationView";
 
-// routes within the movie database example app
-// used for routing
-
 export const routes = [
   {
+    path: "/",
+    Component: HomeView,
+    label: "Home",
+  },
+  {
     path: "/profile",
-    component: ProfileView,
+    Component: ProfileView,
+    label: "View User",
   },
   {
     path: "/login",
-    component: SignInView,
+    Component: SignInView,
+    label: "Login",
   },
   {
     path: "/register",
-    component: SignUpView,
+    Component: SignUpView,
+    label: "Create Account",
   },
   {
     path: "/create-group",
-    component: CreateGroupView,
-  },
-  {
-    path: "/in-my-area",
-    component: InMyAreaView,
-  },
-  {
-    path: "/premium/payment-confirmation",
-    component: PaymentConfirmationView,
-  },
-  {
-    path: "/premium/payment-plan",
-    component: PaymentPlanView,
+    Component: CreateGroupView,
+    label: "Create Group"
   },
   {
     path: "/premium",
-    component: PremiumView,
+    Component: PremiumView,
+    label: "Premium",
+  },
+  {
+    path: "/premium/payment-plan",
+    Component: PaymentPlanView,
+    label: "Payment Plan",
+  },
+  {
+    path: "/premium/payment-confirmation",
+    Component: PaymentConfirmationView,
+    label: "Confirmation",
   },
   {
     path: "/recommended",
-    component: RecommendedView,
+    Component: RecommendedView,
+    label: "Recommendations",
   },
   {
-    path: "/group-page/:id",
-    component: GroupPageView,
+    path: "/in-my-area",
+    Component: InMyAreaView,
+    label: "In my Area",
   },
   {
     path: "/my-groups",
-    component: MyGroupsView,
+    Component: MyGroupsView,
+    label: "My Groups",
   },
   {
-    exact: true,
+    path: ["/group/:id", "/my-groups/:id", "/recommended/:id", "/in-my-area/:id"],
+    Component: GroupPageView,
+    label: "View Group",
+  },
+  {
     path: "/password-reset/:user/:token",
-    component: ResetPasswordView,
+    Component: ResetPasswordView,
+    label: "Account Recovery",
   },
   {
     path: "/imprint",
-    component: Imprint,
+    Component: Imprint,
+    label: "Imprint",
   },
   {
     path: "/tos",
-    component: ToS,
+    Component: ToS,
+    label: "Terms of Service",
   },
   {
     path: "/privacy",
-    component: PrivacyPolicy,
-  },
-  {
-    path: "/",
-    component: HomeView,
+    Component: PrivacyPolicy,
+    label: "Privacy Policy",
   },
 ];
