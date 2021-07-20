@@ -13,11 +13,6 @@ const initialState = {
   error: null,
 };
 
-/*
- * TODO:
- *  - Error not showing on second try
- */
-
 export const login = createAsyncThunk(
   "user/login",
   async ({ username, password }, thunkAPI) => {
@@ -28,7 +23,7 @@ export const login = createAsyncThunk(
       switch (e.response.status) {
         case 401:
         case 404:
-          return thunkAPI.rejectWithValue("Incorrect username or password.");
+          return thunkAPI.rejectWithValue("Incorrect username or password."); //TODO: not necessary anymore
         default:
           return thunkAPI.rejectWithValue(e.response.data.error);
       }
@@ -50,6 +45,9 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.error = null;
     },
+    setAuthError: (state, action) => {
+      state.error = action.payload;
+    },
   },
   extraReducers: {
     [login.fulfilled]: (state, action) => {
@@ -65,7 +63,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutReducer, authUserReducer } = userSlice.actions;
+export const { logoutReducer, authUserReducer, setAuthError } = userSlice.actions;
 
 export const logout = () => async (dispatch) => {
   await logoutRequest();
@@ -87,6 +85,7 @@ export const register = (username, email, password, bday, hobbies) => async (dis
     const result = await registrationRequest(username, email, password, bday, hobbies);
     dispatch(authUserReducer(result.data));
   } catch (e) {
+    dispatch(setAuthError(e.message));
     setToken(null);
   }
 };

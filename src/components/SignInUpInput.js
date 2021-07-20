@@ -15,6 +15,7 @@ export function SignInUpInput(props) {
       InputProps={props.inputProps}
       InputLabelProps={props.inputLabelProps}
       error={props.inputError}
+      helperText={props.errorMessage}
       autoComplete={props.autoComplete}
     />
   );
@@ -29,5 +30,6 @@ SignInUpInput.propTypes = {
   inputProps: PropTypes.object,
   inputLabelProps: PropTypes.object,
   inputError: PropTypes.bool,
+  errorMessage: PropTypes.string,
   autoComplete: PropTypes.string,
 };
