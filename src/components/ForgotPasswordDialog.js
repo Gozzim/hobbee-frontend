@@ -34,9 +34,10 @@ export function ForgotPasswordDialog(props) {
   };
 
   const closeMe = async () => {
-    props.onClose();
     setEmail("");
     setError("");
+    setFinished(false);
+    props.onClose();
   };
 
   return (
@@ -58,7 +59,7 @@ export function ForgotPasswordDialog(props) {
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={props.onClose}
+              onClick={closeMe}
               variant="contained"
               color="primary"
               style={{ backgroundColor: HOBBEE_ORANGE }}
@@ -71,7 +72,7 @@ export function ForgotPasswordDialog(props) {
         <div>
           <DialogContent>
             <DialogContentText>
-              Enter your email address below and we will send instructions on
+              Enter your email address below and we will send you instructions on
               how to reset your password.
             </DialogContentText>
             <SignInUpInput
@@ -86,13 +87,13 @@ export function ForgotPasswordDialog(props) {
                 autoComplete={"email"}
             />
             {error ? (
-              <div style={{}}>
+              <div>
                 <Typography color="error">{error}</Typography>
               </div>
             ) : null}
           </DialogContent>
           <DialogActions>
-            <Button onClick={props.onClose} color="primary" type={"cancel"}>
+            <Button onClick={props.onClose} color="primary" type={"button"}>
               Cancel
             </Button>
             <Button

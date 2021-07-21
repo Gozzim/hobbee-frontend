@@ -3,6 +3,7 @@ import { Button } from "@material-ui/core";
 import { CreateGroup } from "./CreateGroup";
 import { CustomizeGroup } from "./CustomizeGroup";
 import { createRequest } from "../../services/GroupService";
+import { RequireLoggedIn } from "../../components/RequireLoggedIn";
 
 const initialGroupFormState = {
   groupName: "",
@@ -28,10 +29,10 @@ export function CreateGroupView() {
   const [formStep, setFormStep] = React.useState(0);
 
   return (
-    <>
+    <RequireLoggedIn>
       {renderForm()}
       {renderButtons()}
-    </>
+    </RequireLoggedIn>
   );
 
   function renderForm() {

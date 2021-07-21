@@ -1,19 +1,7 @@
 import HttpService, { setToken } from "./HttpService";
 
-export async function registrationRequest(
-  username,
-  email,
-  password,
-  bday,
-  hobbies
-) {
-  const resp = await HttpService.post("auth/register", {
-    username: username,
-    email: email,
-    password: password,
-    dateOfBirth: bday,
-    hobbies: [...hobbies],
-  });
+export async function registrationRequest(userdata) {
+  const resp = await HttpService.post("auth/register", userdata);
   return await processToken(resp.data.token);
 }
 
@@ -30,13 +18,13 @@ export async function logoutRequest() {
 }
 
 export async function forgotPasswordRequest(email) {
-  return await HttpService.post("auth/forgot", {
+  return await HttpService.post("user/forgot", {
     email: email
   });
 }
 
 export async function resetPasswordRequest(user, token, password) {
-  const resp = await HttpService.post("auth/reset", {
+  const resp = await HttpService.post("user/reset", {
     user: user,
     token: token,
     password: password
@@ -44,14 +32,20 @@ export async function resetPasswordRequest(user, token, password) {
   return await processToken(resp.data.token);
 }
 
-export async function fetchMe() {
-  const resp = await HttpService.get("auth/me");
-  // TODO: Token Refreshment
-  const user = { ...resp };
-  return user;
+export async function isUsernameAvailable(username) {
+  try {
+    const resp = await HttpService.post("auth/exists/username", {username: username});
+    return resp.data;
+  } catch (err) {
+    return err.message;
+  }
 }
 
-async function processToken(token) {
+export async function fetchMe() {
+  return await HttpService.get("user/me");
+}
+
+export async function processToken(token) {
   setToken(token);
 
   return await fetchMe();
