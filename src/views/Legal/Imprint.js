@@ -103,18 +103,23 @@ export function Imprint(props) {
           Example Group Picture 1: Photo by <a href={"https://unsplash.com/@heftiba"}>Toa Heftiba</a> on <a
           href={"https://unsplash.com/photos/yWyS3lM6K-E"}>Unsplash</a>
         </li>
-
         <li>
-          Example Group Picture 2: Photo from <a href={"https://pixabay.com/images/id-690046/"}> Pixabay </a>
+          Example Group Picture 2: Photo from <a href={"https://pixabay.com/images/id-690046/"}>Pixabay</a>
         </li>
         <li>
           Example Group Picture 3: Photo by <a href={"https://unsplash.com/@christianw"}>Christian Wiediger</a> on <a
           href={"https://unsplash.com/photos/WkfDrhxDMC8"}>Unsplash</a>
         </li>
-        <li>Frontpage image: Photo by <a href={"https://unsplash.com/@_visalli"}>Antonino Visalli</a> on <a
-          href={"https://unsplash.com/photos/RNiBLy7aHck"}>Unsplash</a></li>
-        <li>Ad Banners: Taken from<a href={"https://alidropship.com/best-banner-ads-examples/"}> Alidropship </a></li>
-        <li>The hobb.ee bee is our own creation :)</li>
+        <li>
+          Frontpage image: Photo by <a href={"https://unsplash.com/@_visalli"}>Antonino Visalli</a> on <a
+          href={"https://unsplash.com/photos/RNiBLy7aHck"}>Unsplash</a>
+        </li>
+        <li>
+          Ad Banners: Taken from <a href={"https://alidropship.com/best-banner-ads-examples/"}>Alidropship</a>
+        </li>
+        <li>
+          The hobb.ee logo and bee are our own creations :)
+        </li>
       </ul>
     </div>
   );
