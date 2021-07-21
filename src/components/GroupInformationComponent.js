@@ -6,7 +6,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import {Button, IconButton} from "@material-ui/core";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import UserIcon from "@material-ui/icons/AccountCircle";
-import { HOBBEE_BROWN } from "../shared/Constants";
+import {HOBBEE_BLUE, HOBBEE_BROWN, HOBBEE_ORANGE, HOBBEE_YELLOW} from "../shared/Constants";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
 import GroupIcon from "@material-ui/icons/PeopleAlt";
@@ -15,6 +15,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { EditGroupDialog } from "./EditGroupDialog";
 import {useSelector} from "react-redux";
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +61,7 @@ export function GroupInformationComponent(props) {
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={10}>
-          <Typography variant="h4" color="inherit">
+          <Typography variant="h4" color="inherit" style={{wordWrap: "break-word"}}>
             {props.group.groupName}
           </Typography>
         </Grid>
@@ -81,9 +82,14 @@ export function GroupInformationComponent(props) {
           </div>
         </Grid>
         <Grid item xs={10}>
-          <Typography variant="h6">
-            {props.group.groupOwner.username}
-          </Typography>
+          <div style={{display: "flex"}}>
+            <Typography variant="h6">
+              {props.group.groupOwner.username}
+            </Typography>
+            <CustomTooltip title={props.group.groupOwner.username + " is boosting this group."}>
+              <TrendingUpIcon style={{ fill: HOBBEE_ORANGE, marginTop: "4px", marginLeft: "8px" }} />
+            </CustomTooltip>
+          </div>
         </Grid>
         <Grid item xs={2}>
           <div className={classes.detailsItem}>
@@ -117,10 +123,14 @@ export function GroupInformationComponent(props) {
         </Grid>
         <Grid item xs={10}>
           {props.joined && !props.group.location == "" ? (
-            <Typography variant="h6">{props.group.location}</Typography>
+            <Typography variant="h6" style={{wordWrap: "break-word"}}>{props.group.location}</Typography>
           ) : (
-            <Typography variant="h6">{props.group.city}</Typography>
+            <Typography variant="h6" style={{wordWrap: "break-word"}}>{props.group.city}</Typography>
           )}
+          {props.group.onOffline === "online" ? (
+              <Typography variant="h6">(online)</Typography>
+          ) : null
+          }
         </Grid>
         <Grid item xs={2}>
           <div className={classes.detailsItem}>

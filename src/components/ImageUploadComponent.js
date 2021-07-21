@@ -15,8 +15,6 @@ import {
 } from "@material-ui/core";
 import { getFileUrl, uploadRequest } from "../services/FileService";
 import {withStyles} from "@material-ui/core/styles";
-import EventIcon from "@material-ui/icons/Event";
-import {HOBBEE_BROWN} from "../shared/Constants";
 
 const examplePics = [
   "60ec51d7e0edf15bb9e1993a",
@@ -96,7 +94,7 @@ export function ImageUploadComponent(props) {
             fileInput.current.click();
           }}
         >
-          <img width={300} height={220} src={getFileUrl(props.groupForm.pic)} />
+          <img alt="group-image" width={300} height={220} src={getFileUrl(props.groupForm.pic)} />
         </Button>
       ) : (
         <Button
@@ -171,7 +169,7 @@ export function ImageUploadComponent(props) {
                   fileInput.current.value = "";
                 }}
               >
-                <img width={130} height={95} src={getFileUrl(id)} />
+                <img alt="example-image" width={130} height={95} src={getFileUrl(id)} />
               </Button>
             </div>
           );

@@ -309,6 +309,14 @@ export function EditGroupDialog(props) {
                   "aria-label": "change date",
                 }}
                 style={{ marginRight: "10px" }}
+                error={
+                  groupForm.date <= Date.now()
+                }
+                helperText={
+                  true
+                      ? String(groupForm.date < Date.now())
+                      : ""
+                }
               />
               <KeyboardTimePicker
                 label="Time"
@@ -329,6 +337,14 @@ export function EditGroupDialog(props) {
                 KeyboardButtonProps={{
                   "aria-label": "change time",
                 }}
+                error={
+                  groupForm.date <= Date.now()
+                }
+                helperText={
+                  groupForm.date <= Date.now()
+                      ? "Date must lie in the future"
+                      : ""
+                }
               />
             </MuiPickersUtilsProvider>
             <IconButton

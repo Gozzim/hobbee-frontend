@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import GroupImage from "../assets/test.png";
 import "../views/style.css";
-import UserIcon from "@material-ui/icons/AccountCircle";
-import EventIcon from "@material-ui/icons/Event";
-import LocationIcon from "@material-ui/icons/LocationOn";
-import GroupIcon from "@material-ui/icons/PeopleAlt";
-import { Button, IconButton } from "@material-ui/core";
+import {Snackbar} from "@material-ui/core";
 import { Chat } from "../components/Chat";
 import { TagComponent } from "../components/TagComponent";
 import {
@@ -21,6 +15,7 @@ import { useSelector } from "react-redux";
 import { getFileUrl } from "../services/FileService";
 import Grid from "@material-ui/core/Grid";
 import { GroupInformationComponent } from "../components/GroupInformationComponent";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -123,15 +118,18 @@ const initialState = {
   description: "",
 };
 
+const initialSnackbar = {
+  open: false,
+  message: "",
+};
+
 export function GroupPageView(props) {
   const classes = useStyles();
   const groupId = props.match.params.id;
   const [joined, setJoined] = useState(false);
   const [group, setGroup] = useState(initialState);
   const [chatLoaded, setChatLoaded] = useState(false);
-  const user = useSelector((state) => {
-    return state.user;
-  });
+  const [snackbar, setSnackbar] = React.useState(initialSnackbar);
 
   useEffect(async () => {
     const thisGroup = await fetchGroup(groupId);
@@ -166,23 +164,46 @@ export function GroupPageView(props) {
 
   async function handleJoin() {
     console.log("Joining Group");
-    const result = await joinGroupRequest(groupId);
-    console.log(result.data);
-    setJoined(true);
-    io.emit("new system message", {
-      groupId: groupId,
-    });
+    try {
+      const result = await joinGroupRequest(groupId);
+      console.log(result.data.message);
+      console.log("test")
+      setJoined(true);
+      io.emit("new system message", {
+        groupId: groupId,
+      });
+    } catch (e) {
+      console.log("Failed to join group")
+      handleError(e.response.data.message)
+    }
   }
 
   async function handleLeave() {
     console.log("Leaving Group");
-    const result = await leaveGroupRequest(groupId);
-    console.log(result.data);
-    setJoined(false);
-    io.emit("new system message", {
-      groupId: groupId,
-    });
+    try {
+      const result = await leaveGroupRequest(groupId);
+      console.log(result.data);
+      setJoined(false);
+      io.emit("new system message", {
+        groupId: groupId,
+      });
+    } catch (e) {
+      console.log("Failed to leave group")
+      handleError(e.response.data.message)
+    }
   }
+
+  const handleError = (error) => {
+    setSnackbar({open: true, message: error});
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbar({open: false, message: ""});
+  };
 
   return (
     <div className={classes.root}>
@@ -237,6 +258,12 @@ export function GroupPageView(props) {
           {group.description}
         </Grid>
       </Grid>
+
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
