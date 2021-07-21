@@ -5,7 +5,6 @@ import { Link, Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 function DynamicBreadcrumbs(props) {
-    console.log(props)
 
   return (
     <Route>

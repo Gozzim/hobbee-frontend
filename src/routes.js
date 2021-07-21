@@ -15,6 +15,7 @@ import ResetPasswordView from "./views/UserAuthentication/ResetPasswordView";
 import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PaymentPlanView";
 import { PaymentConfirmationView } from "./views/PaymentConfirmationView";
+import { FeedbackView } from "./views/Feedback/FeedbackView";
 
 export const routes = [
   {
@@ -25,7 +26,7 @@ export const routes = [
   {
     path: "/profile",
     Component: ProfileView,
-    label: "View User",
+    label: "User-Profile",
   },
   {
     path: "/login",
@@ -71,6 +72,11 @@ export const routes = [
     path: "/my-groups",
     Component: MyGroupsView,
     label: "My Groups",
+  },
+  {
+    path: "/feedback/:id",
+    Component: FeedbackView,
+    label: "Your Feedback",
   },
   {
     path: ["/group/:id", "/my-groups/:id", "/recommended/:id", "/in-my-area/:id"],
