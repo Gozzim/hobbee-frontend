@@ -5,7 +5,6 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import HobbeeIcon from "../assets/bee_cream.png";
 import TextField from "@material-ui/core/TextField";
-import { GroupComponent } from "../components/GroupComponent";
 import { TagComponent } from "../components/TagComponent";
 import { TagAutocomplete } from "../components/TagAutocomplete";
 import { Editable } from "../components/Editable";

@@ -1,11 +1,6 @@
-import Fuse from "fuse.js";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { SearchBarSmallComponent } from "../components/SearchBarSmallComponent";
 import { getRecommendedGroups } from "../redux/reducers/groupsReducer";
-import Grid from "@material-ui/core/Grid";
-import { GroupComponent } from "../components/GroupComponent";
 import { SearchBarComponent } from "../components/SeachBarComponent";
 
 export function RecommendedView() {
@@ -21,5 +16,5 @@ export function RecommendedView() {
     }
   }, [user.isLoggedIn]);
 
-  return <SearchBarComponent groups={groups} />;
+  return <SearchBarComponent groups={groups} title="RECOMMENDED FOR YOU" />;
 }

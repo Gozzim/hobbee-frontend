@@ -8,6 +8,8 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
+  IconButton,
+  InputAdornment,
   Radio,
   RadioGroup,
   TextField,
@@ -23,13 +25,14 @@ import { TagAutocomplete } from "../components/TagAutocomplete";
 import Fuse from "fuse.js";
 import { GroupComponent } from "./GroupComponent";
 import { formatISO } from "date-fns";
+import { Tune } from "@material-ui/icons";
+import GroupIcon from "@material-ui/icons/Group";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "2px 4px",
     display: "flex",
     alignItems: "center",
-    width: 600,
   },
   small: {
     padding: "2px 4px",
@@ -47,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     margin: 4,
   },
+  filterContainer: {
+    padding: "20px !important",
+  },
 }));
 
 function applyFilters(groups, filters) {
@@ -54,13 +60,29 @@ function applyFilters(groups, filters) {
   let filteredGroups = groups;
 
   if (filters.city) {
+    const fuse = new Fuse(filteredGroups, {
+      keys: ["city"],
+    });
+    filteredGroups = fuse.search(filters.city).map((result) => result.item);
+  }
+
+  if (filters.from) {
+    const fromDate = new Date(filters.from);
+    fromDate.setHours(0, 0, 0, 0);
     filteredGroups = filteredGroups.filter((group) => {
-      return group.city === filters.city;
+      if (!group.date) return true;
+      return fromDate <= new Date(group.date);
     });
   }
 
-  //   from: null,
-  //   to: null,
+  if (filters.to) {
+    const toDate = new Date(filters.to);
+    toDate.setHours(23, 59, 59, 999);
+    filteredGroups = filteredGroups.filter((group) => {
+      if (!group.date) return true;
+      return toDate >= new Date(group.date);
+    });
+  }
 
   if (filters.participants) {
     filteredGroups = filteredGroups.filter((group) => {
@@ -100,9 +122,10 @@ function applyFilters(groups, filters) {
 export function SearchBarComponent(props) {
   const classes = useStyles();
   const [searchValue, setSearchValue] = React.useState("");
+  const [showFilters, setShowFilters] = React.useState(false);
 
   const fuse = new Fuse(props.groups, {
-    keys: ["groupName", "city"],
+    keys: ["groupName"],
   });
   const filteredGroups = searchValue
     ? fuse.search(searchValue).map((result) => result.item)
@@ -129,215 +152,257 @@ export function SearchBarComponent(props) {
   const groupsToShow = applyFilters(filteredGroups, filters);
 
   return (
-    <Grid container spacing={2} justify="center">
-      <Grid item>
-        <Paper component="form" className={classes.root}>
-          <SearchIcon />
-          <InputBase
-            className={classes.input}
-            placeholder={searchString}
-            inputProps={{ "aria-label": { searchString } }}
-            value={searchValue}
-            onChange={(event) => {
-              setSearchValue(event.target.value);
-            }}
-          />
-        </Paper>
-      </Grid>
-      <Grid item>
-        <Button
-          type="submit"
-          variant="contained"
-          className={classes.iconButton}
-        >
-          Go
-        </Button>
-      </Grid>
-
-      <Grid item xs={4}>
-        <TextField
-          label="e.g. Munich, Germany"
-          className=""
-          required
-          fullWidth
-          variant="outlined"
-          size="small"
-          onChange={(event) => {
-            setFilters((filters) => {
-              return { ...filters, city: event.target.value };
-            });
-          }}
-          value={filters.city}
-        />
-      </Grid>
-
-      <Grid item xs={3}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            label="From"
-            onChange={(date) => {
-              setFilters((filters) => {
-                return { ...filters, from: formatISO(date) };
-              });
-            }}
-            value={filters.from}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-          />
-        </MuiPickersUtilsProvider>
-      </Grid>
-      <Grid item xs={3}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            label="To"
-            onChange={(date) => {
-              setFilters((filters) => {
-                return { ...filters, to: formatISO(date) };
-              });
-            }}
-            value={filters.to}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-          />
-        </MuiPickersUtilsProvider>
-      </Grid>
-
-      <Grid item>
-        <Typography></Typography>
-
-        <TextField
-          id="standard-number"
-          type="number"
-          placeholder={"unlimited"}
-          label="Participants"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(event) => {
-            setFilters((filters) => {
-              if (parseInt(event.target.value, 10) < 1) {
-                return { ...filters, participants: "" };
-              } else {
-                return { ...filters, participants: event.target.value };
-              }
-            });
-          }}
-          value={filters.participants}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="standard-number"
-          type="number"
-          label="Free Slots"
-          placeholder={"any"}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(event) => {
-            setFilters((filters) => {
-              if (parseInt(event.target.value, 10) < 1) {
-                return { ...filters, slots: "" };
-              } else {
-                return { ...filters, slots: event.target.value };
-              }
-            });
-          }}
-          value={filters.slots}
-        />
-      </Grid>
-
-      <Grid item>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={filters.online}
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Paper component="form" className={classes.root}>
+            <SearchIcon />
+            <InputBase
+              className={classes.input}
+              placeholder={searchString}
+              inputProps={{ "aria-label": { searchString } }}
+              value={searchValue}
               onChange={(event) => {
-                setFilters((filters) => {
-                  return { ...filters, online: event.target.checked };
-                });
+                setSearchValue(event.target.value);
               }}
-              color="default"
             />
-          }
-          label="Online"
-        />
-
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={filters.offline}
-              onChange={(event) => {
-                setFilters((filters) => {
-                  return { ...filters, offline: event.target.checked };
-                });
+            <IconButton
+              onClick={() => {
+                setShowFilters((shown) => !shown);
               }}
-              color="default"
-            />
-          }
-          label="Offline"
-        />
-
-        <TagAutocomplete
-          onChange={(tags) => {
-            setFilters((filters) => {
-              return { ...filters, tags };
-            });
-          }}
-          value={filters.tags}
-        />
-
-        <div className={"creategroup-tags"}>
-          {filters.tags.map((x) => {
-            return (
-              <TagComponent
-                id={x}
-                key={x}
-                onDelete={() => {
-                  setFilters((filters) => {
-                    return {
-                      ...filters,
-                      tags: filters.tags.filter((tag) => {
-                        return x !== tag;
-                      }),
-                    };
-                  });
-                }}
-              />
-            );
-          })}
-        </div>
-      </Grid>
-
-      <Grid item>
-        <center>
-          <h1>RECOMMENDED FOR YOU</h1>
-          {groupsToShow.length > 0 ? (
-            <div>
-              <Grid container spacing={2} justify="center">
-                {groupsToShow.map((group) => {
-                  return (
-                    <Grid item key={group._id}>
-                      <GroupComponent group={group} />
-                    </Grid>
-                  );
-                })}
+            >
+              <Tune />
+            </IconButton>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} className={classes.filterContainer}>
+          {showFilters ? (
+            <Grid container spacing={4}>
+              <Grid item xs={6}>
+                <TextField
+                  placeholder="e.g. Munich, Germany"
+                  label="City"
+                  InputProps={{
+                    style: {
+                      height: "32px",
+                    },
+                  }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  fullWidth
+                  size="small"
+                  onChange={(event) => {
+                    setFilters((filters) => {
+                      return { ...filters, city: event.target.value };
+                    });
+                  }}
+                  value={filters.city}
+                />
               </Grid>
-            </div>
-          ) : (
-            <div>
-              <center>
-                <h1>You dont seem to be part of any group!</h1>
-              </center>
-              <center>
-                <p>Maybe try joining some!</p>
-              </center>
-            </div>
-          )}
-        </center>
+
+              <Grid item xs={3}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    label="From"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    format={"dd.MM.yyyy"}
+                    onChange={(date) => {
+                      setFilters((filters) => {
+                        return {
+                          ...filters,
+                          from:
+                            date instanceof Date && !isNaN(date)
+                              ? date.toISOString()
+                              : null,
+                        };
+                      });
+                    }}
+                    value={filters.from}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </Grid>
+              <Grid item xs={3}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    label="To"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    format={"dd.MM.yyyy"}
+                    onChange={(date) => {
+                      setFilters((filters) => {
+                        return {
+                          ...filters,
+                          to:
+                            date instanceof Date && !isNaN(date)
+                              ? date.toISOString()
+                              : null,
+                        };
+                      });
+                    }}
+                    value={filters.to}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Grid container spacing={4} alignItems="center">
+                  <Grid item xs={3}>
+                    <TextField
+                      id="standard-number"
+                      type="number"
+                      placeholder={"unlimited"}
+                      label="max. Participants"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      onChange={(event) => {
+                        setFilters((filters) => {
+                          if (parseInt(event.target.value, 10) < 1) {
+                            return { ...filters, participants: "" };
+                          } else {
+                            return {
+                              ...filters,
+                              participants: event.target.value,
+                            };
+                          }
+                        });
+                      }}
+                      value={filters.participants}
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <TextField
+                      id="standard-number"
+                      type="number"
+                      label="Free Slots"
+                      placeholder={"any"}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      onChange={(event) => {
+                        setFilters((filters) => {
+                          if (parseInt(event.target.value, 10) < 1) {
+                            return { ...filters, slots: "" };
+                          } else {
+                            return { ...filters, slots: event.target.value };
+                          }
+                        });
+                      }}
+                      value={filters.slots}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={filters.online}
+                          onChange={(event) => {
+                            setFilters((filters) => {
+                              return {
+                                ...filters,
+                                online: event.target.checked,
+                              };
+                            });
+                          }}
+                          color="default"
+                        />
+                      }
+                      label="Online"
+                    />
+
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={filters.offline}
+                          onChange={(event) => {
+                            setFilters((filters) => {
+                              return {
+                                ...filters,
+                                offline: event.target.checked,
+                              };
+                            });
+                          }}
+                          color="default"
+                        />
+                      }
+                      label="Offline"
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={6}>
+                <TagAutocomplete
+                  onChange={(tags) => {
+                    setFilters((filters) => {
+                      return { ...filters, tags };
+                    });
+                  }}
+                  value={filters.tags}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <div className={"creategroup-tags"}>
+                  {filters.tags.map((x) => {
+                    return (
+                      <TagComponent
+                        id={x}
+                        key={x}
+                        onDelete={() => {
+                          setFilters((filters) => {
+                            return {
+                              ...filters,
+                              tags: filters.tags.filter((tag) => {
+                                return x !== tag;
+                              }),
+                            };
+                          });
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              </Grid>
+            </Grid>
+          ) : null}
+        </Grid>
+
+        <Grid item xs={12}>
+          <center>
+            <h1>{props.title}</h1>
+            {groupsToShow.length > 0 ? (
+              <div>
+                <Grid container spacing={2} justify="center">
+                  {groupsToShow.map((group) => {
+                    return (
+                      <Grid item key={group._id}>
+                        <GroupComponent group={group} />
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </div>
+            ) : (
+              <div>
+                <center>
+                  <Typography>No groups found</Typography>
+                </center>
+              </div>
+            )}
+          </center>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }
