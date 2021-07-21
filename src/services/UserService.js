@@ -18,13 +18,13 @@ export async function logoutRequest() {
 }
 
 export async function forgotPasswordRequest(email) {
-  return await HttpService.post("auth/forgot", {
+  return await HttpService.post("user/forgot", {
     email: email
   });
 }
 
 export async function resetPasswordRequest(user, token, password) {
-  const resp = await HttpService.post("auth/reset", {
+  const resp = await HttpService.post("user/reset", {
     user: user,
     token: token,
     password: password
@@ -42,7 +42,7 @@ export async function isUsernameAvailable(username) {
 }
 
 export async function fetchMe() {
-  return await HttpService.get("auth/me");
+  return await HttpService.get("user/me");
 }
 
 export async function processToken(token) {

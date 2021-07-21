@@ -4,7 +4,7 @@ import SignUpView from "./views/UserAuthentication/SignUpView";
 import { CreateGroupView } from "./views/CreateGroupView";
 import { HomeView } from "./views/HomeView";
 import { InMyAreaView } from "./views/InMyAreaView";
-import { PremiumView } from "./views/PremiumView";
+import { PremiumView } from "./views/PremiumSubscription/PremiumView";
 import { RecommendedView } from "./views/RecommendedView";
 import { MyGroupsView } from "./views/MyGroupsView";
 import { Imprint } from "./views/Legal/Imprint";
@@ -13,8 +13,8 @@ import { ToS } from "./views/Legal/TermsOfService";
 import { ProfileView } from "./views/ProfileView";
 import ResetPasswordView from "./views/UserAuthentication/ResetPasswordView";
 import { GroupPageView } from "./views/GroupPageView";
-import { PaymentPlanView } from "./views/PaymentPlanView";
-import {PaymentConfirmationView} from "./views/PaymentConfirmationView";
+import { PaymentPlanView } from "./views/PremiumSubscription/PaymentPlanView";
+import { PaymentConfirmationView } from "./views/PremiumSubscription/PaymentConfirmationView";
 
 // routes within the movie database example app
 // used for routing

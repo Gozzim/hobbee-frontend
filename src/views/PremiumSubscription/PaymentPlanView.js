@@ -1,29 +1,18 @@
-import React from "react";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import MUILink from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
+import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
-import PayPalCheckout from "../components/PayPalCheckout";
-import { HOBBEE_BLUE, HOBBEE_BROWN, HOBBEE_ORANGE, HOBBEE_YELLOW, SUBSCRIPTION_PLAN } from "../shared/Constants";
+import PayPalCheckout from "../../components/PayPalCheckout";
+import { HOBBEE_ORANGE, SUBSCRIPTION_PLAN } from "../../shared/Constants";
+import HobbeePremiumLogo from "../../assets/hobbee_premium.svg";
 
 const useStyles = makeStyles((theme) => ({
-  breadcrumbs: {
-    marginTop: "20px",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
   pageContent: {
-    marginTop: "50px",
-    maxWidth: "500px",
+    width: "60%",
     margin: "auto",
   },
   planBox: {
     margin: "auto",
     marginBottom: "50px",
-    textAlign: "center",
     height: "70px",
     width: "97%",
     borderColor: "black",
@@ -31,18 +20,6 @@ const useStyles = makeStyles((theme) => ({
     borderStyle: "solid",
     borderRadius: "5px",
     boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)",
-  },
-  choosePlanButton: {
-    marginTop: "20px",
-    marginBottom: "40px",
-    width: "100%",
-    backgroundColor: HOBBEE_YELLOW,
-    fontSize: 15,
-    padding: "20px",
-    "&:hover": {
-      backgroundColor: HOBBEE_BLUE,
-      color: HOBBEE_BROWN,
-    },
   },
   optionDescriptor: {
     position: "absolute",
@@ -53,54 +30,38 @@ const useStyles = makeStyles((theme) => ({
 const BlueRadio = withStyles({
   root: {
     color: "grey",
-    '&$checked': {
+    "&$checked": {
       color: "#17C2BC",
     },
   },
   checked: {},
 })((props) => <Radio color="default" {...props} />);
 
-function handleClick(event) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
-
 export function PaymentPlanView(props) {
   const classes = useStyles();
 
-  const [selectedValue, setSelectedValue] = React.useState(SUBSCRIPTION_PLAN.advanced);
+  const [selectedValue, setSelectedValue] = useState(SUBSCRIPTION_PLAN.advanced);
+  const [receipt, setReceipt] = useState(null);
+
+  useEffect(() => {
+    if (receipt) {
+      props.history.push({
+        pathname: "/premium/payment-confirmation",
+        state: { receipt: receipt },
+      });
+    }
+  }, [receipt]);
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
 
   return (
-    <div>
-      <div className={classes.breadcrumbs}>
-        <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
-          aria-label="breadcrumb"
-        >
-          <MUILink color="inherit" href="/" onClick={handleClick}>
-            Home
-          </MUILink>
-          <MUILink color="inherit" href="/" onClick={handleClick}>
-            Premium
-          </MUILink>
-          <Typography color="textPrimary">PAYMENT PLAN</Typography>
-        </Breadcrumbs>
-      </div>
       <div className={classes.pageContent}>
-        <Typography
-          variant="h4"
-          style={{ textAlign: "center", marginBottom: "30px" }}
-        >
-          Hobb.ee PREMIUM
-        </Typography>
-        <RadioGroup
-          className={"creategroup-radios"}
-          style={{ position: "relative" }}
-        >
+        <div style={{ textAlign: "center" }}>
+          <img src={HobbeePremiumLogo} width={"90%"} alt={"logo"} />
+        </div>
+        <RadioGroup style={{ position: "relative" }}>
           <FormControlLabel
             value="1-month"
             control={
@@ -108,7 +69,6 @@ export function PaymentPlanView(props) {
                 checked={selectedValue === SUBSCRIPTION_PLAN.standard}
                 onChange={handleChange}
                 value={SUBSCRIPTION_PLAN.standard}
-                name="radio-button-demo"
               />
             }
             label="1 Month"
@@ -124,7 +84,6 @@ export function PaymentPlanView(props) {
                 checked={selectedValue === SUBSCRIPTION_PLAN.advanced}
                 onChange={handleChange}
                 value={SUBSCRIPTION_PLAN.advanced}
-                name="radio-button-demo"
               />
             }
             label="3 Months"
@@ -140,7 +99,6 @@ export function PaymentPlanView(props) {
                 checked={selectedValue === SUBSCRIPTION_PLAN.elite}
                 onChange={handleChange}
                 value={SUBSCRIPTION_PLAN.elite}
-                name="radio-button-demo"
               />
             }
             label="12 Months"
@@ -152,8 +110,6 @@ export function PaymentPlanView(props) {
               top: "255px",
               left: "50%",
               backgroundColor: HOBBEE_ORANGE,
-              width: "auto",
-              textAlign: "center",
               padding: "10px",
               transform: "translate(-50%, 0)",
               borderRadius: "5px",
@@ -165,9 +121,7 @@ export function PaymentPlanView(props) {
             1.50€/Month
           </div>
         </RadioGroup>
-
-        <PayPalCheckout planId={selectedValue} />
+        <PayPalCheckout planId={selectedValue} onSuccess={setReceipt} />
       </div>
-    </div>
   );
 }

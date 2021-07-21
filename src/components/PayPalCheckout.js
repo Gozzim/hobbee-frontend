@@ -16,10 +16,10 @@ function PayPalCheckout(props) {
 
     const onApprove = async (order) => {
         try {
-            await sendPremiumRequest(order); //TODO
-            props.history.push("/premium/payment-confirmation"); //TODO
+            const receipt = await sendPremiumRequest(order);
+            props.onSuccess(receipt);
         } catch (e) {
-            console.log(e) //TODO
+            console.log(e)
         }
     };
 
