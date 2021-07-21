@@ -10,11 +10,11 @@ export function Imprint(props) {
         <h3>Information in accordance with section 5 TMG:</h3>
       </p>
       <p>
-        Hobb.ee
-        <br />
-        Boltzmannstr. 3<br />
-        85748 Garching bei München
-        <br />
+        Maja Schuknecht
+        <br/>
+        Martin-Behaim-Str. 2<br/>
+        81373 München
+        <br/>
         E-Mail: contact@hobb.ee
       </p>
       <p>
@@ -67,7 +67,7 @@ export function Imprint(props) {
         organization of content and modifications, are used exclusively for
         fulfilling the contract. For goods to be delivered, for instance, your
         name and address must be relayed to the supplier of the goods.
-        <br />
+        <br/>
         (2) Without your explicit consent or a legal basis, your personal data
         are not passed on to third parties outside the scope of fulfilling this
         contract. After completion of the contract, your data are blocked
@@ -84,11 +84,43 @@ export function Imprint(props) {
         deleted after you close the browser. Other cookies remain on your
         computer (long-term cookies) and permit its recognition on your next
         visit. This allows us to improve your access to our site.
-        <br />
+        <br/>
         (2) You can prevent storage of cookies by choosing a &#8220;disable
         cookies&#8221; option in your browser settings. But this can limit the
         functionality of our Internet offers as a result.
       </p>
+
+      <h3>References </h3>
+      <p>This website has been created primarily via <a href={"https://material-ui.com/"}>Material UI</a>.
+        The payment process uses the <a href={"https://developer.paypal.com/docs/api-basics/sandbox/"}>PayPal
+          Sandbox</a> for testing purposes. <br/>
+
+        For our hobby tags we are using <a href={"https://en.wikipedia.org/wiki/List_of_hobbies"}>this list</a>.</p>
+
+      <p>Image Sources:</p>
+      <ul>
+        <li>
+          Example Group Picture 1: Photo by <a href={"https://unsplash.com/@heftiba"}>Toa Heftiba</a> on <a
+          href={"https://unsplash.com/photos/yWyS3lM6K-E"}>Unsplash</a>
+        </li>
+        <li>
+          Example Group Picture 2: Photo from <a href={"https://pixabay.com/images/id-690046/"}>Pixabay</a>
+        </li>
+        <li>
+          Example Group Picture 3: Photo by <a href={"https://unsplash.com/@christianw"}>Christian Wiediger</a> on <a
+          href={"https://unsplash.com/photos/WkfDrhxDMC8"}>Unsplash</a>
+        </li>
+        <li>
+          Frontpage image: Photo by <a href={"https://unsplash.com/@_visalli"}>Antonino Visalli</a> on <a
+          href={"https://unsplash.com/photos/RNiBLy7aHck"}>Unsplash</a>
+        </li>
+        <li>
+          Ad Banners: Taken from <a href={"https://alidropship.com/best-banner-ads-examples/"}>Alidropship</a>
+        </li>
+        <li>
+          The hobb.ee logo and bee are our own creations :)
+        </li>
+      </ul>
     </div>
   );
 }

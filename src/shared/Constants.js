@@ -12,7 +12,7 @@ export const PASS_REGEX = {
   STRONG: /^((?=.*[A-Z])(?=.*[a-z])(?=.*[^0-9a-zA-Z\s:])(?=.*[0-9])[\S]{10,32}|(?=.*[A-Z])(?=.*[a-z])((?=.*[^0-9a-zA-Z\s:])|(?=.*[0-9]))[\S]{15,32})$/, // prettier-ignore
 };
 export const USERNAME_REGEX = /^[A-Za-z0-9\-_]{4,16}$/; // prettier-ignore
-export const GROUPNAME_REGEX = /^\S((?!(\s|_|-){2})[a-zA-Z0-9\-_\x20]){4,16}\S$/; // prettier-ignore
+export const GROUPNAME_REGEX = /^\S((?!(\s|_|-){2})[a-zA-Z0-9\-_\x20]){2,22}\S$/; // prettier-ignore
 
 export const ERRORS = {
   weakPassword: "Passwords must be at least 6 characters long, contain upper & lower case letters and at least one number or special character",
