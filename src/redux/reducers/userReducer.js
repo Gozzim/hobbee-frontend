@@ -76,13 +76,14 @@ export const authUser = () => async (dispatch) => {
     const result = await fetchMe();
     dispatch(authUserReducer(result.data));
   } catch (e) {
+    // Token invalid or expired
     setToken(null);
   }
 };
 
-export const register = (username, email, password, bday, hobbies) => async (dispatch) => {
+export const register = (userdata) => async (dispatch) => {
   try {
-    const result = await registrationRequest(username, email, password, bday, hobbies);
+    const result = await registrationRequest(userdata);
     dispatch(authUserReducer(result.data));
   } catch (e) {
     dispatch(setAuthError(e.message));

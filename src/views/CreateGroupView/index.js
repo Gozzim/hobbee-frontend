@@ -23,7 +23,7 @@ const initialTouchedState = {
   pic: false,
 };
 
-export function CreateGroupView() {
+export function CreateGroupView(props) {
   const [groupForm, setGroupForm] = React.useState(initialGroupFormState);
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [formStep, setFormStep] = React.useState(0);
@@ -97,7 +97,8 @@ export function CreateGroupView() {
             variant="contained"
             onClick={async () => {
               if (groupForm.pic !== "") {
-                await createRequest(groupForm);
+                const response = await createRequest(groupForm);
+                props.history.push("/group-page/" + response.data.id + "#new");
               } else {
                 setTouched((touched) => {
                   return {

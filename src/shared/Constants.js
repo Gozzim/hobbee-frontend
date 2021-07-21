@@ -16,4 +16,10 @@ export const GROUPNAME_REGEX = /^\S((?!(\s|_|-){2})[a-zA-Z0-9\-_\x20]){4,16}\S$/
 
 export const ERRORS = {
   weakPassword: "Passwords must be at least 6 characters long, contain upper & lower case letters and at least one number or special character",
-}
+};
+
+export const SUBSCRIPTION_PLAN = {
+  elite: "P-62E82252FP3121819MDZR2EY",
+  advanced: "P-6RW02432GE006263HMDZRZZY",
+  standard: "P-0MA943175X946230LMDZRZSQ",
+};

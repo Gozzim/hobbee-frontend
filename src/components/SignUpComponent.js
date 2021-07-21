@@ -56,7 +56,7 @@ const initialRegisterState = {
 };
 
 const initialErrors = {
-  general: "", //TODO
+  general: "",
   email: "",
   username: "",
   password: "",
@@ -70,6 +70,9 @@ export function SignUpComponent(props) {
   const [registerState, setRegisterState] = useState(initialRegisterState);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+
+  const minAge = new Date();
+  minAge.setFullYear(minAge.getFullYear() - 18);
 
   useEffect(() => {
     if (props.user.error) {
@@ -100,7 +103,8 @@ export function SignUpComponent(props) {
     if (
       registerError.password !== "" ||
       registerError.username !== "" ||
-      registerError.email !== ""
+      registerError.email !== "" ||
+      registerState.bday > minAge
     ) {
       return;
     }
@@ -280,7 +284,10 @@ export function SignUpComponent(props) {
                 value={registerState.bday}
                 onChange={onChangeBday}
                 format={"dd.MM.yyyy"}
-                KeyboardButtonProps={{ edge: "end" }}
+                KeyboardButtonProps={{ edge: "end", tabIndex: "-1" }}
+                maxDate={minAge}
+                maxDateMessage={"You must be at least 18 years old to join Hobb.ee"}
+                invalidDateMessage={""}
                 autoComplete={"bday"}
               />
             </MuiPickersUtilsProvider>
