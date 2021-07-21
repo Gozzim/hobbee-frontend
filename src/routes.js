@@ -57,7 +57,7 @@ export const routes = [
     component: RecommendedView,
   },
   {
-    path: "/group-page",
+    path: "/group-page/:id",
     component: GroupPageView,
   },
   {
