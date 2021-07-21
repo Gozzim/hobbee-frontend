@@ -1,7 +1,7 @@
 import HttpService, { getToken, setToken } from "./HttpService";
 
 export async function createRequest(data) {
-  await HttpService.post("group/create", data);
+  return await HttpService.post("group/create", data);
 }
 
 export async function fetchGroups() {

@@ -11,13 +11,14 @@ import EditIcon from "@material-ui/icons/Edit";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
 import GroupIcon from "@material-ui/icons/PeopleAlt";
-import { Button, IconButton } from "@material-ui/core";
+import { Button, IconButton, Snackbar } from "@material-ui/core";
 import { Chat } from "../components/Chat";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import { TagComponent } from "../components/TagComponent";
 import { joinGroup, leaveGroup, fetchGroup } from "../services/GroupService";
 import { io } from "../services/SocketService";
 import Tooltip from "@material-ui/core/Tooltip";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -169,9 +170,27 @@ export function GroupPageView(props) {
 
   async function editGroup() {}
 
+  const onClose = () => {
+    props.history.replace(props.location.pathname);
+  };
+
   if (joined) {
     return (
       <div>
+        <Snackbar
+          open={props.location.hash === "#new"}
+          autoHideDuration={6000}
+          onClose={(_event, reason) => {
+            // Only close after autoHideDuration expired
+            if (reason === "timeout") {
+              onClose();
+            }
+          }}
+        >
+          <Alert onClose={onClose} severity="success">
+            You successfully created the group!
+          </Alert>
+        </Snackbar>
         <div className={classes.breadcrumbs}>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}

@@ -38,7 +38,7 @@ function SignInView(props) {
   };
 
   const onClose = () => {
-    props.history.replace("/login");
+    props.history.replace(props.location.pathname);
   };
 
   return (
