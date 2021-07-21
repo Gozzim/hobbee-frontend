@@ -88,9 +88,9 @@ export function EditGroupDialog(props) {
       isValidGroupname(groupForm.groupName) &&
       groupForm.city !== "" &&
       groupForm.tags.length > 0 &&
-      (groupForm.participants >= groupForm.groupMembers.length ||
-        groupForm.participants === "" ||
-        groupForm.participants === 0)
+      (groupForm.maxMembers >= groupForm.groupMembers.length ||
+        groupForm.maxMembers === "" ||
+        groupForm.maxMembers === 0)
     ) {
       try {
         const newGroup = await editGroupRequest(groupForm);
@@ -261,29 +261,29 @@ export function EditGroupDialog(props) {
             onChange={(event) => {
               setGroupForm((groupForm) => {
                 if (parseInt(event.target.value, 10) < 1) {
-                  return { ...groupForm, participants: "" };
+                  return { ...groupForm, maxMembers: "" };
                 } else if (
                   event.target.value === "1" &&
-                  groupForm.participants === "2"
+                  groupForm.maxMembers === "2"
                 ) {
-                  return { ...groupForm, participants: "" };
+                  return { ...groupForm, maxMembers: "" };
                 } else if (event.target.value === "1") {
-                  return { ...groupForm, participants: "2" };
+                  return { ...groupForm, maxMembers: "2" };
                 } else {
-                  return { ...groupForm, participants: event.target.value };
+                  return { ...groupForm, maxMembers: event.target.value };
                 }
               });
             }}
-            value={groupForm.participants === 0 ? "" : groupForm.participants}
+            value={groupForm.maxMembers === 0 ? "" : groupForm.maxMembers}
             error={
-              groupForm.participants < groupForm.groupMembers.length &&
-              groupForm.participants !== "" &&
-              groupForm.participants !== 0
+              groupForm.maxMembers < groupForm.groupMembers.length &&
+              groupForm.maxMembers !== "" &&
+              groupForm.maxMembers !== 0
             }
             helperText={
-              groupForm.participants < groupForm.groupMembers.length &&
-              groupForm.participants !== "" &&
-              groupForm.participants !== 0
+              groupForm.maxMembers < groupForm.groupMembers.length &&
+              groupForm.maxMembers !== "" &&
+              groupForm.maxMembers !== 0
                 ? "Must be at least " + groupForm.groupMembers.length
                 : ""
             }

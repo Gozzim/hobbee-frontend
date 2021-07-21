@@ -4,6 +4,7 @@ import { CreateGroup } from "./CreateGroup";
 import { CustomizeGroup } from "./CustomizeGroup";
 import { createRequest } from "../../services/GroupService";
 import { RequireLoggedIn } from "../../components/RequireLoggedIn";
+import { isValidGroupname } from "../../validators/GroupDataValidator";
 
 const initialGroupFormState = {
   groupName: "",
@@ -11,7 +12,7 @@ const initialGroupFormState = {
   onOffline: "both",
   tags: [],
   pic: "",
-  participants: "",
+  maxMembers: "",
   date: null,
   location: "",
   description: "",
@@ -58,7 +59,7 @@ export function CreateGroupView(props) {
             variant="contained"
             onClick={() => {
               if (
-                groupForm.groupName !== "" &&
+                isValidGroupname(groupForm.groupName) &&
                 groupForm.city !== "" &&
                 groupForm.tags.length > 0
               ) {

@@ -165,8 +165,8 @@ export function GroupInformationComponent(props) {
         </Grid>
         <Grid item xs={8}>
           <Typography variant="h6">
-            {props.group.participants != 0
-              ? props.group.groupMembers.length + "/" + props.group.participants
+            {props.group.maxMembers != 0
+              ? props.group.groupMembers.length + "/" + props.group.maxMembers
               : props.group.groupMembers.length}
           </Typography>
         </Grid>

@@ -112,7 +112,7 @@ const initialState = {
   onOffline: "both",
   tags: [],
   pic: "",
-  participants: "",
+  maxMembers: "",
   date: null,
   location: undefined,
   description: "",
@@ -205,6 +205,10 @@ export function GroupPageView(props) {
     setSnackbar({open: false, message: ""});
   };
 
+  const onClose = () => {
+    props.history.replace(props.location.pathname);
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
@@ -262,6 +266,21 @@ export function GroupPageView(props) {
       <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
           {snackbar.message}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+          open={props.location.hash === "#new"}
+          autoHideDuration={6000}
+          onClose={(_event, reason) => {
+            // Only close after autoHideDuration expired
+            if (reason === "timeout") {
+              onClose();
+            }
+          }}
+      >
+        <Alert onClose={onClose} severity="success">
+          Group created!
         </Alert>
       </Snackbar>
     </div>
