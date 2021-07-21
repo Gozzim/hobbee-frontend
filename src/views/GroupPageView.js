@@ -1,37 +1,40 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Typography from "@material-ui/core/Typography";
-import MUILink from "@material-ui/core/Link";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import GroupImage from "../assets/test.png";
+import React, { useState, useEffect } from "react";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import "../views/style.css";
-import UserIcon from "@material-ui/icons/AccountCircle";
-import EventIcon from "@material-ui/icons/Event";
-import LocationIcon from "@material-ui/icons/LocationOn";
-import GroupIcon from "@material-ui/icons/PeopleAlt";
-import { Button, IconButton } from "@material-ui/core";
+import {Snackbar} from "@material-ui/core";
 import { Chat } from "../components/Chat";
-import ExitIcon from "@material-ui/icons/ExitToApp";
 import { TagComponent } from "../components/TagComponent";
+import {
+  joinGroupRequest,
+  leaveGroupRequest,
+  fetchGroup,
+} from "../services/GroupService";
+import { io } from "../services/SocketService";
+import Tooltip from "@material-ui/core/Tooltip";
+import { useSelector } from "react-redux";
+import { getFileUrl } from "../services/FileService";
+import Grid from "@material-ui/core/Grid";
+import { GroupInformationComponent } from "../components/GroupInformationComponent";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
-  breadcrumbs: {
-    marginTop: "20px",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
   },
   pageContent: {
-    marginTop: "50px",
+    marginTop: "30px",
     display: "flex",
   },
-  picture: {
-    display: "inline-block",
-    height: "300px",
-    width: "400px",
-    marginRight: "50px",
-    marginBottom: "30px",
+  image: {
+    borderRadius: "10px",
+    objectFit: "contain",
+    maxWidth: "100%",
+    marginBottom: "10px",
   },
   chat: {
     fontFamily: "UD Digi KyoKasho NK-R",
@@ -58,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "20px",
   },
   detailsItemText: {
+    wordBreak: "break-all",
     color: "#32210B",
     marginLeft: "20px",
   },
@@ -76,197 +80,209 @@ const useStyles = makeStyles((theme) => ({
     right: 50,
     top: -5,
   },
+  editButton: {
+    position: "absolute",
+    right: 50,
+    top: 205,
+  },
+  fab: {
+    margin: theme.spacing(2),
+  },
+  absolute: {
+    position: "absolute",
+    bottom: theme.spacing(2),
+    right: theme.spacing(3),
+  },
 }));
 
-function handleClick(event) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
+const CustomTooltip = withStyles((theme) => ({
+  tooltip: {
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    margin: 0,
+  },
+}))(Tooltip);
+
+const initialState = {
+  _id: "",
+  groupName: "",
+  groupOwner: "",
+  groupMembers: [],
+  city: "",
+  onOffline: "both",
+  tags: [],
+  pic: "",
+  maxMembers: "",
+  date: null,
+  location: undefined,
+  description: "",
+};
+
+const initialSnackbar = {
+  open: false,
+  message: "",
+};
 
 export function GroupPageView(props) {
   const classes = useStyles();
+  const groupId = props.match.params.id;
   const [joined, setJoined] = useState(false);
-  const tags = ["Sewing", "Crafting", "Cosplay"];
+  const [group, setGroup] = useState(initialState);
+  const [chatLoaded, setChatLoaded] = useState(false);
+  const [snackbar, setSnackbar] = React.useState(initialSnackbar);
 
-  if (joined) {
-    return (
-      <div>
-        <div className={classes.breadcrumbs}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            <MUILink color="inherit" href="/" onClick={handleClick}>
-              Home
-            </MUILink>
-            <MUILink
-              color="inherit"
-              href="/getting-started/installation/"
-              onClick={handleClick}
-            >
-              My Groups
-            </MUILink>
-            <Typography color="textPrimary">Group Name</Typography>
-          </Breadcrumbs>
-        </div>
-        <div className={classes.pageContent}>
-          <div style={{ flex: 1 }}>
-            <div className={classes.picture}>
+  useEffect(async () => {
+    const thisGroup = await fetchGroup(groupId);
+    setGroup(thisGroup.data);
+    if (thisGroup.data.chat) {
+      setJoined(true);
+    }
+  }, [joined]);
+  console.log(group);
+
+  //connect socket
+  useEffect(async () => {
+    io.on("return message", async (data) => {
+      const thisGroup = await fetchGroup(groupId);
+      setGroup(thisGroup.data);
+    });
+    return () => io.destroy();
+  }, []);
+
+  //dynamically adjust chat height to group info height
+  //TODO: make this less hacky, if possible. Otherwise make comment
+  useEffect( () => {
+    setTimeout(() => {
+      setChatLoaded(true);
+      const scroller = document.getElementsByClassName("scroller");
+      if(scroller.length !== 0) {
+        scroller[0].style.height =
+            document.getElementById("group-info-div").offsetHeight - 72 + "px";
+      }
+    }, 100);
+  }, [group]);
+
+  async function handleJoin() {
+    console.log("Joining Group");
+    try {
+      const result = await joinGroupRequest(groupId);
+      console.log(result.data.message);
+      console.log("test")
+      setJoined(true);
+      io.emit("new system message", {
+        groupId: groupId,
+      });
+    } catch (e) {
+      console.log("Failed to join group")
+      handleError(e.response.data.message)
+    }
+  }
+
+  async function handleLeave() {
+    console.log("Leaving Group");
+    try {
+      const result = await leaveGroupRequest(groupId);
+      console.log(result.data);
+      setJoined(false);
+      io.emit("new system message", {
+        groupId: groupId,
+      });
+    } catch (e) {
+      console.log("Failed to leave group")
+      handleError(e.response.data.message)
+    }
+  }
+
+  const handleError = (error) => {
+    setSnackbar({open: true, message: error});
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbar({open: false, message: ""});
+  };
+
+  const onClose = () => {
+    props.history.replace(props.location.pathname);
+  };
+
+  return (
+    <div className={classes.root}>
+      <Grid container spacing={2}>
+        <Grid Grid item xs={6}>
+          <Grid container spacing={2}>
+            <Grid item id="group-info-div" xs={12}>
               <img
-                src={GroupImage}
-                style={{ borderRadius: "5px" }}
+                src={getFileUrl(group.pic)}
+                className={classes.image}
                 alt={"GroupPic"}
               />
-            </div>
-            <div className={classes.infoJoined}>
-              <Typography variant="h4" color="inherit">
-                Table Tennis at TUM
-              </Typography>
-              <IconButton
-                onClick={() => setJoined(false)}
-                color="inherit"
-                className={classes.leaveButton}
-              >
-                <ExitIcon />
-              </IconButton>
-              <div className={classes.detailsItem}>
-                <UserIcon style={{ fill: "#32210B" }} />
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  Group Owner
-                </Typography>
-              </div>
-              <div className={classes.detailsItem}>
-                <EventIcon style={{ fill: "#32210B" }} />
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  Mi, 09.06.2021 21:00 Uhr
-                </Typography>
-              </div>
-              <div className={classes.detailsItem}>
-                <LocationIcon style={{ fill: "#32210B" }} />
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  Arcisstr. 21, 80800 Munich
-                </Typography>
-              </div>
-              <div className={classes.detailsItem}>
-                <GroupIcon style={{ fill: "#32210B" }} />
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  5/7
-                </Typography>
-              </div>
-            </div>
-            <div style={{ display: "flex" }}>
-              {tags.map((x) => {
-                return <TagComponent title={x} key={x} />;
-              })}
-            </div>
-          </div>
-          <div className={classes.chat}>
-            <Chat />
-          </div>
-        </div>
-
-        <div style={{ fontSize: "17px" }}>
-          <p>
-            Failure to comply will result in disqualification. Lorem ipsum dolor
-            sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-            amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-            diam nonumy eirmod tempor invidunt ut labore et dolore magna
-            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
-            duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-            sanctus est Lorem ipsum dolor sit amet.
-          </p>
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <div className={classes.breadcrumbs}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            <MUILink color="inherit" href="/" onClick={handleClick}>
-              Home
-            </MUILink>
-            <MUILink
-              color="inherit"
-              href="/getting-started/installation/"
-              onClick={handleClick}
-            >
-              My Groups
-            </MUILink>
-            <Typography color="textPrimary">Group Name</Typography>
-          </Breadcrumbs>
-        </div>
-        <div className={classes.pageContent}>
-          <div className={classes.picture}>
-            <img
-              src={GroupImage}
-              style={{ borderRadius: "5px" }}
-              alt={"GroupPic"}
+              {joined ? (
+                <GroupInformationComponent
+                  group={group}
+                  setGroup={setGroup}
+                  joined={joined}
+                  setJoined={setJoined}
+                  handleJoin={handleJoin}
+                  handleLeave={handleLeave}
+                />
+              ) : null}
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={6} id="chat-div">
+          {chatLoaded ? (joined ? (
+            <Chat groupID={groupId} />
+          ) : (
+            <GroupInformationComponent
+              group={group}
+              setGroup={setGroup}
+              joined={joined}
+              setJoined={setJoined}
+              handleJoin={handleJoin}
+              handleLeave={handleLeave}
             />
+          )) : null}
+        </Grid>
+        <Grid item xs={12}>
+          <div style={{ display: "flex" }}>
+            {group.tags.map((x) => {
+              return (
+                <div style={{ marginRight: "10px" }}>
+                  <TagComponent id={x} key={x} />
+                </div>
+              );
+            })}
           </div>
-          <div className={classes.infoNotJoined}>
-            <Typography variant="h4" color="inherit">
-              Table Tennis at TUM
-            </Typography>
-            <div className={classes.detailsItem}>
-              <UserIcon style={{ fill: "#32210B" }} />
-              <Typography variant="h6" className={classes.detailsItemText}>
-                Group Owner
-              </Typography>
-            </div>
-            <div className={classes.detailsItem}>
-              <EventIcon style={{ fill: "#32210B" }} />
-              <Typography variant="h6" className={classes.detailsItemText}>
-                Mi, 09.06.2021 21:00 Uhr
-              </Typography>
-            </div>
-            <div className={classes.detailsItem}>
-              <LocationIcon style={{ fill: "#32210B" }} />
-              <Typography variant="h6" className={classes.detailsItemText}>
-                Munich
-              </Typography>
-            </div>
-            <div className={classes.detailsItem}>
-              <GroupIcon style={{ fill: "#32210B" }} />
-              <Typography variant="h6" className={classes.detailsItemText}>
-                5/7
-              </Typography>
-            </div>
-            <Button
-              className={classes.joinButton}
-              type="button"
-              onClick={() => setJoined(true)}
-            >
-              JOIN GROUP
-            </Button>
-          </div>
-        </div>
-        <div style={{ display: "flex" }}>
-          {tags.map((x) => {
-            return <TagComponent title={x} key={x} />;
-          })}
-        </div>
-        <div style={{ fontSize: "17px" }}>
-          <p>
-            Failure to comply will result in disqualification. Lorem ipsum dolor
-            sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-            amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-            diam nonumy eirmod tempor invidunt ut labore et dolore magna
-            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
-            duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-            sanctus est Lorem ipsum dolor sit amet.
-          </p>
-        </div>
-      </div>
-    );
-  }
+        </Grid>
+        <Grid item xs={12}>
+          {group.description}
+        </Grid>
+      </Grid>
+
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+          open={props.location.hash === "#new"}
+          autoHideDuration={6000}
+          onClose={(_event, reason) => {
+            // Only close after autoHideDuration expired
+            if (reason === "timeout") {
+              onClose();
+            }
+          }}
+      >
+        <Alert onClose={onClose} severity="success">
+          Group created!
+        </Alert>
+      </Snackbar>
+    </div>
+  );
 }

@@ -94,6 +94,16 @@
   justify-content: space-between;
   flex-grow: 1;
 }
+.scroller {
+  margin: 0 auto;
+  height: 560px;
+  width: 100%;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+.scroller-item {
+  margin: 30px 0;
+}
 .creategroup-nodatebutton{
   margin-top: 10px !important;
   margin-left: -5px !important;
@@ -102,4 +112,18 @@
   display: inline-flex;
   flex-direction: column;
   align-items: flex-end;
+}
+.imageupload-avatare {
+  display: flex;
+  margin-bottom: 30px;
+}
+.imageupload-description {
+  margin-bottom: 0px !important;
+  margin-top: 10px !important;
+}
+.imageupload-button {
+  width: 60px;
+  height: 60px;
+  margin-left: 10px !important;
+  margin-top: 23px !important;
 }

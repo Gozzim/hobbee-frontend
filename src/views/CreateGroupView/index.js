@@ -4,6 +4,7 @@ import { CreateGroup } from "./CreateGroup";
 import { CustomizeGroup } from "./CustomizeGroup";
 import { createRequest } from "../../services/GroupService";
 import { RequireLoggedIn } from "../../components/RequireLoggedIn";
+import { isValidGroupname } from "../../validators/GroupDataValidator";
 
 const initialGroupFormState = {
   groupName: "",
@@ -11,7 +12,7 @@ const initialGroupFormState = {
   onOffline: "both",
   tags: [],
   pic: "",
-  participants: "",
+  maxMembers: "",
   date: null,
   location: "",
   description: "",
@@ -23,7 +24,7 @@ const initialTouchedState = {
   pic: false,
 };
 
-export function CreateGroupView() {
+export function CreateGroupView(props) {
   const [groupForm, setGroupForm] = React.useState(initialGroupFormState);
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [formStep, setFormStep] = React.useState(0);
@@ -58,7 +59,7 @@ export function CreateGroupView() {
             variant="contained"
             onClick={() => {
               if (
-                groupForm.groupName !== "" &&
+                isValidGroupname(groupForm.groupName) &&
                 groupForm.city !== "" &&
                 groupForm.tags.length > 0
               ) {
@@ -97,7 +98,8 @@ export function CreateGroupView() {
             variant="contained"
             onClick={async () => {
               if (groupForm.pic !== "") {
-                await createRequest(groupForm);
+                const response = await createRequest(groupForm);
+                props.history.push("/group-page/" + response.data.id + "#new");
               } else {
                 setTouched((touched) => {
                   return {

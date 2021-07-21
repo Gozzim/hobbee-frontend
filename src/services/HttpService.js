@@ -1,22 +1,6 @@
 import axios from "axios";
 import { logout } from "../redux/reducers/userReducer";
 
-// Handling requests before they are sent
-axios.interceptors.request.use(
-  async (request) => {
-    // Before request is sent
-    const token = getToken();
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `JWT ${token}`;
-    }
-    return request;
-  },
-  (error) => {
-    // Error handling
-    return Promise.reject(error);
-  }
-);
-
 // Handling received requests
 axios.interceptors.response.use(
   (resp) => {

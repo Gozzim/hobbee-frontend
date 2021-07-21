@@ -244,20 +244,20 @@ export function CustomizeGroup(props) {
               onChange={(event) => {
                 props.setGroupForm((groupForm) => {
                   if (parseInt(event.target.value, 10) < 1) {
-                    return { ...groupForm, participants: "" };
+                    return { ...groupForm, maxMembers: "" };
                   } else if (
                     event.target.value === "1" &&
-                    groupForm.participants === "2"
+                    groupForm.maxMembers === "2"
                   ) {
-                    return { ...groupForm, participants: "" };
+                    return { ...groupForm, maxMembers: "" };
                   } else if (event.target.value === "1") {
-                    return { ...groupForm, participants: "2" };
+                    return { ...groupForm, maxMembers: "2" };
                   } else {
-                    return { ...groupForm, participants: event.target.value };
+                    return { ...groupForm, maxMembers: event.target.value };
                   }
                 });
               }}
-              value={props.groupForm.participants}
+              value={props.groupForm.maxMembers}
             />
           </Grid>
           <Grid item xs={6} className={"border"}>

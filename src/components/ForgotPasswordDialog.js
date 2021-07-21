@@ -34,9 +34,10 @@ export function ForgotPasswordDialog(props) {
   };
 
   const closeMe = async () => {
-    props.onClose();
     setEmail("");
     setError("");
+    setFinished(false);
+    props.onClose();
   };
 
   return (
@@ -58,7 +59,7 @@ export function ForgotPasswordDialog(props) {
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={props.onClose}
+              onClick={closeMe}
               variant="contained"
               color="primary"
               style={{ backgroundColor: HOBBEE_ORANGE }}
