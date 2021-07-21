@@ -1,45 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
-import MUILink from "@material-ui/core/Link";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import GroupImage from "../assets/test.png";
 import "../views/style.css";
 import UserIcon from "@material-ui/icons/AccountCircle";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
 import GroupIcon from "@material-ui/icons/PeopleAlt";
-import {Button, IconButton} from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 import { Chat } from "../components/Chat";
-import { EditGroupDialog } from "../components/EditGroupDialog";
-import ExitIcon from "@material-ui/icons/ExitToApp";
 import { TagComponent } from "../components/TagComponent";
-import { joinGroupRequest, leaveGroupRequest, fetchGroup } from "../services/GroupService";
+import {
+  joinGroupRequest,
+  leaveGroupRequest,
+  fetchGroup,
+} from "../services/GroupService";
 import { io } from "../services/SocketService";
 import Tooltip from "@material-ui/core/Tooltip";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { useSelector } from "react-redux";
+import { getFileUrl } from "../services/FileService";
+import Grid from "@material-ui/core/Grid";
+import { GroupInformationComponent } from "../components/GroupInformationComponent";
 
 const useStyles = makeStyles((theme) => ({
-  breadcrumbs: {
-    marginTop: "0px",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
   },
   pageContent: {
     marginTop: "30px",
     display: "flex",
   },
-  picture: {
-    display: "inline-block",
-    height: "300px",
-    width: "400px",
-    marginRight: "50px",
-    marginBottom: "30px",
+  image: {
+    borderRadius: "10px",
+    objectFit: "contain",
+    maxWidth: "100%",
+    marginBottom: "10px",
   },
   chat: {
     fontFamily: "UD Digi KyoKasho NK-R",
@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "20px",
   },
   detailsItemText: {
+    wordBreak: "break-all",
     color: "#32210B",
     marginLeft: "20px",
   },
@@ -99,11 +100,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function handleClick(event) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
-
 const CustomTooltip = withStyles((theme) => ({
   tooltip: {
     boxShadow: theme.shadows[1],
@@ -132,6 +128,7 @@ export function GroupPageView(props) {
   const groupId = props.match.params.id;
   const [joined, setJoined] = useState(false);
   const [group, setGroup] = useState(initialState);
+  const [chatLoaded, setChatLoaded] = useState(false);
   const user = useSelector((state) => {
     return state.user;
   });
@@ -154,6 +151,19 @@ export function GroupPageView(props) {
     return () => io.destroy();
   }, []);
 
+  //dynamically adjust chat height to group info height
+  //TODO: make this less hacky, if possible. Otherwise make comment
+  useEffect( () => {
+    setTimeout(() => {
+      setChatLoaded(true);
+      const scroller = document.getElementsByClassName("scroller");
+      if(scroller.length !== 0) {
+        scroller[0].style.height =
+            document.getElementById("group-info-div").offsetHeight - 72 + "px";
+      }
+    }, 100);
+  }, [group]);
+
   async function handleJoin() {
     console.log("Joining Group");
     const result = await joinGroupRequest(groupId);
@@ -174,243 +184,59 @@ export function GroupPageView(props) {
     });
   }
 
-  if (joined) {
-    return (
-      <div>
-        <div className={classes.breadcrumbs}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            <MUILink color="inherit" href="/" onClick={handleClick}>
-              Home
-            </MUILink>
-            <MUILink
-              color="inherit"
-              href="/getting-started/installation/"
-              onClick={handleClick}
-            >
-              My Groups
-            </MUILink>
-            <Typography color="textPrimary">Group Name</Typography>
-          </Breadcrumbs>
-        </div>
-        <div className={classes.pageContent}>
-          <div style={{ flex: 1 }}>
-            <div className={classes.picture}>
+  return (
+    <div className={classes.root}>
+      <Grid container spacing={2}>
+        <Grid Grid item xs={6}>
+          <Grid container spacing={2}>
+            <Grid item id="group-info-div" xs={12}>
               <img
-                src={GroupImage}
-                style={{ borderRadius: "5px" }}
+                src={getFileUrl(group.pic)}
+                className={classes.image}
                 alt={"GroupPic"}
               />
-            </div>
-            <div className={classes.infoJoined}>
-              <Typography variant="h4" color="inherit">
-                {group.groupName}
-              </Typography>
-              <CustomTooltip title="Leave Group">
-                <IconButton
-                  onClick={() => handleLeave()}
-                  color="inherit"
-                  className={classes.leaveButton}
-                >
-                  <ExitIcon />
-                </IconButton>
-              </CustomTooltip>
-              {user.user && group.groupOwner._id === user.user._id ? (
-                  <div className={classes.editButton}>
-                    <EditGroupDialog group={group} setGroup={setGroup} />
-                  </div>
+              {joined ? (
+                <GroupInformationComponent
+                  group={group}
+                  setGroup={setGroup}
+                  joined={joined}
+                  setJoined={setJoined}
+                  handleJoin={handleJoin}
+                  handleLeave={handleLeave}
+                />
               ) : null}
-              <div className={classes.detailsItem}>
-                <CustomTooltip title="Group Owner">
-                  <UserIcon style={{ fill: "#32210B" }} />
-                </CustomTooltip>
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  {group.groupOwner.username}
-                </Typography>
-              </div>
-              <div className={classes.detailsItem}>
-                <CustomTooltip title="Date">
-                  <EventIcon style={{ fill: "#32210B" }} />
-                </CustomTooltip>
-                {group.date && !group.date.length == 0 ? (
-                  <Typography variant="h6" className={classes.detailsItemText}>
-                    {new Date(group.date).toLocaleString("en-GB", {
-                      weekday: "short",
-                      year: "numeric",
-                      month: "numeric",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </Typography>
-                ) : (
-                  <Typography variant="h6" className={classes.detailsItemText}>
-                    to be determined
-                  </Typography>
-                )}
-              </div>
-              <div className={classes.detailsItem}>
-                <CustomTooltip title="Location">
-                  <LocationIcon style={{ fill: "#32210B" }} />
-                </CustomTooltip>
-                {!group.location == "" ? (
-                  <Typography variant="h6" className={classes.detailsItemText}>
-                    {group.location}
-                  </Typography>
-                ) : (
-                  <Typography variant="h6" className={classes.detailsItemText}>
-                    {group.city}
-                  </Typography>
-                )}
-              </div>
-              <div className={classes.detailsItem}>
-                <PopupState variant="popover" popupId="demo-popup-menu">
-                  {(popupState) => (
-                    <React.Fragment>
-                      <CustomTooltip title="Group Members">
-                        <GroupIcon
-                          style={{ fill: "#32210B", cursor: "pointer" }}
-                          {...bindTrigger(popupState)}
-                        />
-                      </CustomTooltip>
-                      <Menu {...bindMenu(popupState)}>
-                        {group.groupMembers.map((member) => {
-                          return (
-                            <MenuItem onClick={popupState.close}>
-                              {member.username}
-                            </MenuItem>
-                          );
-                        })}
-                      </Menu>
-                    </React.Fragment>
-                  )}
-                </PopupState>
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  {group.groupMembers.length}/{group.participants}
-                </Typography>
-              </div>
-            </div>
-            <div style={{ display: "flex" }}>
-              {group.tags.map((x) => {
-                return (
-                  <div style={{ marginRight: "10px" }}>
-                    <TagComponent id={x} key={x} />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className={classes.chat}>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={6} id="chat-div">
+          {chatLoaded ? (joined ? (
             <Chat groupID={groupId} />
-          </div>
-        </div>
-        <div style={{ fontSize: "17px" }}>
-          <p>{group.description}</p>
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <div className={classes.breadcrumbs}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            <MUILink color="inherit" href="/" onClick={handleClick}>
-              Home
-            </MUILink>
-            <MUILink
-              color="inherit"
-              href="/getting-started/installation/"
-              onClick={handleClick}
-            >
-              My Groups
-            </MUILink>
-            <Typography color="textPrimary">Group Name</Typography>
-          </Breadcrumbs>
-        </div>
-        <div className={classes.pageContent}>
-          <div className={classes.picture}>
-            <img
-              src={GroupImage}
-              style={{ borderRadius: "5px" }}
-              alt={"GroupPic"}
+          ) : (
+            <GroupInformationComponent
+              group={group}
+              setGroup={setGroup}
+              joined={joined}
+              setJoined={setJoined}
+              handleJoin={handleJoin}
+              handleLeave={handleLeave}
             />
+          )) : null}
+        </Grid>
+        <Grid item xs={12}>
+          <div style={{ display: "flex" }}>
+            {group.tags.map((x) => {
+              return (
+                <div style={{ marginRight: "10px" }}>
+                  <TagComponent id={x} key={x} />
+                </div>
+              );
+            })}
           </div>
-          <div className={classes.infoNotJoined}>
-            <Typography variant="h4" color="inherit">
-              {group.groupName}
-            </Typography>
-            <div className={classes.detailsItem}>
-              <CustomTooltip title="Group Owner">
-                <UserIcon style={{ fill: "#32210B" }} />
-              </CustomTooltip>
-              <Typography variant="h6" className={classes.detailsItemText}>
-                {group.groupOwner.username}
-              </Typography>
-            </div>
-            <div className={classes.detailsItem}>
-              <CustomTooltip title="Date">
-                <EventIcon style={{ fill: "#32210B" }} />
-              </CustomTooltip>
-              {group.date && !group.date.length == 0 ? (
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  {new Date(group.date).toLocaleString("en-GB", {
-                    weekday: "short",
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </Typography>
-              ) : (
-                <Typography variant="h6" className={classes.detailsItemText}>
-                  to be determined
-                </Typography>
-              )}
-            </div>
-            <div className={classes.detailsItem}>
-              <CustomTooltip title="City">
-                <LocationIcon style={{ fill: "#32210B" }} />
-              </CustomTooltip>
-              <Typography variant="h6" className={classes.detailsItemText}>
-                {group.city}
-              </Typography>
-            </div>
-            <div className={classes.detailsItem}>
-              <CustomTooltip title="Group Members">
-                <GroupIcon style={{ fill: "#32210B" }} />
-              </CustomTooltip>
-              <Typography variant="h6" className={classes.detailsItemText}>
-                {group.groupMembers.length}/{group.participants}
-              </Typography>
-            </div>
-            <Button
-              className={classes.joinButton}
-              type="button"
-              onClick={() => handleJoin()}
-            >
-              JOIN GROUP
-            </Button>
-          </div>
-        </div>
-        <div style={{ display: "flex" }}>
-          {group.tags.map((x) => {
-            return (
-              <div style={{ marginRight: "10px" }}>
-                <TagComponent id={x} key={x} />
-              </div>
-            );
-          })}
-        </div>
-        <div style={{ fontSize: "17px" }}>
-          <p>{group.description}</p>
-        </div>
-      </div>
-    );
-  }
+        </Grid>
+        <Grid item xs={12}>
+          {group.description}
+        </Grid>
+      </Grid>
+    </div>
+  );
 }

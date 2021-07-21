@@ -3,7 +3,6 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -28,6 +27,8 @@ import DateFnsUtils from "@date-io/date-fns";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import { editGroupRequest } from "../services/GroupService";
 import DeleteIcon from "@material-ui/icons/Delete";
+import {isValidGroupname} from "../validators/GroupDataValidator";
+import {ImageUploadComponent} from "./ImageUploadComponent";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -74,6 +75,7 @@ export function EditGroupDialog(props) {
 
   const handleClickOpen = () => {
     setGroupForm(props.group);
+    setTouched(initialTouchedState);
     setOpen(true);
   };
 
@@ -83,8 +85,7 @@ export function EditGroupDialog(props) {
 
   const handleUpdate = async () => {
     if (
-      groupForm.groupName.length <= 16 &&
-      groupForm.groupName.length > 0 &&
+      isValidGroupname(groupForm.groupName) &&
       groupForm.city !== "" &&
       groupForm.tags.length > 0 &&
       (groupForm.participants >= groupForm.groupMembers.length ||
@@ -112,11 +113,17 @@ export function EditGroupDialog(props) {
 
   return (
     <div>
-      <CustomTooltip title="Edit Group">
-        <IconButton onClick={handleClickOpen} color="inherit">
-          <EditIcon />
-        </IconButton>
-      </CustomTooltip>
+      <div style={{ position: "relative" }}>
+        <CustomTooltip title="Edit Group">
+          <IconButton
+            onClick={handleClickOpen}
+            color="inherit"
+            style={{ position: "absolute", transform: "translateY(-12px)" }}
+          >
+            <EditIcon />
+          </IconButton>
+        </CustomTooltip>
+      </div>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -124,10 +131,7 @@ export function EditGroupDialog(props) {
       >
         <DialogTitle id="form-dialog-title">Edit Group</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Update the group name, date, location and tags at your heart's
-            desire!
-          </DialogContentText>
+          <ImageUploadComponent groupForm={groupForm} setGroupForm={setGroupForm} touched={touched} setTouched={setTouched}/>
           <TextField
             label="Group Name"
             className={classes.textfield}
@@ -145,13 +149,11 @@ export function EditGroupDialog(props) {
             }}
             value={groupForm.groupName}
             error={
-              (touched.groupName && groupForm.groupName === "") ||
-              (touched.groupName && groupForm.groupName.length > 16)
+              touched.groupName && !isValidGroupname(groupForm.groupName)
             }
             helperText={
-              (touched.groupName && groupForm.groupName === "") ||
-              (touched.groupName && groupForm.groupName.length > 16)
-                ? "Must be 1-16 characters long"
+              touched.groupName && !isValidGroupname(groupForm.groupName)
+                ? "Invalid Group Name"
                 : ""
             }
           />
@@ -173,7 +175,9 @@ export function EditGroupDialog(props) {
             value={groupForm.city}
             error={touched.city && groupForm.city === ""}
             helperText={
-              touched.city && groupForm.city === "" ? "Empty entry" : ""
+              touched.city && groupForm.city === ""
+                ? "Invalid City"
+                : ""
             }
           />
           <FormControl component="fieldset" className={classes.textfield}>
@@ -341,7 +345,7 @@ export function EditGroupDialog(props) {
           <TextField
             label="Location"
             className={classes.textfield}
-            id="TitleField"
+            id="LocationField"
             type="text"
             fullWidth
             variant="outlined"
