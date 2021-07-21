@@ -35,7 +35,7 @@ export function CreateGroup(props) {
           });
         }}
         value={props.groupForm.groupName}
-        error={!isValidGroupname(props.groupForm.groupName)}
+        error={props.touched.groupName && !isValidGroupname(props.groupForm.groupName)}
         helperText={
           props.touched.groupName && !isValidGroupname(props.groupForm.groupName)
             ? "Invalid entry"

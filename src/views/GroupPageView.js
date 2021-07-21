@@ -7,11 +7,10 @@ import { TagComponent } from "../components/TagComponent";
 import {
   joinGroupRequest,
   leaveGroupRequest,
-  fetchGroup,
+  fetchGroup, deleteGroupRequest,
 } from "../services/GroupService";
 import { io } from "../services/SocketService";
 import Tooltip from "@material-ui/core/Tooltip";
-import { useSelector } from "react-redux";
 import { getFileUrl } from "../services/FileService";
 import Grid from "@material-ui/core/Grid";
 import { GroupInformationComponent } from "../components/GroupInformationComponent";
@@ -94,14 +93,6 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(3),
   },
 }));
-
-const CustomTooltip = withStyles((theme) => ({
-  tooltip: {
-    boxShadow: theme.shadows[1],
-    fontSize: 11,
-    margin: 0,
-  },
-}))(Tooltip);
 
 const initialState = {
   _id: "",
@@ -193,8 +184,31 @@ export function GroupPageView(props) {
     }
   }
 
+  async function handleDelete() {
+    console.log("Deleting Group");
+    try {
+      await deleteGroupRequest(groupId);
+      setGroup((group) => {
+        return { ...group, deleted: true };
+      });
+      /*
+      io.emit("new system message", {
+        groupId: groupId,
+      });
+
+       */
+    } catch (e) {
+      console.log("Failed to delete group")
+      handleError(e.response.data.message)
+    }
+  }
+
   const handleError = (error) => {
-    setSnackbar({open: true, message: error});
+    if(error === "Failed to authenticate token") {
+      setSnackbar({open: true, message: "You need to be logged in for this action."});
+    } else {
+      setSnackbar({open: true, message: error});
+    }
   };
 
   const handleClose = (event, reason) => {
@@ -208,6 +222,14 @@ export function GroupPageView(props) {
   const onClose = () => {
     props.history.replace(props.location.pathname);
   };
+
+  if(group.deleted) {
+    return (
+      <div>
+        This group has been deleted. It doesn't exist anymore.
+      </div>
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -228,6 +250,7 @@ export function GroupPageView(props) {
                   setJoined={setJoined}
                   handleJoin={handleJoin}
                   handleLeave={handleLeave}
+                  handleDelete={handleDelete}
                 />
               ) : null}
             </Grid>
@@ -244,6 +267,7 @@ export function GroupPageView(props) {
               setJoined={setJoined}
               handleJoin={handleJoin}
               handleLeave={handleLeave}
+              handleDelete={handleDelete}
             />
           )) : null}
         </Grid>
