@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { Button } from "@material-ui/core";
+import {IconButton} from "@material-ui/core";
 import { ChatMessage } from "./ChatMessage";
 import { useSelector } from "react-redux";
 import { fetchProcessedGroupChat } from "../services/GroupService";
 import { io } from "../services/SocketService";
+import SendIcon from "@material-ui/icons/Send";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -22,8 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
   messageButtonDiv: {
     //flex: 1,
-    width: "100px",
+    width: "60px",
     position: "relative",
+    marginLeft: "10px",
   },
   messageButton: {
     position: "absolute",
@@ -32,11 +34,6 @@ const useStyles = makeStyles((theme) => ({
     transform: "translate(-50%,-50%)",
   },
 }));
-
-/**
- * For having an internal scroll container
- * @param {props} props
- */
 
 export function Chat(props) {
   const classes = useStyles();
@@ -81,10 +78,9 @@ export function Chat(props) {
     setInput("");
   };
 
-  const messagesEndRef = useRef(null);
-
   const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    const element = document.getElementById("chat-scroller");
+    element.scrollTop = element.scrollHeight;
   };
 
   useEffect(scrollToBottom, [messages]);
@@ -97,21 +93,22 @@ export function Chat(props) {
   return (
     <div>
       <div className={classes.chat}>
-        <div className="scroller">
+        <div className="scroller" id="chat-scroller">
           {messages.map((x) => {
-            const currentUser = x.sender === user.user._id;
-            return (
-              <ChatMessage
-                isSystemMessage={x.isSystemMessage}
-                name={x.senderName || null}
-                message={x.message}
-                time={x.timestamp}
-                key={x._id}
-                isCurrentUser={currentUser}
-              />
-            );
+            if(user.user) {
+              const currentUser = x.sender === user.user._id;
+              return (
+                  <ChatMessage
+                      isSystemMessage={x.isSystemMessage}
+                      name={x.senderName || null}
+                      message={x.message}
+                      time={x.timestamp}
+                      key={x._id}
+                      isCurrentUser={currentUser}
+                  />
+              );
+            }
           })}
-          <div ref={messagesEndRef} />
         </div>
       </div>
       <div style={{ display: "flex" }}>
@@ -131,13 +128,13 @@ export function Chat(props) {
           />
         </form>
         <div className={classes.messageButtonDiv}>
-          <Button
-            type="button"
-            className={classes.messageButton}
-            onClick={() => sendMessage()}
+          <IconButton
+              type="button"
+              className={classes.messageButton}
+              onClick={() => sendMessage()}
           >
-            SEND
-          </Button>
+            <SendIcon />
+          </IconButton>
         </div>
       </div>
     </div>
