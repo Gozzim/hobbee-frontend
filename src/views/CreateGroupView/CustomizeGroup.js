@@ -247,7 +247,7 @@ export function CustomizeGroup(props) {
                     return { ...groupForm, participants: "" };
                   } else if (
                     event.target.value === "1" &&
-                    props.groupForm.participants === "2"
+                    groupForm.participants === "2"
                   ) {
                     return { ...groupForm, participants: "" };
                   } else if (event.target.value === "1") {
