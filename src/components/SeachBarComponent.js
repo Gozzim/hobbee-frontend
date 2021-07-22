@@ -64,6 +64,9 @@ const useStyles = makeStyles((theme) => ({
   filterContainer: {
     padding: "20px !important",
   },
+  FormControl:{
+    width: "500px",
+  }
 }));
 
 function applyFilters(groups, filters) {
@@ -435,7 +438,7 @@ export function SearchBarComponent(props) {
         <Grid container>
         <Grid item xs={6}>
           <Grid  alignItems={"center"} justify={"flex-start"}>
-            <FormControl>
+            <FormControl fullWidth>
               <InputLabel>Results per page</InputLabel>
               <Select
                 value={groupsOnPage}
@@ -477,6 +480,9 @@ export function SearchBarComponent(props) {
           </Grid>
         </Grid>
 
+        </Grid>
+      </Grid>
+      {/*FROM HERE ON THE RESULT SECTION BEGFINS*/}
           <center>
             <h1>{props.title}</h1>
             {groupsToShow.length > 0 ? (
@@ -484,11 +490,9 @@ export function SearchBarComponent(props) {
                 <Grid container spacing={2} justify="center">
                   {groupsToShow.slice(groupsOnPage*(page-1),page*groupsOnPage).map((group) => {
                     return (
-                      <center>
                       <Grid item key={group._id}>
                         <GroupComponent group={group} />
                       </Grid>
-                      </center>
                     );
                   })}
                 </Grid>
@@ -502,12 +506,9 @@ export function SearchBarComponent(props) {
             )}
           </center>
 
-        </Grid>
-        <div className={classes.pagination}>
-          <Pagination count={pages} variant="rounded" page={page} onChange={(_,p) => setPage(p)} />
-        </div>
-
-      </Grid>
+      <div className={classes.pagination}>
+        <Pagination count={pages} variant="rounded" page={page} onChange={(_,p) => setPage(p)} />
+      </div>
     </>
   );
 }
