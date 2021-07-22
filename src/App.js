@@ -35,7 +35,7 @@ export function App() {
   return (
     <div className={classes.appRoot}>
       <CssBaseline />
-      <React.StrictMode>
+      <React.Fragment>
         <Header />
         <ContentContainer footer={<Footer />}>
           <Switch>
@@ -64,7 +64,7 @@ export function App() {
             ))}
           </Switch>
         </ContentContainer>
-      </React.StrictMode>
+      </React.Fragment>
     </div>
   );
 }
