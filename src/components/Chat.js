@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import {IconButton} from "@material-ui/core";
@@ -17,9 +17,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
   },
   chat: {
-    backgroundColor: "#FFF3C2",
     width: "100%",
-    borderRadius: "10px",
   },
   messageButtonDiv: {
     //flex: 1,
@@ -68,13 +66,17 @@ export function Chat(props) {
   }, []);
 
   const sendMessage = () => {
-    io.emit("new user message", {
-      sender: user.user._id,
-      message: input,
-      timestamp: Date.now(),
-      isSystemMessage: false,
-      groupId: groupID,
-    });
+    if (!input.replace(/\s/g, '').length) {
+      console.log("empty or only spaces message");
+    } else {
+      io.emit("new user message", {
+        sender: user.user._id,
+        message: input,
+        timestamp: Date.now(),
+        isSystemMessage: false,
+        groupId: groupID,
+      });
+    }
     setInput("");
   };
 
@@ -91,52 +93,54 @@ export function Chat(props) {
   };
 
   return (
-    <div>
-      <div className={classes.chat}>
-        <div className="scroller" id="chat-scroller">
-          {messages.map((x) => {
-            if(user.user) {
-              const currentUser = x.sender === user.user._id;
-              return (
-                  <ChatMessage
-                      isSystemMessage={x.isSystemMessage}
-                      name={x.senderName || null}
-                      message={x.message}
-                      time={x.timestamp}
-                      key={x._id}
-                      isCurrentUser={currentUser}
-                  />
-              );
-            }
-          })}
+    <div style={{backgroundColor: "white", borderRadius: "10px",}}>
+        <div className={classes.chat}>
+          <div className="scroller" id="chat-scroller">
+            {messages.map((x) => {
+              if(user.user) {
+                const currentUser = x.sender === user.user._id;
+                return (
+                    <ChatMessage
+                        isSystemMessage={x.isSystemMessage}
+                        name={x.senderName || null}
+                        message={x.message}
+                        time={x.timestamp}
+                        key={x._id}
+                        isCurrentUser={currentUser}
+                    />
+                );
+              } else {
+                return null;
+              }
+            })}
+          </div>
         </div>
-      </div>
-      <div style={{ display: "flex" }}>
-        <form
-          className={classes.inputField}
-          noValidate
-          autoComplete="off"
-          style={{ flex: 3 }}
-          onSubmit={handleSubmit}
-        >
-          <TextField
-            id="outlined-basic"
-            label="Send a message"
-            variant="outlined"
-            value={input}
-            onInput={(e) => setInput(e.target.value)}
-          />
-        </form>
-        <div className={classes.messageButtonDiv}>
-          <IconButton
-              type="button"
-              className={classes.messageButton}
-              onClick={() => sendMessage()}
+        <div style={{ display: "flex" }}>
+          <form
+              className={classes.inputField}
+              noValidate
+              autoComplete="off"
+              style={{ flex: 3 }}
+              onSubmit={handleSubmit}
           >
-            <SendIcon />
-          </IconButton>
+            <TextField
+                id="outlined-basic"
+                label="Send a message"
+                variant="outlined"
+                value={input}
+                onInput={(e) => setInput(e.target.value)}
+            />
+          </form>
+          <div className={classes.messageButtonDiv}>
+            <IconButton
+                type="button"
+                className={classes.messageButton}
+                onClick={() => sendMessage()}
+            >
+              <SendIcon />
+            </IconButton>
+          </div>
         </div>
-      </div>
     </div>
   );
 }

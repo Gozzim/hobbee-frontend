@@ -127,3 +127,14 @@
   margin-left: 10px !important;
   margin-top: 23px !important;
 }
+::-webkit-scrollbar{
+  width:9px;
+}
+::-webkit-scrollbar-thumb{
+  border-radius: 10px;
+  background-color: #cccccc;
+}
+::-webkit-scrollbar-track{
+  border-radius: 10px;
+  background-color: #eeeeee;
+}

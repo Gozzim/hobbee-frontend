@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     borderStyle: "solid",
     borderWidth: "10px",
     borderRadius: "10px",
-    boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)",
     marginTop: "50px",
     paddingTop: "10px",
   },
@@ -104,7 +103,7 @@ export function HomeView(props) {
             style={{
               borderRadius: "10px",
               maxWidth: "100%",
-              boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)",
+              boxShadow: "0 3px 10px rgb(0 0 0 / 0.3)",
             }}
             alt={"HomePic"}
           />

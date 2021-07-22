@@ -28,6 +28,11 @@ export async function editGroupRequest(data) {
   return await HttpService.post("group/edit/" + data._id, data);
 }
 
+export async function deleteGroupRequest(data) {
+  await setToken(getToken());
+  return await HttpService.post("group/delete/" + data);
+}
+
 export async function fetchProcessedGroupChat(data) {
   await setToken(getToken());
   return await HttpService.get("group/chat/" + data);
