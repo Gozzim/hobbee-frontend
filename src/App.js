@@ -7,7 +7,7 @@ import { routes } from "./routes";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { getToken, setToken } from "./services/HttpService";
-import { authUser } from "./redux/reducers/userReducer";
+import { authReady, authUser } from "./redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
 import { connect } from "react-redux";
@@ -25,12 +25,14 @@ function App() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  useLayoutEffect(() => {
+  useLayoutEffect(async () => {
     const token = getToken();
     if (token) {
       setToken(token);
       dispatch(authUser());
       dispatch(fetchNotifications());
+    } else {
+      dispatch(authReady());
     }
   }, []);
 

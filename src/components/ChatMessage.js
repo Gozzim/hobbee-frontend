@@ -3,10 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   messageBox: {
-    backgroundColor: "white",
     borderRadius: "5px",
     height: "auto",
-    //width: "100px",
     margin: "5px",
     display: "inline-block",
     padding: "10px",
@@ -47,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   timestampDiv: {
     fontFamily: "Roboto",
     fontSize: "12px",
-    color: "#888888",
+    color: "#666666",
   },
 }));
 
@@ -57,7 +55,6 @@ export function ChatMessage(props) {
   const sender = props.name;
   const message = props.message;
   const timestamp = props.time;
-  const isCurrentUser = props.isCurrentUser;
 
   if (isSystemMessage) {
     return (
@@ -66,18 +63,29 @@ export function ChatMessage(props) {
       </div>
     );
   } else {
-    return (
-      <div className={isCurrentUser ? classes.right : classes.left}>
-        <div className={classes.messageBox}>
-          {!isCurrentUser ? (
-            <div className={classes.nameDiv}>{sender}</div>
-          ) : null}
-          <div className={"linkDefault"} style={{ textAlign: "left" }}>
-            {message}
+    if(props.isCurrentUser) {
+      return (
+          <div className={classes.right}>
+            <div className={classes.messageBox} style={{ backgroundColor: "#FFe680" }}>
+              <div className={"linkDefault"} style={{ textAlign: "left" }}>
+                {message}
+              </div>
+              <div className={classes.timestampDiv}>{timestamp}</div>
+            </div>
           </div>
-          <div className={classes.timestampDiv}>{timestamp}</div>
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+          <div className={classes.left}>
+            <div className={classes.messageBox} style={{ backgroundColor: "#FFF3C2" }}>
+              <div className={classes.nameDiv}>{sender}</div>
+              <div className={"linkDefault"} style={{ textAlign: "left" }}>
+                {message}
+              </div>
+              <div className={classes.timestampDiv}>{timestamp}</div>
+            </div>
+          </div>
+      );
+    }
   }
 }

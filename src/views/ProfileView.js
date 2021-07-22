@@ -5,12 +5,11 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import HobbeeIcon from "../assets/bee_cream.png";
 import TextField from "@material-ui/core/TextField";
-import { GroupComponent } from "../components/GroupComponent";
-import { GroupComponentVertical } from "../components/GroupComponentVertical";
 import { TagComponent } from "../components/TagComponent";
 import { TagAutocomplete } from "../components/TagAutocomplete";
 import { Editable } from "../components/Editable";
 import { useSelector } from "react-redux";
+import { MyGroupsResultsComponent } from "../components/MyGroupsResultsComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -186,43 +185,7 @@ export function ProfileView(props) {
               </Grid>
             </Grid>
 
-            <h3> These are your groups: </h3>
-
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <GroupComponent />
-              </Grid>
-              <Grid item xs={4}>
-                <GroupComponent />
-              </Grid>
-              <Grid item xs={4}>
-                <GroupComponent />
-              </Grid>
-              <Grid item xs={3}>
-                <GroupComponentVertical />
-              </Grid>
-              <Grid item xs={3}>
-                <GroupComponentVertical />
-              </Grid>
-              <Grid item xs={3}>
-                <GroupComponentVertical />
-              </Grid>
-              <Grid item xs={3}>
-                <GroupComponentVertical />
-              </Grid>
-              <Grid item xs={3}>
-                <GroupComponentVertical />
-              </Grid>
-              <Grid item xs={3}>
-                <GroupComponentVertical />
-              </Grid>
-              <Grid item xs={3}>
-                <GroupComponentVertical />
-              </Grid>
-              <Grid item xs={3}>
-                <GroupComponentVertical />
-              </Grid>
-            </Grid>
+            <MyGroupsResultsComponent />
           </div>
         );
       }}

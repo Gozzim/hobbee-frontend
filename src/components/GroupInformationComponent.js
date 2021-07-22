@@ -3,10 +3,12 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
-import {Button, IconButton} from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import UserIcon from "@material-ui/icons/AccountCircle";
-import {HOBBEE_BLUE, HOBBEE_BROWN, HOBBEE_ORANGE, HOBBEE_YELLOW} from "../shared/Constants";
+import {
+  HOBBEE_BROWN,
+} from "../shared/Constants";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
 import GroupIcon from "@material-ui/icons/PeopleAlt";
@@ -14,8 +16,10 @@ import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { EditGroupDialog } from "./EditGroupDialog";
-import {useSelector} from "react-redux";
-import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import { useSelector, connect } from "react-redux";
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
+import ErrorIcon from "@material-ui/icons/Error";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
       color: "#32210B",
     },
   },
+  expiredIcon: {
+    marginTop: "9px",
+    marginLeft: "9px",
+    fill: "tomato",
+  },
 }));
 
 const CustomTooltip = withStyles((theme) => ({
@@ -51,7 +60,7 @@ const CustomTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-export function GroupInformationComponent(props) {
+function GroupInformationComponent(props) {
   const classes = useStyles();
   const user = useSelector((state) => {
     return state.user;
@@ -61,17 +70,29 @@ export function GroupInformationComponent(props) {
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={10}>
-          <Typography variant="h4" color="inherit" style={{wordWrap: "break-word"}}>
+          <Typography
+            variant="h4"
+            color="inherit"
+            style={{ wordWrap: "break-word" }}
+          >
             {props.group.groupName}
           </Typography>
         </Grid>
         <Grid item xs={2}>
           {props.joined ? (
-            <CustomTooltip title="Leave Group">
-              <IconButton onClick={() => props.handleLeave()} color="inherit">
-                <ExitIcon />
-              </IconButton>
-            </CustomTooltip>
+            !(
+              props.group.date && props.group.date < new Date().toISOString()
+            ) ? (
+              <CustomTooltip title="Leave Group">
+                <IconButton onClick={() => props.handleLeave()}>
+                  <ExitIcon />
+                </IconButton>
+              </CustomTooltip>
+            ) : (
+              <CustomTooltip title="This group has expired. Leaving or editing is not possible anymore.">
+                <ErrorIcon className={classes.expiredIcon} />
+              </CustomTooltip>
+            )
           ) : null}
         </Grid>
         <Grid item xs={2}>
@@ -82,13 +103,27 @@ export function GroupInformationComponent(props) {
           </div>
         </Grid>
         <Grid item xs={10}>
-          <div style={{display: "flex"}}>
+          <div style={{ display: "flex" }}>
             <Typography variant="h6">
               {props.group.groupOwner.username}
             </Typography>
-            <CustomTooltip title={props.group.groupOwner.username + " is boosting this group."}>
-              <TrendingUpIcon style={{ fill: HOBBEE_ORANGE, marginTop: "4px", marginLeft: "8px" }} />
-            </CustomTooltip>
+            {props.group.groupOwner.premium.active
+                ? (
+                  <CustomTooltip
+                      title={
+                        props.group.groupOwner.username + " is boosting this group."
+                      }
+                  >
+                    <TrendingUpIcon
+                        style={{
+                          fill: "#17C2BC",
+                          marginTop: "4px",
+                          marginLeft: "8px",
+                        }}
+                    />
+                  </CustomTooltip>
+              ) : null
+            }
           </div>
         </Grid>
         <Grid item xs={2}>
@@ -99,7 +134,7 @@ export function GroupInformationComponent(props) {
           </div>
         </Grid>
         <Grid item xs={10}>
-          {props.group.date && !props.group.date.length == 0 ? (
+          {props.group.date ? (
             <Typography variant="h6">
               {new Date(props.group.date).toLocaleString("en-GB", {
                 weekday: "short",
@@ -123,14 +158,17 @@ export function GroupInformationComponent(props) {
         </Grid>
         <Grid item xs={10}>
           {props.joined && !props.group.location == "" ? (
-            <Typography variant="h6" style={{wordWrap: "break-word"}}>{props.group.location}</Typography>
+            <Typography variant="h6" style={{ wordWrap: "break-word" }}>
+              {props.group.location}
+            </Typography>
           ) : (
-            <Typography variant="h6" style={{wordWrap: "break-word"}}>{props.group.city}</Typography>
+            <Typography variant="h6" style={{ wordWrap: "break-word" }}>
+              {props.group.city}
+            </Typography>
           )}
           {props.group.onOffline === "online" ? (
-              <Typography variant="h6">(online)</Typography>
-          ) : null
-          }
+            <Typography variant="h6">(online)</Typography>
+          ) : null}
         </Grid>
         <Grid item xs={2}>
           <div className={classes.detailsItem}>
@@ -147,7 +185,7 @@ export function GroupInformationComponent(props) {
                     <Menu {...bindMenu(popupState)}>
                       {props.group.groupMembers.map((member) => {
                         return (
-                          <MenuItem onClick={popupState.close}>
+                          <MenuItem onClick={() => props.history.push("/user/" + member.username)}>
                             {member.username}
                           </MenuItem>
                         );
@@ -171,22 +209,43 @@ export function GroupInformationComponent(props) {
           </Typography>
         </Grid>
         <Grid item xs={2}>
-          {props.joined && user.user && props.group.groupOwner._id === user.user._id ? (
-              <EditGroupDialog group={props.group} setGroup={props.setGroup} />
+          {props.joined &&
+          user.user &&
+          props.group.groupOwner._id === user.user._id &&
+          (props.group.date === null ||
+            props.group.date > new Date().toISOString()) ? (
+            <EditGroupDialog group={props.group} setGroup={props.setGroup} handleDelete={props.handleDelete}/>
           ) : null}
         </Grid>
         {!props.joined ? (
-          <Grid item xs={6}>
-            <Button
+          !(props.group.date && props.group.date < new Date().toISOString()) ? (
+            <Grid item xs={12}>
+              <Button
                 className={classes.joinButton}
                 type="button"
                 onClick={() => props.handleJoin()}
-            >
-              JOIN GROUP
-            </Button>
-          </Grid>
+              >
+                JOIN GROUP
+              </Button>
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <div style={{ display: "flex"}}>
+                <div className={classes.detailsItem}>
+                  <ErrorIcon style={{ fill: "tomato" }} />
+                </div>
+                <div style={{marginTop: "8px", marginLeft: "15px"}}>
+                  <Typography variant="h7" style={{ color: "tomato", fontWeight: 800 }}>
+                    This group has expired and can't be joined.
+                  </Typography>
+                </div>
+              </div>
+            </Grid>
+          )
         ) : null}
       </Grid>
     </div>
   );
 }
+
+export default connect()(withRouter(GroupInformationComponent));

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -14,6 +14,7 @@ import {
   TextField,
   Tooltip,
   IconButton,
+  DialogContentText,
 } from "@material-ui/core";
 import { TagAutocomplete } from "./TagAutocomplete";
 import { TagComponent } from "./TagComponent";
@@ -22,13 +23,14 @@ import {
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { formatISO } from "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import { editGroupRequest } from "../services/GroupService";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {isValidGroupname} from "../validators/GroupDataValidator";
-import {ImageUploadComponent} from "./ImageUploadComponent";
+import { isValidGroupname } from "../validators/GroupDataValidator";
+import { ImageUploadComponent } from "./ImageUploadComponent";
+import { HOBBEE_YELLOW } from "../shared/Constants";
+import {io} from "../services/SocketService";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -39,6 +41,27 @@ const useStyles = makeStyles((theme) => ({
     height: "60px",
     marginLeft: "10px",
     marginTop: "14px",
+  },
+  deleteGroupButton: {
+    //marginLeft: "10px",
+    marginTop: "30px",
+    marginBottom: "30px",
+    backgroundColor: "#ff6347",
+    borderStyle: "solid",
+    borderWidth: "4px",
+    borderColor: "#ff5233",
+    color: "black",
+    "&:hover": {
+      borderColor: "#e6e6e6",
+    },
+  },
+  updateButton: {
+    backgroundColor: HOBBEE_YELLOW,
+    color: "black",
+  },
+  deleteButton: {
+    backgroundColor: "#ff6347",
+    color: "black",
   },
 }));
 
@@ -65,6 +88,7 @@ const initialTouchedState = {
   city: false,
   tags: false,
   pic: false,
+  date: false,
 };
 
 export function EditGroupDialog(props) {
@@ -72,13 +96,25 @@ export function EditGroupDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [groupForm, setGroupForm] = React.useState(props.group);
   const [touched, setTouched] = React.useState(initialTouchedState);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  //connect socket
+  useEffect(() => {
+    //reconnect chat sockets if db disconnects for a short time
+    io.on("disconnect", async () => {
+      for (let i = 0; i < 10; i++) {
+        await new Promise((r) => setTimeout(r, 1000));
+        io.emit("room", props.group._id);
+      }
+    });
+    io.emit("room", props.group._id);
+  }, []);
+
+  const handleOpen = () => {
     setGroupForm(props.group);
     setTouched(initialTouchedState);
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -90,14 +126,22 @@ export function EditGroupDialog(props) {
       groupForm.tags.length > 0 &&
       (groupForm.maxMembers >= groupForm.groupMembers.length ||
         groupForm.maxMembers === "" ||
-        groupForm.maxMembers === 0)
+        groupForm.maxMembers === 0) &&
+      (groupForm.date === null || groupForm.date > new Date().toISOString())
     ) {
       try {
         const newGroup = await editGroupRequest(groupForm);
         props.setGroup(newGroup.data);
+        io.emit("system update message", {
+          groupId: props.group._id,
+        });
         handleClose();
       } catch (e) {
         console.log(e.message);
+        handleClose();
+        io.emit("system update message", {
+          groupId: props.group._id,
+        });
       }
     } else {
       setTouched((touched) => {
@@ -106,9 +150,23 @@ export function EditGroupDialog(props) {
           city: true,
           tags: true,
           pic: true,
+          date: true,
         };
       });
     }
+  };
+
+  const handleDeleteOpen = () => {
+    setDeleteOpen(true);
+  };
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
+  };
+
+  const handleDelete = () => {
+    props.handleDelete();
+    handleDeleteClose();
+    handleClose();
   };
 
   return (
@@ -116,8 +174,7 @@ export function EditGroupDialog(props) {
       <div style={{ position: "relative" }}>
         <CustomTooltip title="Edit Group">
           <IconButton
-            onClick={handleClickOpen}
-            color="inherit"
+            onClick={handleOpen}
             style={{ position: "absolute", transform: "translateY(-12px)" }}
           >
             <EditIcon />
@@ -131,7 +188,12 @@ export function EditGroupDialog(props) {
       >
         <DialogTitle id="form-dialog-title">Edit Group</DialogTitle>
         <DialogContent>
-          <ImageUploadComponent groupForm={groupForm} setGroupForm={setGroupForm} touched={touched} setTouched={setTouched}/>
+          <ImageUploadComponent
+            groupForm={groupForm}
+            setGroupForm={setGroupForm}
+            touched={touched}
+            setTouched={setTouched}
+          />
           <TextField
             label="Group Name"
             className={classes.textfield}
@@ -148,9 +210,7 @@ export function EditGroupDialog(props) {
               });
             }}
             value={groupForm.groupName}
-            error={
-              touched.groupName && !isValidGroupname(groupForm.groupName)
-            }
+            error={touched.groupName && !isValidGroupname(groupForm.groupName)}
             helperText={
               touched.groupName && !isValidGroupname(groupForm.groupName)
                 ? "Invalid Group Name"
@@ -175,9 +235,7 @@ export function EditGroupDialog(props) {
             value={groupForm.city}
             error={touched.city && groupForm.city === ""}
             helperText={
-              touched.city && groupForm.city === ""
-                ? "Invalid City"
-                : ""
+              touched.city && groupForm.city === "" ? "Invalid City" : ""
             }
           />
           <FormControl component="fieldset" className={classes.textfield}>
@@ -296,26 +354,29 @@ export function EditGroupDialog(props) {
                 inputVariant="outlined"
                 disablePast="true"
                 onChange={(date) => {
+                  setTouched((touched) => {
+                    return { ...touched, date: true };
+                  });
                   setGroupForm((groupForm) => {
-                    return { ...groupForm, date: formatISO(date) };
+                    return { ...groupForm, date: date.toISOString() };
                   });
                 }}
-                value={
-                  groupForm.date && groupForm.date.length === 0
-                    ? null
-                    : groupForm.date
-                }
+                value={!groupForm.date ? null : groupForm.date}
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
                 style={{ marginRight: "10px" }}
                 error={
-                  groupForm.date <= Date.now()
+                  touched.date &&
+                  groupForm.date &&
+                  groupForm.date <= new Date().toISOString()
                 }
                 helperText={
-                  true
-                      ? String(groupForm.date < Date.now())
-                      : ""
+                  touched.date &&
+                  groupForm.date &&
+                  groupForm.date <= new Date().toISOString()
+                    ? "Must lie in the future"
+                    : ""
                 }
               />
               <KeyboardTimePicker
@@ -325,25 +386,21 @@ export function EditGroupDialog(props) {
                 disablePast="true"
                 keyboardIcon={<AccessTimeIcon />}
                 onChange={(date) => {
+                  setTouched((touched) => {
+                    return { ...touched, date: true };
+                  });
                   setGroupForm((groupForm) => {
-                    return { ...groupForm, date: formatISO(date) };
+                    return { ...groupForm, date: date.toISOString() };
                   });
                 }}
-                value={
-                  groupForm.date && groupForm.date.length === 0
-                    ? null
-                    : groupForm.date
-                }
+                value={!groupForm.date ? null : groupForm.date}
                 KeyboardButtonProps={{
                   "aria-label": "change time",
                 }}
                 error={
-                  groupForm.date <= Date.now()
-                }
-                helperText={
-                  groupForm.date <= Date.now()
-                      ? "Date must lie in the future"
-                      : ""
+                  touched.date &&
+                  groupForm.date &&
+                  groupForm.date <= new Date().toISOString()
                 }
               />
             </MuiPickersUtilsProvider>
@@ -385,12 +442,47 @@ export function EditGroupDialog(props) {
               });
             }}
           />
+          <Button
+            onClick={handleDeleteOpen}
+            color="inherit"
+            className={classes.deleteGroupButton}
+          >
+            Delete Group
+          </Button>
+          <Dialog
+            open={deleteOpen}
+            onClose={handleDeleteClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">Delete Group</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Are you sure that you want to delete this group?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDeleteClose} color="inherit">
+                Cancel
+              </Button>
+              <Button
+                onClick={handleDelete}
+                color="inherit"
+                className={classes.deleteButton}
+              >
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="inherit">
             Cancel
           </Button>
-          <Button onClick={handleUpdate} color="inherit">
+          <Button
+            onClick={handleUpdate}
+            color="inherit"
+            className={classes.updateButton}
+          >
             Update
           </Button>
         </DialogActions>
