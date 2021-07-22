@@ -475,6 +475,7 @@ export function SearchBarComponent(props) {
               {ascending ? <ArrowUpward /> : <ArrowDownward />}
             </IconButton>
           </Grid>
+        </Grid>
 
           <center>
             <h1>{props.title}</h1>
