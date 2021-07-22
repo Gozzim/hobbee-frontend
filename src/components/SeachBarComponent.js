@@ -6,12 +6,16 @@ import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
 import {
   Checkbox,
+  FormControl,
   FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
+  InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -25,7 +29,7 @@ import { TagAutocomplete } from "../components/TagAutocomplete";
 import Fuse from "fuse.js";
 import { GroupComponent } from "./GroupComponent";
 import { formatISO } from "date-fns";
-import { Tune } from "@material-ui/icons";
+import { ArrowDownward, ArrowUpward, Tune } from "@material-ui/icons";
 import GroupIcon from "@material-ui/icons/Group";
 
 const useStyles = makeStyles((theme) => ({
@@ -119,6 +123,34 @@ function applyFilters(groups, filters) {
   return filteredGroups;
 }
 
+function applySorting(groups, sortBy, ascending) {
+  const sortedGroups = [...groups];
+
+  if (sortBy === "timestamp") {
+    sortedGroups.sort((a, b) => {
+      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+    });
+  }
+
+  if (sortBy === "date") {
+    sortedGroups.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  }
+
+  if (sortBy === "participants") {
+    sortedGroups.sort((a, b) => {
+      return b.groupMembers.length - a.groupMembers.length;
+    });
+  }
+
+  if (ascending) {
+    sortedGroups.reverse();
+  }
+
+  return sortedGroups;
+}
+
 export function SearchBarComponent(props) {
   const classes = useStyles();
   const [searchValue, setSearchValue] = React.useState("");
@@ -149,7 +181,13 @@ export function SearchBarComponent(props) {
     tags: [],
   });
 
-  const groupsToShow = applyFilters(filteredGroups, filters);
+  const [sortBy, setSortBy] = React.useState("timestamp");
+  const [ascending, setAscending] = React.useState(false);
+  const groupsToShow = applySorting(
+    applyFilters(filteredGroups, filters),
+    sortBy,
+    ascending
+  );
 
   return (
     <>
@@ -379,6 +417,31 @@ export function SearchBarComponent(props) {
         </Grid>
 
         <Grid item xs={12}>
+          <Grid container alignItems={"center"} justify={"flex-end"}>
+            <FormControl>
+              <InputLabel>Sort by</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={sortBy}
+                onChange={(event) => {
+                  setSortBy(event.target.value);
+                }}
+              >
+                <MenuItem value="timestamp">Creation date</MenuItem>
+                <MenuItem value="date">Date</MenuItem>
+                <MenuItem value="participants">Number of participants</MenuItem>
+              </Select>
+            </FormControl>
+            <IconButton
+              onClick={() => {
+                setAscending((ascending) => !ascending);
+              }}
+            >
+              {ascending ? <ArrowUpward /> : <ArrowDownward />}
+            </IconButton>
+          </Grid>
+
           <center>
             <h1>{props.title}</h1>
             {groupsToShow.length > 0 ? (
