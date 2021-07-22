@@ -452,7 +452,7 @@ export function SearchBarComponent(props) {
           </Grid>
         </Grid>
 
-        <Grid item xs={6} >
+        <Grid item xs={6}>
           <Grid container alignItems={"center"} justify={"flex-end"}>
             <FormControl>
               <InputLabel>Sort by</InputLabel>
@@ -483,9 +483,11 @@ export function SearchBarComponent(props) {
                 <Grid container spacing={2} justify="center">
                   {groupsToShow.slice(groupsOnPage*(page-1),page*groupsOnPage).map((group) => {
                     return (
+                      <center>
                       <Grid item key={group._id}>
                         <GroupComponent group={group} />
                       </Grid>
+                      </center>
                     );
                   })}
                 </Grid>
@@ -499,15 +501,11 @@ export function SearchBarComponent(props) {
             )}
           </center>
 
-          <center>
-          <div className={classes.pagination}>
-
-            <Pagination count={pages} variant="rounded" page={page} onChange={(_,p) => setPage(p)} />
-
-          </div>
-          </center>
-
         </Grid>
+        <div className={classes.pagination}>
+          <Pagination count={pages} variant="rounded" page={page} onChange={(_,p) => setPage(p)} />
+        </div>
+
       </Grid>
     </>
   );
