@@ -4,10 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import GroupIcon from "@material-ui/icons/Group";
 import ExploreIcon from "@material-ui/icons/Explore";
 import EventIcon from "@material-ui/icons/Event";
-import { ButtonBase, Grid, Icon, Typography } from "@material-ui/core";
-import { Image } from "@material-ui/icons";
-import DummyGroupImage from "../assets/bee_cream.png";
+import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import PropTypes from "prop-types";
+import { getFileUrl } from "../services/FileService";
 
 const useStyles = makeStyles((theme) => ({
   icons: {
@@ -18,69 +18,87 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: "left",
     color: "#32210B",
-    maxWidth: 500,
+    width: "280px",
+    height: "422px",
     "&:hover": {
       backgroundColor: "rgba(0, 0, 0, 0.04)",
       color: "#32210B",
     },
   },
-  image: {
-    width: 128,
-    height: 128,
+  listItem: {
+    paddingTop: "4px !important",
+    paddingBottom: "4px !important",
+  },
+  listItemIcon: {
+    color: "#000000 !important",
+    minWidth: "38px !important",
   },
   img: {
     margin: "auto",
     display: "block",
     maxWidth: "100%",
     maxHeight: "100%",
+    width: 200,
+    height: 150,
+    marginTop: "8px",
+    marginBottom: "8px",
+    textAlign: "center",
   },
 }));
 
 export function GroupComponent(props) {
   const classes = useStyles();
 
-  const title = "This is your Default group";
-  const city = "Munich";
-  const time = new Date("July 19, 2021 13:37");
-  const currentMembers = 5;
-  const maxMembers = 7;
-  //const groupImage = image
+  const currentMembers = props.group.groupMembers.length;
+  const maxMembers = props.group.maxMembers;
 
   return (
     <Paper className={classes.paper}>
-      <h3> {title} </h3>
-      <Grid container spacing={2}>
-        <Grid item>
-          <ButtonBase className={classes.image}>
-            <img className={classes.img} alt="image" src={DummyGroupImage} />
-          </ButtonBase>
-        </Grid>
-        <Grid item xs={12} sm container>
-          <Grid item xs container direction="column" spacing={2}>
-            <Grid>
-              <Typography>
-                <ExploreIcon /> {city}
-              </Typography>
-            </Grid>
-            <Grid>
-              <Typography>
-                <EventIcon /> Date: {time.toLocaleDateString()}
-              </Typography>
-            </Grid>
-            <Grid>
-              <Typography>
-                <AccessTimeIcon /> Time: {time.toLocaleTimeString()}
-              </Typography>
-            </Grid>
-            <Grid>
-              <Typography>
-                <GroupIcon fontSize={"medium"} /> Members: {currentMembers}/
-                {maxMembers}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      <h3>{props.group.groupName}</h3>
+      <img className={classes.img} src={getFileUrl(props.group.pic)} />
+      <List>
+        <ListItem disableGutters className={classes.listItem}>
+          <ListItemIcon className={classes.listItemIcon}>
+            <ExploreIcon />
+          </ListItemIcon>
+          <ListItemText primary={props.group.city} />
+        </ListItem>
+        {props.group.date ? (
+          <>
+            <ListItem disableGutters className={classes.listItem}>
+              <ListItemIcon className={classes.listItemIcon}>
+                <EventIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={new Date(props.group.date).toLocaleDateString()}
+              />
+            </ListItem>
+            <ListItem disableGutters className={classes.listItem}>
+              <ListItemIcon className={classes.listItemIcon}>
+                <AccessTimeIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={new Date(props.group.date).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              />
+            </ListItem>
+          </>
+        ) : null}
+        <ListItem disableGutters className={classes.listItem}>
+          <ListItemIcon className={classes.listItemIcon}>
+            <GroupIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={currentMembers + (maxMembers ? "/" + maxMembers : "")}
+          />
+        </ListItem>
+      </List>
     </Paper>
   );
 }
+
+GroupComponent.propTypes = {
+  group: PropTypes.object.isRequired,
+};

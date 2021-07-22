@@ -24,7 +24,6 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import { formatISO } from "date-fns";
 import { getFileUrl, uploadRequest } from "../../services/FileService";
 
 const examplePics = [
@@ -76,7 +75,7 @@ export function CustomizeGroup(props) {
                   image={temporaryImage}
                   scale={scale}
                   width={300}
-                  height={220}
+                  height={225}
                   border={50}
                   color={[0, 0, 0, 0.6]}
                   rotate={0}
@@ -110,7 +109,7 @@ export function CustomizeGroup(props) {
               >
                 <img
                   width={300}
-                  height={220}
+                  height={225}
                   src={getFileUrl(props.groupForm.pic)}
                 />
               </Button>
@@ -247,7 +246,7 @@ export function CustomizeGroup(props) {
                     return { ...groupForm, maxMembers: "" };
                   } else if (
                     event.target.value === "1" &&
-                    props.groupForm.maxMembers === "2"
+                    groupForm.maxMembers === "2"
                   ) {
                     return { ...groupForm, maxMembers: "" };
                   } else if (event.target.value === "1") {
@@ -268,10 +267,16 @@ export function CustomizeGroup(props) {
               <div className={"customizegroup-datetime-container"}>
                 <KeyboardDatePicker
                   margin="normal"
+                  format={"dd.MM.yyyy"}
                   onChange={(date) => {
-                    props.setGroupForm((groupForm) => {
-                      return { ...groupForm, date: formatISO(date) };
-                    });
+                    if (date instanceof Date && !isNaN(date)) {
+                      props.setGroupForm((groupForm) => {
+                        return {
+                          ...groupForm,
+                          date: date.toISOString(),
+                        };
+                      });
+                    }
                   }}
                   value={props.groupForm.date}
                   KeyboardButtonProps={{
@@ -281,10 +286,16 @@ export function CustomizeGroup(props) {
                 <KeyboardTimePicker
                   keyboardIcon={<ScheduleIcon />}
                   margin="normal"
+                  format={"HH:ii"}
                   onChange={(date) => {
-                    props.setGroupForm((groupForm) => {
-                      return { ...groupForm, date: formatISO(date) };
-                    });
+                    if (date instanceof Date && !isNaN(date)) {
+                      props.setGroupForm((groupForm) => {
+                        return {
+                          ...groupForm,
+                          date: date.toISOString(),
+                        };
+                      });
+                    }
                   }}
                   value={props.groupForm.date}
                   KeyboardButtonProps={{

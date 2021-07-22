@@ -37,3 +37,15 @@ export async function fetchProcessedGroupChat(data) {
   await setToken(getToken());
   return await HttpService.get("group/chat/" + data);
 }
+
+export async function fetchMyGroups() {
+  return await HttpService.get("/group/mine");
+}
+
+export async function fetchRecommendedGroups() {
+  return await HttpService.get("/group/recommended");
+}
+
+export async function fetchGroupsInMyArea() {
+  return await HttpService.get("/group/in-my-area");
+}

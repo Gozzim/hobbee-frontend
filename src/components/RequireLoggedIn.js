@@ -6,9 +6,10 @@ export function RequireLoggedIn(props) {
     return state.user;
   });
 
-  if (user.isLoggedIn) {
-    return props.children;
-  }
+  // Wait until we know whether the user is logged in or not
+  if (!user.authReady) return null;
+  // If the user is not logged in, redirect to sign in page
+  if (!user.isLoggedIn) return <Redirect to="/login#forbidden" />;
 
-  return <Redirect to="/login#forbidden" />;
+  return props.children;
 }
