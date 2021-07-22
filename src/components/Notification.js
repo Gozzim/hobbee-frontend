@@ -13,8 +13,6 @@ import AlarmIcon from "@material-ui/icons/Alarm";
 import AssistantIcon from "@material-ui/icons/Assistant";
 import ChatIcon from "@material-ui/icons/Chat";
 import InfoIcon from "@material-ui/icons/Info";
-import { readNotification } from "../redux/reducers/notificationReducer";
-import { useDispatch } from "react-redux";
 
 const NotificationTypes = {
   CHAT: "Chat",
@@ -31,7 +29,6 @@ const useStyles = makeStyles(() => ({
 
 export function Notification(props) {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const getNotificationIcon = (msgType) => {
     switch (msgType) {
@@ -47,11 +44,20 @@ export function Notification(props) {
   };
 
   return (
-    <ListItem button dense className={classes.notification} onClick={() => props.onClickNotification(props.link)}>
+    <ListItem
+      button
+      dense
+      className={classes.notification}
+      onClick={props.onClickNotification}
+    >
       <ListItemIcon>{getNotificationIcon(props.msgType)}</ListItemIcon>
       <ListItemText primary={props.groupName} secondary={props.message} />
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="delete" onClick={() => dispatch(readNotification(props.id))}>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={props.onDeleteNotification}
+        >
           <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
@@ -61,10 +67,9 @@ export function Notification(props) {
 
 // attributes of props and their type
 Notification.propTypes = {
-  id: PropTypes.string.isRequired,
   groupName: PropTypes.string.isRequired,
   onClickNotification: PropTypes.func.isRequired,
-  link: PropTypes.string,
+  onDeleteNotification: PropTypes.func.isRequired,
   msgType: PropTypes.string,
   message: PropTypes.string,
   read: PropTypes.bool,

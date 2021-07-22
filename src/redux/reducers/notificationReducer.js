@@ -1,6 +1,7 @@
 import {
-    fetchNotificationRequest, readAllNotificationsRequest,
-    readNotificationRequest
+  fetchNotificationRequest,
+  readAllNotificationsRequest,
+  readNotificationRequest,
 } from "../../services/NotificationService";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -20,12 +21,14 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState,
   reducers: {
-      markNotificationRead: (state, action) => {
-          return state.filter((notification) => notification._id !== action.payload._id)
-      },
-      clearNotifications: (state) => {
-          return [];
-      }
+    markNotificationRead: (state, action) => {
+      return state.filter(
+        (notification) => notification._id !== action.payload
+      );
+    },
+    clearNotifications: (state) => {
+      return [];
+    },
   },
   extraReducers: {
     [fetchNotifications.fulfilled]: (state, action) => {
@@ -34,24 +37,25 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { markNotificationRead, clearNotifications } = notificationSlice.actions;
+export const { markNotificationRead, clearNotifications } =
+  notificationSlice.actions;
 
 export const readNotification = (notification) => async (dispatch) => {
-    try {
-        const resp = await readNotificationRequest(notification);
-        dispatch(markNotificationRead(resp));
-    } catch (e) {
-        console.log(e.message); //TODO
-    }
+  try {
+    await readNotificationRequest(notification);
+    dispatch(markNotificationRead(notification));
+  } catch (e) {
+    console.log(e.message); //TODO
+  }
 };
 
 export const readAllNotifications = () => async (dispatch) => {
-    try {
-        await readAllNotificationsRequest();
-        dispatch(clearNotifications());
-    } catch (e) {
-        console.log(e.message); //TODO
-    }
+  try {
+    await readAllNotificationsRequest();
+    dispatch(clearNotifications());
+  } catch (e) {
+    console.log(e.message); //TODO
+  }
 };
 
 export default notificationSlice.reducer;

@@ -1,30 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { Menu, Divider, ListItem, Typography } from "@material-ui/core";
-import { connect } from "react-redux";
+import {
+  Menu,
+  Divider,
+  ListItem,
+  Typography,
+  Collapse,
+} from "@material-ui/core";
+import { connect, useDispatch } from "react-redux";
 import { Notification } from "./Notification";
+import { TransitionGroup } from "react-transition-group";
+import {
+  readAllNotifications,
+  readNotification,
+} from "../redux/reducers/notificationReducer";
 
-/*
- * TODO:
- *  - Mark as read button functionality
- *  - Mark all as read button functionality
- */
-
-const NotificationTypes = {
-  CHAT: "Chat",
-  REMINDER: "Reminder",
-  FEEDBACK: "Feedback",
-};
-
-/**
- * Menu for user managment
- * @param {props} props
- */
 function NotificationMenu(props) {
-  const onClickNotification = (link) => {
+  const dispatch = useDispatch();
+
+  const onClickNotification = (link, id) => {
     props.onClose();
-    props.history.push(link)
+    dispatch(readNotification(id));
+    props.history.push(link);
+  };
+
+  const onDeleteNotification = (id) => {
+    dispatch(readNotification(id));
+  };
+
+  const clearNotifications = () => {
+    dispatch(readAllNotifications());
+    props.onClose();
   };
 
   return (
@@ -38,19 +45,21 @@ function NotificationMenu(props) {
         horizontal: "right",
       }}
     >
-      {props.notifications.map((notification) => (
-        <Notification
-          key={notification._id}
-          id={notification._id}
-          groupName={notification.group.groupName}
-          onClickNotification={onClickNotification}
-          link={notification.link}
-          msgType={notification.notificationType}
-          message={notification.content}
-        />
-      ))}
+      <TransitionGroup>
+        {props.notifications.map((notification) => (
+          <Collapse key={notification._id}>
+            <Notification
+              groupName={notification.group.groupName}
+              onClickNotification={() => onClickNotification(notification.link, notification._id)}
+              msgType={notification.notificationType}
+              message={notification.content}
+              onDeleteNotification={() => onDeleteNotification(notification._id)}
+            />
+          </Collapse>
+        ))}
+      </TransitionGroup>
       <Divider key="divider" />
-      <ListItem button>
+      <ListItem button onClick={clearNotifications}>
         <Typography component="span" align="right" variant="body2">
           Mark all as read
         </Typography>
@@ -59,7 +68,6 @@ function NotificationMenu(props) {
   );
 }
 
-// attributes of props and their type
 NotificationMenu.propTypes = {
   onClose: PropTypes.func.isRequired,
   anchor: PropTypes.object,
