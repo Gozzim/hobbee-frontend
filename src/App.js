@@ -7,7 +7,7 @@ import { routes } from "./routes";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { getToken, setToken } from "./services/HttpService";
-import { authUser } from "./redux/reducers/userReducer";
+import { authReady, authUser } from "./redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
 
@@ -24,11 +24,13 @@ export function App() {
   const dispatch = useDispatch();
 
   // set document title
-  useEffect(() => {
+  useEffect(async () => {
     const token = getToken();
     if (token) {
       setToken(token);
       dispatch(authUser());
+    } else {
+      dispatch(authReady());
     }
   }, []);
 
