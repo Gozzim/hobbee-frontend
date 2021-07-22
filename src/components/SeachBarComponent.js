@@ -193,7 +193,14 @@ export function SearchBarComponent(props) {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Paper component="form" className={classes.root}>
+          <Paper
+            component="form"
+            className={classes.root}
+            onSubmit={(e) => {
+              e.preventDefault();
+              setShowFilters(true);
+            }}
+          >
             <SearchIcon />
             <InputBase
               className={classes.input}
