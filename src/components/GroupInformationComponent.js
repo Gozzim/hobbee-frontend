@@ -17,10 +17,9 @@ import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { EditGroupDialog } from "./EditGroupDialog";
-import { useSelector } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import ErrorIcon from "@material-ui/icons/Error";
-import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +58,6 @@ const CustomTooltip = withStyles((theme) => ({
     boxShadow: theme.shadows[1],
     fontSize: 11,
     margin: 0,
-    width: "150px",
   },
 }))(Tooltip);
 
@@ -188,8 +186,7 @@ function GroupInformationComponent(props) {
                     <Menu {...bindMenu(popupState)}>
                       {props.group.groupMembers.map((member) => {
                         return (
-                            //TODO: replace with actual link ..........v
-                          <MenuItem onClick={() => props.history.push("/")}>
+                          <MenuItem onClick={() => props.history.push("/user/" + member.username)}>
                             {member.username}
                           </MenuItem>
                         );

@@ -138,6 +138,10 @@ export function EditGroupDialog(props) {
         handleClose();
       } catch (e) {
         console.log(e.message);
+        handleClose();
+        io.emit("system update message", {
+          groupId: props.group._id,
+        });
       }
     } else {
       setTouched((touched) => {
