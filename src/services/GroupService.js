@@ -40,3 +40,7 @@ export async function fetchMyGroups() {
 export async function fetchRecommendedGroups() {
   return await HttpService.get("/group/recommended");
 }
+
+export async function fetchGroupsInMyArea() {
+  return await HttpService.get("/group/in-my-area");
+}
