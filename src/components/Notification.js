@@ -24,9 +24,6 @@ const useStyles = makeStyles(() => ({
   notification: {
     display: "flex",
     minWidth: "200px",
-    "&:isRead": {
-      //TODO
-    },
   },
 }));
 
@@ -47,11 +44,20 @@ export function Notification(props) {
   };
 
   return (
-    <ListItem button dense className={classes.notification} onClick={() => props.onClickNotification(props.msgType, props.link)}>
+    <ListItem
+      button
+      dense
+      className={classes.notification}
+      onClick={props.onClickNotification}
+    >
       <ListItemIcon>{getNotificationIcon(props.msgType)}</ListItemIcon>
-      <ListItemText primary={props.groupName} secondary={props.message} />
+      <ListItemText primary={props.groupName} secondary={props.message} secondaryTypographyProps={{noWrap: true}}/>
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="delete">
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={props.onDeleteNotification}
+        >
           <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
@@ -63,8 +69,7 @@ export function Notification(props) {
 Notification.propTypes = {
   groupName: PropTypes.string.isRequired,
   onClickNotification: PropTypes.func.isRequired,
-  link: PropTypes.string,
+  onDeleteNotification: PropTypes.func.isRequired,
   msgType: PropTypes.string,
   message: PropTypes.string,
-  read: PropTypes.bool,
 };

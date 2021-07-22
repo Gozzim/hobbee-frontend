@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -11,7 +11,6 @@ import {
   ListItem,
   ListItemText,
   Toolbar,
-  Typography,
   useMediaQuery,
 } from "@material-ui/core";
 import UserMenu from "./UserMenu";
@@ -76,10 +75,9 @@ export function Header(props) {
     return state.notification;
   });
 
-  const [userMenuAnchor, setUserMenuAnchor] = React.useState(null);
-  const [notificationMenuAnchor, setNotificationMenuAnchor] =
-    React.useState(null);
-  const [drawerState, setDrawerState] = React.useState(false);
+  const [userMenuAnchor, setUserMenuAnchor] = useState(null);
+  const [notificationMenuAnchor, setNotificationMenuAnchor] = useState(null);
+  const [drawerState, setDrawerState] = useState(false);
 
   const useFullWidthNavigation = useMediaQuery("(min-width:1114px)");
 

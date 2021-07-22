@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,6 +10,8 @@ import { getToken, setToken } from "./services/HttpService";
 import { authReady, authUser } from "./redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
+import { connect } from "react-redux";
+import { fetchNotifications } from "./redux/reducers/notificationReducer";
 
 const useStyles = makeStyles((theme) => ({
   appRoot: {
@@ -19,16 +21,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function App() {
+function App() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // set document title
-  useEffect(async () => {
+  useLayoutEffect(async () => {
     const token = getToken();
     if (token) {
       setToken(token);
       dispatch(authUser());
+      dispatch(fetchNotifications());
     } else {
       dispatch(authReady());
     }
@@ -37,36 +39,36 @@ export function App() {
   return (
     <div className={classes.appRoot}>
       <CssBaseline />
-      <React.Fragment>
-        <Header />
-        <ContentContainer footer={<Footer />}>
-          <Switch>
-            {routes.map(({ path, Component, label }, i) => (
-              <Route
-                exact
-                key={i}
-                path={path}
-                render={(routeProps) => {
-                  document.title = "Hobb.ee | " + label;
-                  const crumbs = routes.filter(({ path }) =>
-                    typeof path === "object"
-                      ? path.some((subPath) =>
-                          routeProps.match.path.includes(subPath)
-                        )
-                      : routeProps.match.path.includes(path)
-                  );
-                  return (
-                    <div>
-                      <DynamicBreadcrumbs crumbs={crumbs} />
-                      <Component {...routeProps} />
-                    </div>
-                  );
-                }}
-              />
-            ))}
-          </Switch>
-        </ContentContainer>
-      </React.Fragment>
+      <Header />
+      <ContentContainer footer={<Footer />}>
+        <Switch>
+          {routes.map(({ path, Component, label }, i) => (
+            <Route
+              exact
+              key={i}
+              path={path}
+              render={(routeProps) => {
+                document.title = "Hobb.ee | " + label;
+                const crumbs = routes.filter(({ path }) =>
+                  typeof path === "object"
+                    ? path.some((subPath) =>
+                        routeProps.match.path.includes(subPath)
+                      )
+                    : routeProps.match.path.includes(path)
+                );
+                return (
+                  <div>
+                    <DynamicBreadcrumbs crumbs={crumbs} />
+                    <Component {...routeProps} />
+                  </div>
+                );
+              }}
+            />
+          ))}
+        </Switch>
+      </ContentContainer>
     </div>
   );
 }
+
+export default connect()(App);
