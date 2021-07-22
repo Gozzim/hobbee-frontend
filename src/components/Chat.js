@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
   },
   chat: {
-    backgroundColor: "#FFF3C2",
     width: "100%",
     borderRadius: "10px",
   },
@@ -95,54 +94,54 @@ export function Chat(props) {
   };
 
   return (
-    <div>
-      <div className={classes.chat}>
-        <div className="scroller" id="chat-scroller">
-          {messages.map((x) => {
-            if(user.user) {
-              const currentUser = x.sender === user.user._id;
-              return (
-                  <ChatMessage
-                      isSystemMessage={x.isSystemMessage}
-                      name={x.senderName || null}
-                      message={x.message}
-                      time={x.timestamp}
-                      key={x._id}
-                      isCurrentUser={currentUser}
-                  />
-              );
-            } else {
-              return null;
-            }
-          })}
+    <div style={{backgroundColor: "white"}}>
+        <div className={classes.chat}>
+          <div className="scroller" id="chat-scroller">
+            {messages.map((x) => {
+              if(user.user) {
+                const currentUser = x.sender === user.user._id;
+                return (
+                    <ChatMessage
+                        isSystemMessage={x.isSystemMessage}
+                        name={x.senderName || null}
+                        message={x.message}
+                        time={x.timestamp}
+                        key={x._id}
+                        isCurrentUser={currentUser}
+                    />
+                );
+              } else {
+                return null;
+              }
+            })}
+          </div>
         </div>
-      </div>
-      <div style={{ display: "flex" }}>
-        <form
-          className={classes.inputField}
-          noValidate
-          autoComplete="off"
-          style={{ flex: 3 }}
-          onSubmit={handleSubmit}
-        >
-          <TextField
-            id="outlined-basic"
-            label="Send a message"
-            variant="outlined"
-            value={input}
-            onInput={(e) => setInput(e.target.value)}
-          />
-        </form>
-        <div className={classes.messageButtonDiv}>
-          <IconButton
-              type="button"
-              className={classes.messageButton}
-              onClick={() => sendMessage()}
+        <div style={{ display: "flex" }}>
+          <form
+              className={classes.inputField}
+              noValidate
+              autoComplete="off"
+              style={{ flex: 3 }}
+              onSubmit={handleSubmit}
           >
-            <SendIcon />
-          </IconButton>
+            <TextField
+                id="outlined-basic"
+                label="Send a message"
+                variant="outlined"
+                value={input}
+                onInput={(e) => setInput(e.target.value)}
+            />
+          </form>
+          <div className={classes.messageButtonDiv}>
+            <IconButton
+                type="button"
+                className={classes.messageButton}
+                onClick={() => sendMessage()}
+            >
+              <SendIcon />
+            </IconButton>
+          </div>
         </div>
-      </div>
     </div>
   );
 }

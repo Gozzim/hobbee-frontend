@@ -117,7 +117,7 @@ function GroupInformationComponent(props) {
                   >
                     <TrendingUpIcon
                         style={{
-                          fill: HOBBEE_ORANGE,
+                          fill: "#17C2BC",
                           marginTop: "4px",
                           marginLeft: "8px",
                         }}

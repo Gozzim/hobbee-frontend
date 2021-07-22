@@ -8,8 +8,7 @@ export function TagComponent(props) {
     return x._id === props.id;
   });
   const colors = ["orange", "yellow", "blue"];
-  const colorindex = index % colors.length;
-  const color = colors[colorindex];
+  const color = colors[1];
 
   if(index<0) {
     return null;
