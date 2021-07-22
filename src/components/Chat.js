@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
   chat: {
     width: "100%",
-    borderRadius: "10px",
   },
   messageButtonDiv: {
     //flex: 1,
@@ -94,7 +93,7 @@ export function Chat(props) {
   };
 
   return (
-    <div style={{backgroundColor: "white"}}>
+    <div style={{backgroundColor: "white", borderRadius: "10px",}}>
         <div className={classes.chat}>
           <div className="scroller" id="chat-scroller">
             {messages.map((x) => {

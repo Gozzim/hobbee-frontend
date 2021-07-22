@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   timestampDiv: {
     fontFamily: "Roboto",
     fontSize: "12px",
-    color: "#888888",
+    color: "#666666",
   },
 }));
 

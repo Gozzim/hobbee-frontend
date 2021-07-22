@@ -8,7 +8,6 @@ import ExitIcon from "@material-ui/icons/ExitToApp";
 import UserIcon from "@material-ui/icons/AccountCircle";
 import {
   HOBBEE_BROWN,
-  HOBBEE_ORANGE,
 } from "../shared/Constants";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
@@ -85,7 +84,7 @@ function GroupInformationComponent(props) {
               props.group.date && props.group.date < new Date().toISOString()
             ) ? (
               <CustomTooltip title="Leave Group">
-                <IconButton onClick={() => props.handleLeave()} color="inherit">
+                <IconButton onClick={() => props.handleLeave()}>
                   <ExitIcon />
                 </IconButton>
               </CustomTooltip>
@@ -231,7 +230,7 @@ function GroupInformationComponent(props) {
             </Grid>
           ) : (
             <Grid item xs={12}>
-              <div style={{ display: "flex", marginTop: "15px" }}>
+              <div style={{ display: "flex"}}>
                 <div className={classes.detailsItem}>
                   <ErrorIcon style={{ fill: "tomato" }} />
                 </div>

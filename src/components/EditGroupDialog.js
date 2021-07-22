@@ -175,7 +175,6 @@ export function EditGroupDialog(props) {
         <CustomTooltip title="Edit Group">
           <IconButton
             onClick={handleOpen}
-            color="inherit"
             style={{ position: "absolute", transform: "translateY(-12px)" }}
           >
             <EditIcon />
