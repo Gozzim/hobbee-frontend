@@ -22,21 +22,9 @@ const NotificationTypes = {
  * @param {props} props
  */
 function NotificationMenu(props) {
-  const onClickNotification = (msgType, linkId) => {
+  const onClickNotification = (link) => {
     props.onClose();
-
-    switch (msgType) {
-      case NotificationTypes.CHAT:
-      case NotificationTypes.REMINDER:
-        props.history.push("/group/" + linkId);
-        break;
-      case NotificationTypes.FEEDBACK:
-        //TODO
-        props.history.push("/feedback/" + linkId);
-        break;
-      default:
-        break;
-    }
+    props.history.push(link)
   };
 
   return (
@@ -56,7 +44,7 @@ function NotificationMenu(props) {
           id={notification._id}
           groupName={notification.group.groupName}
           onClickNotification={onClickNotification}
-          link={(notification.notificationType === "Chat" || notification.notificationType === "Reminder") ? notification.group._id : "testId"}
+          link={notification.link}
           msgType={notification.notificationType}
           message={notification.content}
         />

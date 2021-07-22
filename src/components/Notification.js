@@ -47,7 +47,7 @@ export function Notification(props) {
   };
 
   return (
-    <ListItem button dense className={classes.notification} onClick={() => props.onClickNotification(props.msgType, props.link)}>
+    <ListItem button dense className={classes.notification} onClick={() => props.onClickNotification(props.link)}>
       <ListItemIcon>{getNotificationIcon(props.msgType)}</ListItemIcon>
       <ListItemText primary={props.groupName} secondary={props.message} />
       <ListItemSecondaryAction>
