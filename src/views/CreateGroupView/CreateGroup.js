@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { TagAutocomplete } from "../../components/TagAutocomplete";
+import {isValidGroupname} from "../../validators/GroupDataValidator";
 
 export function CreateGroup(props) {
   return (
@@ -34,10 +35,10 @@ export function CreateGroup(props) {
           });
         }}
         value={props.groupForm.groupName}
-        error={props.touched.groupName && props.groupForm.groupName === ""}
+        error={!isValidGroupname(props.groupForm.groupName)}
         helperText={
-          props.touched.groupName && props.groupForm.groupName === ""
-            ? "Empty entry"
+          props.touched.groupName && !isValidGroupname(props.groupForm.groupName)
+            ? "Invalid entry"
             : ""
         }
       />

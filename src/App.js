@@ -9,6 +9,7 @@ import { Footer } from "./components/Footer";
 import { getToken, setToken } from "./services/HttpService";
 import { authUser } from "./redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
+import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
 
 const useStyles = makeStyles((theme) => ({
   appRoot: {
@@ -24,7 +25,6 @@ export function App() {
 
   // set document title
   useEffect(() => {
-    document.title = "Hobb.ee";
     const token = getToken();
     if (token) {
       setToken(token);
@@ -33,20 +33,38 @@ export function App() {
   }, []);
 
   return (
-    //<Layout>
     <div className={classes.appRoot}>
       <CssBaseline />
       <React.Fragment>
         <Header />
         <ContentContainer footer={<Footer />}>
           <Switch>
-            {routes.map((route, i) => (
-              <Route key={i} {...route} />
+            {routes.map(({ path, Component, label }, i) => (
+              <Route
+                exact
+                key={i}
+                path={path}
+                render={(routeProps) => {
+                  document.title = "Hobb.ee | " + label;
+                  const crumbs = routes.filter(({ path }) =>
+                    typeof path === "object"
+                      ? path.some((subPath) =>
+                          routeProps.match.path.includes(subPath)
+                        )
+                      : routeProps.match.path.includes(path)
+                  );
+                  return (
+                    <div>
+                      <DynamicBreadcrumbs crumbs={crumbs} />
+                      <Component {...routeProps} />
+                    </div>
+                  );
+                }}
+              />
             ))}
           </Switch>
         </ContentContainer>
       </React.Fragment>
     </div>
-    //</Layout>
   );
 }

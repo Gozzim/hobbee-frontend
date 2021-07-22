@@ -52,11 +52,12 @@ const initialRegisterState = {
   password: "",
   confirmPassword: "",
   bday: null,
+  city: "",
   hobbies: [],
 };
 
 const initialErrors = {
-  general: "", //TODO
+  general: "",
   email: "",
   username: "",
   password: "",
@@ -70,6 +71,9 @@ export function SignUpComponent(props) {
   const [registerState, setRegisterState] = useState(initialRegisterState);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+
+  const minAge = new Date();
+  minAge.setFullYear(minAge.getFullYear() - 18);
 
   useEffect(() => {
     if (props.user.error) {
@@ -100,7 +104,9 @@ export function SignUpComponent(props) {
     if (
       registerError.password !== "" ||
       registerError.username !== "" ||
-      registerError.email !== ""
+      registerError.email !== "" ||
+      registerState.bday > minAge ||
+      registerState.city === ""
     ) {
       return;
     }
@@ -111,6 +117,7 @@ export function SignUpComponent(props) {
         registerState.email,
         registerState.password,
         date,
+        registerState.city,
         registerState.hobbies
       );
     } catch (e) {
@@ -182,6 +189,10 @@ export function SignUpComponent(props) {
 
   const onChangeBday = (e) => {
     changeRegisterState({ bday: e });
+  };
+
+  const onChangeCity = (e) => {
+    changeRegisterState({ city: e.target.value });
   };
 
   return (
@@ -280,10 +291,22 @@ export function SignUpComponent(props) {
                 value={registerState.bday}
                 onChange={onChangeBday}
                 format={"dd.MM.yyyy"}
-                KeyboardButtonProps={{ edge: "end" }}
+                KeyboardButtonProps={{ edge: "end", tabIndex: "-1" }}
+                maxDate={minAge}
+                maxDateMessage={"You must be at least 18 years old to join Hobb.ee"}
+                invalidDateMessage={""}
                 autoComplete={"bday"}
               />
             </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"city"}
+              label={"City of residence"}
+              fieldValue={registerState.city}
+              changeFunc={onChangeCity}
+              autoComplete={"address-level2"}
+            />
           </Grid>
           <Grid item>
             <TagAutocomplete

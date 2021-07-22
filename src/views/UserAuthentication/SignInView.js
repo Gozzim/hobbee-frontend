@@ -4,6 +4,8 @@ import { connect, useSelector } from "react-redux";
 
 import { LoginComponent } from "../../components/UserLoginComponent";
 import { login } from "../../redux/reducers/userReducer";
+import { Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 
 /**
  * For user login
@@ -11,6 +13,8 @@ import { login } from "../../redux/reducers/userReducer";
  */
 function SignInView(props) {
   const user = useSelector((state) => state.user);
+
+  const showNotification = props.location.hash === "#forbidden";
 
   const onAfterLogin = () => {
     let targetPath = "/";
@@ -33,11 +37,28 @@ function SignInView(props) {
     props.dispatch(login({ username, password }));
   };
 
+  const onClose = () => {
+    props.history.replace(props.location.pathname);
+  };
+
   return (
-    <LoginComponent
-      user={user}
-      onLogin={onLogin}
-    />
+    <>
+      <Snackbar
+        open={showNotification}
+        autoHideDuration={6000}
+        onClose={(_event, reason) => {
+          // Only close after autoHideDuration expired
+          if (reason === "timeout") {
+            onClose();
+          }
+        }}
+      >
+        <Alert onClose={onClose} severity="error">
+          You need to be logged in to access that page!
+        </Alert>
+      </Snackbar>
+      <LoginComponent user={user} onLogin={onLogin} />
+    </>
   );
 }
 
