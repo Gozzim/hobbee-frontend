@@ -25,7 +25,7 @@ function App() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  useLayoutEffect(async () => {
+  useLayoutEffect(() => {
     const token = getToken();
     if (token) {
       setToken(token);
