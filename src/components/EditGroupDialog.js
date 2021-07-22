@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -30,6 +30,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { isValidGroupname } from "../validators/GroupDataValidator";
 import { ImageUploadComponent } from "./ImageUploadComponent";
 import { HOBBEE_YELLOW } from "../shared/Constants";
+import {io} from "../services/SocketService";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -97,6 +98,18 @@ export function EditGroupDialog(props) {
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
 
+  //connect socket
+  useEffect(() => {
+    //reconnect chat sockets if db disconnects for a short time
+    io.on("disconnect", async () => {
+      for (let i = 0; i < 10; i++) {
+        await new Promise((r) => setTimeout(r, 1000));
+        io.emit("room", props.group._id);
+      }
+    });
+    io.emit("room", props.group._id);
+  }, []);
+
   const handleOpen = () => {
     setGroupForm(props.group);
     setTouched(initialTouchedState);
@@ -119,6 +132,9 @@ export function EditGroupDialog(props) {
       try {
         const newGroup = await editGroupRequest(groupForm);
         props.setGroup(newGroup.data);
+        io.emit("system update message", {
+          groupId: props.group._id,
+        });
         handleClose();
       } catch (e) {
         console.log(e.message);

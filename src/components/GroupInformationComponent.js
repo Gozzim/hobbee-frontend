@@ -20,6 +20,8 @@ import { EditGroupDialog } from "./EditGroupDialog";
 import { useSelector } from "react-redux";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import ErrorIcon from "@material-ui/icons/Error";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +63,7 @@ const CustomTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-export function GroupInformationComponent(props) {
+function GroupInformationComponent(props) {
   const classes = useStyles();
   const user = useSelector((state) => {
     return state.user;
@@ -108,19 +110,23 @@ export function GroupInformationComponent(props) {
             <Typography variant="h6">
               {props.group.groupOwner.username}
             </Typography>
-            <CustomTooltip
-              title={
-                props.group.groupOwner.username + " is boosting this group."
-              }
-            >
-              <TrendingUpIcon
-                style={{
-                  fill: HOBBEE_ORANGE,
-                  marginTop: "4px",
-                  marginLeft: "8px",
-                }}
-              />
-            </CustomTooltip>
+            {props.group.groupOwner.premium.active
+                ? (
+                  <CustomTooltip
+                      title={
+                        props.group.groupOwner.username + " is boosting this group."
+                      }
+                  >
+                    <TrendingUpIcon
+                        style={{
+                          fill: HOBBEE_ORANGE,
+                          marginTop: "4px",
+                          marginLeft: "8px",
+                        }}
+                    />
+                  </CustomTooltip>
+              ) : null
+            }
           </div>
         </Grid>
         <Grid item xs={2}>
@@ -182,7 +188,8 @@ export function GroupInformationComponent(props) {
                     <Menu {...bindMenu(popupState)}>
                       {props.group.groupMembers.map((member) => {
                         return (
-                          <MenuItem onClick={popupState.close}>
+                            //TODO: replace with actual link ..........v
+                          <MenuItem onClick={() => props.history.push("/")}>
                             {member.username}
                           </MenuItem>
                         );
@@ -244,3 +251,5 @@ export function GroupInformationComponent(props) {
     </div>
   );
 }
+
+export default connect()(withRouter(GroupInformationComponent));

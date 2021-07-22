@@ -100,7 +100,6 @@ export function ReportUserDialog(props) {
   const handleReport = async () => {
     if (!checkedElements < 1 && !(reportForm.other && reportForm.comment === "")) {
       try {
-        console.log(reportForm);
         await reportUserRequest({
           username: props.username,
           reportForm: reportForm,

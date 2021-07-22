@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import "../views/style.css";
 import {Snackbar} from "@material-ui/core";
 import { Chat } from "../components/Chat";
@@ -12,9 +12,9 @@ import {
 import { io } from "../services/SocketService";
 import { getFileUrl } from "../services/FileService";
 import Grid from "@material-ui/core/Grid";
-import { GroupInformationComponent } from "../components/GroupInformationComponent";
+import GroupInformationComponent from "../components/GroupInformationComponent";
 import {Alert} from "@material-ui/lab";
-import { ReportUserDialog } from "../components/ReportUserDialog";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -123,10 +123,14 @@ export function GroupPageView(props) {
   const [snackbar, setSnackbar] = React.useState(initialSnackbar);
 
   useEffect(async () => {
-    const thisGroup = await fetchGroup(groupId);
-    setGroup(thisGroup.data);
-    if (thisGroup.data.chat) {
-      setJoined(true);
+    try {
+      const thisGroup = await fetchGroup(groupId);
+      setGroup(thisGroup.data);
+      if (thisGroup.data.chat) {
+        setJoined(true);
+      }
+    } catch (e) {
+      console.log(e.response.data.message)
     }
   }, [joined]);
   console.log(group);
@@ -160,7 +164,7 @@ export function GroupPageView(props) {
       console.log(result.data.message);
       console.log("test")
       setJoined(true);
-      io.emit("new system message", {
+      io.emit("system update message", {
         groupId: groupId,
       });
     } catch (e) {
@@ -175,7 +179,7 @@ export function GroupPageView(props) {
       const result = await leaveGroupRequest(groupId);
       console.log(result.data);
       setJoined(false);
-      io.emit("new system message", {
+      io.emit("system update message", {
         groupId: groupId,
       });
     } catch (e) {
@@ -191,12 +195,9 @@ export function GroupPageView(props) {
       setGroup((group) => {
         return { ...group, deleted: true };
       });
-      /*
-      io.emit("new system message", {
+      io.emit("system update message", {
         groupId: groupId,
       });
-
-       */
     } catch (e) {
       console.log("Failed to delete group")
       handleError(e.response.data.message)
@@ -226,88 +227,100 @@ export function GroupPageView(props) {
   if(group.deleted) {
     return (
       <div>
-        This group has been deleted. It doesn't exist anymore.
-        <ReportUserDialog username={"testung"}/>
+        <Typography variant="h4" align={"center"}  style={{marginTop: "40px"}}>
+          This group has been deleted.
+        </Typography>
       </div>
     );
   }
 
-  return (
-    <div className={classes.root}>
-      <Grid container spacing={2}>
-        <Grid Grid item xs={6}>
+  if(group.groupName !== "") {
+    return (
+        <div className={classes.root}>
           <Grid container spacing={2}>
-            <Grid item id="group-info-div" xs={12}>
-              <img
-                src={getFileUrl(group.pic)}
-                className={classes.image}
-                alt={"GroupPic"}
-              />
-              {joined ? (
-                <GroupInformationComponent
-                  group={group}
-                  setGroup={setGroup}
-                  joined={joined}
-                  setJoined={setJoined}
-                  handleJoin={handleJoin}
-                  handleLeave={handleLeave}
-                  handleDelete={handleDelete}
-                />
-              ) : null}
+            <Grid Grid item xs={6}>
+              <Grid container spacing={2}>
+                <Grid item id="group-info-div" xs={12}>
+                  <img
+                      src={getFileUrl(group.pic)}
+                      className={classes.image}
+                      alt={"GroupPic"}
+                  />
+                  {joined ? (
+                      <GroupInformationComponent
+                          group={group}
+                          setGroup={setGroup}
+                          joined={joined}
+                          setJoined={setJoined}
+                          handleJoin={handleJoin}
+                          handleLeave={handleLeave}
+                          handleDelete={handleDelete}
+                      />
+                  ) : null}
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={6} id="chat-div">
+              {chatLoaded ? (joined ? (
+                  <Chat groupID={groupId} />
+              ) : (
+                  <GroupInformationComponent
+                      group={group}
+                      setGroup={setGroup}
+                      joined={joined}
+                      setJoined={setJoined}
+                      handleJoin={handleJoin}
+                      handleLeave={handleLeave}
+                      handleDelete={handleDelete}
+                  />
+              )) : null}
+            </Grid>
+            <Grid item xs={12}>
+              <div style={{ display: "flex" }}>
+                {group.tags.map((x) => {
+                  return (
+                      <div style={{ marginRight: "10px" }}>
+                        <TagComponent id={x} key={x} />
+                      </div>
+                  );
+                })}
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              {group.description}
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={6} id="chat-div">
-          {chatLoaded ? (joined ? (
-            <Chat groupID={groupId} />
-          ) : (
-            <GroupInformationComponent
-              group={group}
-              setGroup={setGroup}
-              joined={joined}
-              setJoined={setJoined}
-              handleJoin={handleJoin}
-              handleLeave={handleLeave}
-              handleDelete={handleDelete}
-            />
-          )) : null}
-        </Grid>
-        <Grid item xs={12}>
-          <div style={{ display: "flex" }}>
-            {group.tags.map((x) => {
-              return (
-                <div style={{ marginRight: "10px" }}>
-                  <TagComponent id={x} key={x} />
-                </div>
-              );
-            })}
-          </div>
-        </Grid>
-        <Grid item xs={12}>
-          {group.description}
-        </Grid>
-      </Grid>
 
-      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+          <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error">
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
 
-      <Snackbar
-          open={props.location.hash === "#new"}
-          autoHideDuration={6000}
-          onClose={(_event, reason) => {
-            // Only close after autoHideDuration expired
-            if (reason === "timeout") {
-              onClose();
-            }
-          }}
-      >
-        <Alert onClose={onClose} severity="success">
-          Group created!
-        </Alert>
-      </Snackbar>
-    </div>
-  );
+          <Snackbar
+              open={props.location.hash === "#new"}
+              autoHideDuration={6000}
+              onClose={(_event, reason) => {
+                // Only close after autoHideDuration expired
+                if (reason === "timeout") {
+                  onClose();
+                }
+              }}
+          >
+            <Alert onClose={onClose} severity="success">
+              Group created!
+            </Alert>
+          </Snackbar>
+        </div>
+    );
+  } else {
+    return (
+        <div>
+          <Typography variant="h4" align={"center"}  style={{marginTop: "40px"}}>
+            This group doesn't exist.
+          </Typography>
+        </div>
+    );
+  }
+
 }
