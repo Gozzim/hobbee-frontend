@@ -52,6 +52,7 @@ const initialRegisterState = {
   password: "",
   confirmPassword: "",
   bday: null,
+  city: "",
   hobbies: [],
 };
 
@@ -104,7 +105,8 @@ export function SignUpComponent(props) {
       registerError.password !== "" ||
       registerError.username !== "" ||
       registerError.email !== "" ||
-      registerState.bday > minAge
+      registerState.bday > minAge ||
+      registerState.city === ""
     ) {
       return;
     }
@@ -115,6 +117,7 @@ export function SignUpComponent(props) {
         registerState.email,
         registerState.password,
         date,
+        registerState.city,
         registerState.hobbies
       );
     } catch (e) {
@@ -186,6 +189,10 @@ export function SignUpComponent(props) {
 
   const onChangeBday = (e) => {
     changeRegisterState({ bday: e });
+  };
+
+  const onChangeCity = (e) => {
+    changeRegisterState({ city: e.target.value });
   };
 
   return (
@@ -291,6 +298,15 @@ export function SignUpComponent(props) {
                 autoComplete={"bday"}
               />
             </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item>
+            <SignInUpInput
+              id={"city"}
+              label={"City of residence"}
+              fieldValue={registerState.city}
+              changeFunc={onChangeCity}
+              autoComplete={"address-level2"}
+            />
           </Grid>
           <Grid item>
             <TagAutocomplete
