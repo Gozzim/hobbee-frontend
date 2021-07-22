@@ -1,6 +1,6 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import Alert from "@material-ui/lab/Alert";
 import { connect } from "react-redux";
 import { sendPremiumRequest } from "../services/paymentService";
 import { withRouter } from "react-router-dom";

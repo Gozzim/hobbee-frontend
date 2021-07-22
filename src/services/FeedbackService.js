@@ -5,6 +5,5 @@ export async function submitFeedbackRequest(id, data) {
 }
 
 export async function feedbackFormRequest(id) {
-    const resp = await HttpService.get("/storage/feedback/" + id);
-    return resp.data;
+    return await HttpService.get("/storage/feedback/" + id);
 }

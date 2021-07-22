@@ -5,7 +5,7 @@ import { connect, useSelector } from "react-redux";
 import { LoginComponent } from "../../components/UserLoginComponent";
 import { login } from "../../redux/reducers/userReducer";
 import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import Alert from "@material-ui/lab/Alert";
 
 /**
  * For user login

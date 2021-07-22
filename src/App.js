@@ -25,7 +25,6 @@ export function App() {
 
   // set document title
   useEffect(() => {
-    document.title = "Hobb.ee";
     const token = getToken();
     if (token) {
       setToken(token);
@@ -36,7 +35,7 @@ export function App() {
   return (
     <div className={classes.appRoot}>
       <CssBaseline />
-      <React.StrictMode>
+      <React.Fragment>
         <Header />
         <ContentContainer footer={<Footer />}>
           <Switch>
@@ -46,6 +45,7 @@ export function App() {
                 key={i}
                 path={path}
                 render={(routeProps) => {
+                  document.title = "Hobb.ee | " + label;
                   const crumbs = routes.filter(({ path }) =>
                     typeof path === "object"
                       ? path.some((subPath) =>
@@ -64,7 +64,7 @@ export function App() {
             ))}
           </Switch>
         </ContentContainer>
-      </React.StrictMode>
+      </React.Fragment>
     </div>
   );
 }
