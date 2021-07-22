@@ -51,7 +51,7 @@ export function Notification(props) {
       onClick={props.onClickNotification}
     >
       <ListItemIcon>{getNotificationIcon(props.msgType)}</ListItemIcon>
-      <ListItemText primary={props.groupName} secondary={props.message} />
+      <ListItemText primary={props.groupName} secondary={props.message} secondaryTypographyProps={{noWrap: true}}/>
       <ListItemSecondaryAction>
         <IconButton
           edge="end"
@@ -72,5 +72,4 @@ Notification.propTypes = {
   onDeleteNotification: PropTypes.func.isRequired,
   msgType: PropTypes.string,
   message: PropTypes.string,
-  read: PropTypes.bool,
 };

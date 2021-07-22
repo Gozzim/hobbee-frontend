@@ -8,6 +8,7 @@ import {
   Typography,
   Collapse,
 } from "@material-ui/core";
+import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import { connect, useDispatch } from "react-redux";
 import { Notification } from "./Notification";
 import { TransitionGroup } from "react-transition-group";
@@ -26,12 +27,15 @@ function NotificationMenu(props) {
   };
 
   const onDeleteNotification = (id) => {
+    if (props.notifications.length <= 1) {
+      props.onClose();
+    }
     dispatch(readNotification(id));
   };
 
   const clearNotifications = () => {
-    dispatch(readAllNotifications());
     props.onClose();
+    dispatch(readAllNotifications());
   };
 
   return (
@@ -45,6 +49,7 @@ function NotificationMenu(props) {
         horizontal: "right",
       }}
     >
+      {props.notifications.length > 0 ? (<div style={{minWidth: 300, maxWidth: 500}}>
       <TransitionGroup>
         {props.notifications.map((notification) => (
           <Collapse key={notification._id}>
@@ -64,6 +69,20 @@ function NotificationMenu(props) {
           Mark all as read
         </Typography>
       </ListItem>
+      </div>) : (
+          <div style={{minWidth: 300, maxWidth: 500, minHeight: 200, maxHeight: 400,
+            display: "flex",
+          }}>
+            <ListItem style={{
+              justifyContent: "center",
+              flexDirection: 'column',
+            }}>
+          <NotificationsOffIcon color={"disabled"} style={{
+            fontSize: 40,
+          }}/>
+              <Typography style={{color: "grey", marginTop: 5}}>No notifications</Typography>
+        </ListItem>
+          </div>)}
     </Menu>
   );
 }
