@@ -13,7 +13,8 @@ import {
   RadioGroup,
   TextField,
   Tooltip,
-  IconButton, DialogContentText,
+  IconButton,
+  DialogContentText,
 } from "@material-ui/core";
 import { TagAutocomplete } from "./TagAutocomplete";
 import { TagComponent } from "./TagComponent";
@@ -143,13 +144,9 @@ export function EditGroupDialog(props) {
   };
 
   const handleDelete = () => {
-    console.log("after 0")
     props.handleDelete();
-    console.log("after 1")
     handleDeleteClose();
-    console.log("after 2")
     handleClose();
-    console.log("after 3")
   };
 
   return (

@@ -10,11 +10,11 @@ import {
   fetchGroup, deleteGroupRequest,
 } from "../services/GroupService";
 import { io } from "../services/SocketService";
-import Tooltip from "@material-ui/core/Tooltip";
 import { getFileUrl } from "../services/FileService";
 import Grid from "@material-ui/core/Grid";
 import { GroupInformationComponent } from "../components/GroupInformationComponent";
 import {Alert} from "@material-ui/lab";
+import { ReportUserDialog } from "../components/ReportUserDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -227,6 +227,7 @@ export function GroupPageView(props) {
     return (
       <div>
         This group has been deleted. It doesn't exist anymore.
+        <ReportUserDialog username={"testung"}/>
       </div>
     );
   }
