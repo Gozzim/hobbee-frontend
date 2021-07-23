@@ -1,6 +1,6 @@
 import * as React from "react";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import GroupIcon from "@material-ui/icons/Group";
 import ExploreIcon from "@material-ui/icons/Explore";
 import EventIcon from "@material-ui/icons/Event";
@@ -8,6 +8,7 @@ import { Link, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/c
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PropTypes from "prop-types";
 import { getFileUrl } from "../services/FileService";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   icons: {
@@ -46,6 +47,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+const CustomTooltip = withStyles((theme) => ({
+  tooltip: {
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    margin: 0,
+  },
+}))(Tooltip);
+
 export function GroupComponent(props) {
   const classes = useStyles();
 
@@ -60,7 +70,9 @@ export function GroupComponent(props) {
       <List>
         <ListItem disableGutters className={classes.listItem}>
           <ListItemIcon className={classes.listItemIcon}>
+            <CustomTooltip title={"City"}>
             <ExploreIcon />
+            </CustomTooltip>
           </ListItemIcon>
           <ListItemText primary={props.group.city} />
         </ListItem>
@@ -68,7 +80,9 @@ export function GroupComponent(props) {
           <>
             <ListItem disableGutters className={classes.listItem}>
               <ListItemIcon className={classes.listItemIcon}>
+                <CustomTooltip title={"Date"}>
                 <EventIcon />
+                </CustomTooltip>
               </ListItemIcon>
               <ListItemText
                 primary={new Date(props.group.date).toLocaleDateString()}
@@ -76,7 +90,9 @@ export function GroupComponent(props) {
             </ListItem>
             <ListItem disableGutters className={classes.listItem}>
               <ListItemIcon className={classes.listItemIcon}>
+                <CustomTooltip title={"Time"}>
                 <AccessTimeIcon />
+                </CustomTooltip>
               </ListItemIcon>
               <ListItemText
                 primary={new Date(props.group.date).toLocaleTimeString([], {
@@ -89,7 +105,9 @@ export function GroupComponent(props) {
         ) : null}
         <ListItem disableGutters className={classes.listItem}>
           <ListItemIcon className={classes.listItemIcon}>
+           <CustomTooltip title={"Participants"}>
             <GroupIcon />
+          </CustomTooltip>
           </ListItemIcon>
           <ListItemText
             primary={currentMembers + (maxMembers ? "/" + maxMembers : "")}
