@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     padding: "2px 4px",
     display: "flex",
     alignItems: "center",
-
   },
   pagination: {
     '& > *': {
@@ -64,8 +63,11 @@ const useStyles = makeStyles((theme) => ({
   filterContainer: {
     padding: "20px !important",
   },
-  FormControl:{
-    width: "500px",
+  resultsPerPage:{
+    padding: "2px 4px",
+    display: "flex",
+    flexDirection: 'row',
+    marginLeft: 10,
   }
 }));
 
@@ -437,8 +439,8 @@ export function SearchBarComponent(props) {
 
         <Grid container>
         <Grid item xs={6}>
-          <Grid  alignItems={"center"} justify={"flex-start"}>
-            <FormControl fullWidth>
+          <Grid>
+            <FormControl className={classes.resultsPerPage}>
               <InputLabel>Results per page</InputLabel>
               <Select
                 value={groupsOnPage}
