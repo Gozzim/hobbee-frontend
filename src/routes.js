@@ -16,6 +16,7 @@ import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PremiumSubscription/PaymentPlanView";
 import { PaymentConfirmationView } from "./views/PremiumSubscription/PaymentConfirmationView";
 import { FeedbackView } from "./views/Feedback/FeedbackView";
+import { AccountSettingsView} from "./views/PremiumSubscription/AccountSettingsView";
 
 export const routes = [
   {
@@ -57,6 +58,11 @@ export const routes = [
     path: "/premium/payment-confirmation",
     Component: PaymentConfirmationView,
     label: "Confirmation",
+  },
+  {
+    path: "/account-settings",
+    Component: AccountSettingsView,
+    label: "Account Settings",
   },
   {
     path: "/recommended",
