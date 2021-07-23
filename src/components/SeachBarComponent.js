@@ -31,12 +31,18 @@ import { GroupComponent } from "./GroupComponent";
 import { formatISO } from "date-fns";
 import { ArrowDownward, ArrowUpward, Tune } from "@material-ui/icons";
 import GroupIcon from "@material-ui/icons/Group";
+import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "2px 4px",
     display: "flex",
     alignItems: "center",
+  },
+  pagination: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
   },
   small: {
     padding: "2px 4px",
@@ -57,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
   filterContainer: {
     padding: "20px !important",
   },
+  resultsPerPage:{
+    padding: "2px 4px",
+    display: "flex",
+    flexDirection: 'row',
+    marginLeft: 10,
+  }
 }));
 
 function applyFilters(groups, filters) {
@@ -156,6 +168,10 @@ export function SearchBarComponent(props) {
   const [searchValue, setSearchValue] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
 
+  const [page, setPage] = React.useState(1);
+
+  const [groupsOnPage, setGroupsOnPage] = React.useState(15);
+
   const fuse = new Fuse(props.groups, {
     keys: ["groupName"],
   });
@@ -165,11 +181,6 @@ export function SearchBarComponent(props) {
   //const [autocompleteValue, setAutocompleteValue] = React.useState(null);
 
   const searchString = "What do you like doing?";
-  //const city = "Munich"
-  //const time = new Date("July 19, 2021 13:37")
-  //const currentMembers = 5
-  //const maxMembers = 7
-  //const groupImage = image
   const [filters, setFilters] = React.useState({
     city: "",
     from: null,
@@ -188,6 +199,9 @@ export function SearchBarComponent(props) {
     sortBy,
     ascending
   );
+
+
+  const pages = Math.max(1,Math.ceil((groupsToShow.length/groupsOnPage)));
 
   return (
     <>
@@ -423,13 +437,31 @@ export function SearchBarComponent(props) {
           ) : null}
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid container>
+        <Grid item xs={6}>
+          <Grid>
+            <FormControl className={classes.resultsPerPage}>
+              <InputLabel>Results per page</InputLabel>
+              <Select
+                value={groupsOnPage}
+                onChange={(event) => {
+                  setGroupsOnPage(event.target.value);
+                  setPage(1);
+                }}
+              >
+                <MenuItem value="9">9</MenuItem>
+                <MenuItem value="15">15</MenuItem>
+                <MenuItem value="30">30</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={6}>
           <Grid container alignItems={"center"} justify={"flex-end"}>
             <FormControl>
               <InputLabel>Sort by</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
                 value={sortBy}
                 onChange={(event) => {
                   setSortBy(event.target.value);
@@ -448,13 +480,17 @@ export function SearchBarComponent(props) {
               {ascending ? <ArrowUpward /> : <ArrowDownward />}
             </IconButton>
           </Grid>
+        </Grid>
 
+        </Grid>
+      </Grid>
+      {/*FROM HERE ON THE RESULT SECTION BEGFINS*/}
           <center>
             <h1>{props.title}</h1>
             {groupsToShow.length > 0 ? (
               <div>
                 <Grid container spacing={2} justify="center">
-                  {groupsToShow.map((group) => {
+                  {groupsToShow.slice(groupsOnPage*(page-1),page*groupsOnPage).map((group) => {
                     return (
                       <Grid item key={group._id}>
                         <GroupComponent group={group} />
@@ -471,8 +507,10 @@ export function SearchBarComponent(props) {
               </div>
             )}
           </center>
-        </Grid>
-      </Grid>
+
+      <div className={classes.pagination}>
+        <Pagination count={pages} variant="rounded" page={page} onChange={(_,p) => setPage(p)} />
+      </div>
     </>
   );
 }
