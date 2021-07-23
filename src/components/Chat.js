@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import {IconButton} from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import { ChatMessage } from "./ChatMessage";
 import { useSelector } from "react-redux";
 import { fetchProcessedGroupChat } from "../services/GroupService";
 import { io } from "../services/SocketService";
 import SendIcon from "@material-ui/icons/Send";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export function Chat(props) {
   const classes = useStyles();
 
+  const history = useHistory();
   const user = useSelector((state) => {
     return state.user;
   });
@@ -46,7 +48,7 @@ export function Chat(props) {
 
   //get initial chat
   useEffect(async () => {
-    const thisGroupChat = await fetchProcessedGroupChat(groupID);
+    const thisGroupChat = await fetchProcessedGroupChat(groupID); //TODO never call http request without try catch
     setMessages(thisGroupChat.data);
   }, []);
 
@@ -56,19 +58,24 @@ export function Chat(props) {
     io.on("disconnect", async () => {
       for (let i = 0; i < 10; i++) {
         await new Promise((r) => setTimeout(r, 1000));
-        io.emit("room", groupID);
+        io.emit("room", groupID, user.user._id);
       }
     });
     io.on("return message", (data) => {
       setMessages(data);
     });
-    io.emit("room", groupID);
+    io.emit("room", groupID, user.user._id);
   }, []);
 
+  useEffect(() => {
+    //reconnect chat on back to page without new render
+    history.listen(() => {
+      io.connect();
+    })
+  }, [history]);
+
   const sendMessage = () => {
-    if (!input.replace(/\s/g, '').length) {
-      console.log("empty or only spaces message");
-    } else {
+    if (input.replace(/\s/g, '').length) {
       io.emit("new user message", {
         sender: user.user._id,
         message: input,

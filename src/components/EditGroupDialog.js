@@ -98,18 +98,6 @@ export function EditGroupDialog(props) {
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
 
-  //connect socket
-  useEffect(() => {
-    //reconnect chat sockets if db disconnects for a short time
-    io.on("disconnect", async () => {
-      for (let i = 0; i < 10; i++) {
-        await new Promise((r) => setTimeout(r, 1000));
-        io.emit("room", props.group._id);
-      }
-    });
-    io.emit("room", props.group._id);
-  }, []);
-
   const handleOpen = () => {
     setGroupForm(props.group);
     setTouched(initialTouchedState);
