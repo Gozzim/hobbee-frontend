@@ -15,7 +15,8 @@ export const USERNAME_REGEX = /^[A-Za-z0-9\-_]{4,16}$/; // prettier-ignore
 export const GROUPNAME_REGEX = /^\S((?!(\s|_|-){2})[a-zA-Z0-9\-_\x20]){2,22}\S$/; // prettier-ignore
 
 export const ERRORS = {
-  weakPassword: "Passwords must be at least 6 characters long, contain upper & lower case letters and at least one number or special character",
+  weakPassword:
+    "Passwords must be at least 6 characters long, contain upper & lower case letters and at least one number or special character",
 };
 
 export const SUBSCRIPTION_PLAN = {
@@ -23,3 +24,22 @@ export const SUBSCRIPTION_PLAN = {
   advanced: "P-6RW02432GE006263HMDZRZZY",
   standard: "P-0MA943175X946230LMDZRZSQ",
 };
+
+export const ASCII_BEE =
+  "         `..`           ``         \n" +
+  "        `.smo.`      `.:so.`       \n" +
+  "        .+NNNy.`   `./hNNN+.       \n" +
+  "       `.mNNNN/.  `-yNNNNNy.`      \n" +
+  "       .:NNNNNy.``-hNNNNNNy.`      \n" +
+  "    `` .:NNNNdo...yNNNNNNN/.  ```` \n" +
+  "    .. `.dmy/:+s-:NNNNNNNy.:-...`` \n" +
+  "    `.` ./:-+yhh-:mdmddms-/yy-.`   \n" +
+  " `.` `.``.+syyyy+-::::-:-+syy+.`   \n" +
+  " ``````..-osyyyyssshyyyyyhyyy+.`   \n" +
+  "     `..oo+syysoosyyhhhhhhhyy:.    \n" +
+  "      `.hhhhy/-..+yyyyhhhhhh+.`    \n" +
+  "      `.yhhh+.-/+syyyyyhhhh+.`     \n" +
+  "       .:hhhsohhyyyyyyyyhy:.`      \n" +
+  "        .:yhs/:ohyyyyyso/.`        \n" +
+  "         `.....ohhyo+/-.`          \n" +
+  "           ````....```             \n";
