@@ -63,6 +63,7 @@ function SignUpView(props) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [selectedHobby, setSelectedHobby] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
   const minAge = new Date();
   minAge.setFullYear(minAge.getFullYear() - 18);
@@ -99,7 +100,7 @@ function SignUpView(props) {
 
   const onChangeHobbyInput = (event, hobbyTag) => {
     setSelectedHobby(hobbyTag);
-    if (!registerState.hobbies.includes(hobbyTag)) {
+    if (hobbyTag && !registerState.hobbies.includes(hobbyTag)) {
       try {
         changeRegisterState({ hobbies: [...registerState.hobbies, hobbyTag] });
         setSelectedHobby(null);
@@ -107,6 +108,8 @@ function SignUpView(props) {
         console.log(e.message);
       }
     }
+    setInputValue("");
+    setSelectedHobby(null);
   };
 
   const onSubmit = (e) => {
@@ -322,6 +325,16 @@ function SignUpView(props) {
               <TagAutocomplete
                   onChange={onChangeHobbyInput}
                   value={selectedHobby}
+                  inputValue={inputValue}
+                  onInputChange={(e, v) => {
+                    setInputValue(v);
+                  }}
+                  filterOptions={(options) => {
+                    return options.filter((option) =>
+                        !registerState.hobbies.includes(option)
+
+                    )
+                  }}
               />
               <div className={"creategroup-tags"}>
                 {registerState.hobbies.map((x) => {

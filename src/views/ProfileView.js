@@ -44,13 +44,14 @@ export function ProfileView(props) {
   const user = useSelector((state) => state.user.user);
   const [formData, setFormData] = React.useState(user);
   const [selectedHobby, setSelectedHobby] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
   React.useEffect(() => {
     setFormData(user);
   }, [user]);
 
   const onChangeTagInput = (event, hobbyTag) => {
-    if (!formData.hobbies.includes(hobbyTag._id)) {
+    if (hobbyTag && !formData.hobbies.includes(hobbyTag._id)) {
       try {
         setFormData(() => {
           return { ...formData, hobbies: [...formData.hobbies, hobbyTag._id] };
@@ -60,6 +61,8 @@ export function ProfileView(props) {
         console.log(e.message);
       }
     }
+    setInputValue("");
+    setSelectedHobby(null);
   };
 
   return (
@@ -192,6 +195,16 @@ export function ProfileView(props) {
                   <TagAutocomplete
                     onChange={onChangeTagInput}
                     value={selectedHobby}
+                    inputValue={inputValue}
+                    onInputChange={(e, v) => {
+                      setInputValue(v);
+                    }}
+                    filterOptions={(options) => {
+                      return options.filter((option) =>
+                          !formData.hobbies.includes(option._id)
+
+                      )
+                    }}
                   />
                 ) : null}
               </Grid>

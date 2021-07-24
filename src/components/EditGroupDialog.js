@@ -98,12 +98,13 @@ export function EditGroupDialog(props) {
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [selectedHobby, setSelectedHobby] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
   const onChangeTagInput = (event, hobbyTag) => {
     setTouched((touched) => {
       return { ...touched, tags: true };
     });
-    if (!groupForm.tags.includes(hobbyTag._id)) {
+    if (hobbyTag && !groupForm.tags.includes(hobbyTag._id)) {
       try {
         setGroupForm((groupForm) => {
           return { ...groupForm, tags: [...groupForm.tags, hobbyTag._id] };
@@ -113,6 +114,8 @@ export function EditGroupDialog(props) {
         console.log(e.message);
       }
     }
+    setInputValue("");
+    setSelectedHobby(null);
   }
 
   const handleOpen = () => {
@@ -279,6 +282,16 @@ export function EditGroupDialog(props) {
                 ? "You need at least one tag"
                 : ""
             }
+            inputValue={inputValue}
+            onInputChange={(e, v) => {
+              setInputValue(v);
+            }}
+            filterOptions={(options) => {
+              return options.filter((option) =>
+                  !groupForm.tags.includes(option._id)
+
+              )
+            }}
           />
           <div className={"creategroup-tags"}>
             {groupForm.tags.map((x) => {

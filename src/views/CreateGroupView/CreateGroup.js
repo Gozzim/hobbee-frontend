@@ -8,26 +8,30 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { TagAutocomplete } from "../../components/TagAutocomplete";
+import {
+  TagAutocomplete,
+} from "../../components/TagAutocomplete";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
 
 export function CreateGroup(props) {
   const [selectedHobby, setSelectedHobby] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
   const onChangeTagInput = (event, hobbyTag) => {
     props.setTouched((touched) => {
       return { ...touched, tags: true };
     });
-    if (!props.groupForm.tags.includes(hobbyTag)) {
+    if (hobbyTag && !props.groupForm.tags.includes(hobbyTag)) {
       try {
         props.setGroupForm((groupForm) => {
           return { ...groupForm, tags: [...groupForm.tags, hobbyTag] };
         });
-        setSelectedHobby(null);
       } catch (e) {
         console.log(e.message);
       }
     }
+    setInputValue("");
+    setSelectedHobby(null);
   };
 
   return (
@@ -124,7 +128,17 @@ export function CreateGroup(props) {
       </Typography>
 
       <TagAutocomplete
+        inputValue={inputValue}
+        onInputChange={(e, v) => {
+          setInputValue(v);
+        }}
         style={{ width: 300 }}
+        filterOptions={(options) => {
+            return options.filter((option) =>
+                !props.groupForm.tags.includes(option)
+
+            )
+        }}
         onChange={onChangeTagInput}
         value={selectedHobby}
         error={props.touched.tags && props.groupForm.tags.length === 0}

@@ -10,14 +10,20 @@ export function TagAutocomplete(props) {
     <div className={"creategroup-tags"} style={props.style}>
       <Autocomplete
         options={hobbies}
+        clearOnEscape
+        autoComplete
+        selectOnFocus
         getOptionLabel={(option) => option.title}
         onChange={props.onChange}
         value={props.value}
+        inputValue={props.inputValue}
+        onInputChange={props.onInputChange}
         fullWidth
+        filterOptions={props.filterOptions}
         renderInput={(params) => (
           <TextField
+            placeholder={"Hobbies"}
             {...params}
-            value={props.value}
             variant="outlined"
             error={props.error}
             helperText={props.helperText}
