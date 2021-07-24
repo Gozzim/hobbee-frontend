@@ -94,11 +94,11 @@ export function PaymentPlanView(props) {
               value={SUBSCRIPTION_PLAN.standard}
             />
           }
-          label={<Typography variant="h6">STANDARD - 1 Month</Typography>}
+          label={<Typography variant="h6" style={{fontWeight: "bold"}}>STANDARD - 1 Month</Typography>}
           className={classes.planBox}
         />
-        <div className={classes.optionDescriptor} style={{ top: "25px" }}>
-          2€/Month
+        <div className={classes.optionDescriptor} style={{ top: "19px" }}>
+          <Typography variant="h6">2,00€/M</Typography>
         </div>
         <FormControlLabel
           value="3-months"
@@ -109,11 +109,11 @@ export function PaymentPlanView(props) {
               value={SUBSCRIPTION_PLAN.advanced}
             />
           }
-          label={<Typography variant="h6">ADVANCED - 3 Months </Typography>}
+          label={<Typography variant="h6" style={{fontWeight: "bold"}}>ADVANCED - 3 Months </Typography>}
           className={classes.planBox}
         />
-        <div className={classes.optionDescriptor} style={{ top: "145px" }}>
-          1.75€/Month
+        <div className={classes.optionDescriptor} style={{ top: "139px" }}>
+          <Typography variant="h6">1,75€/M</Typography>
         </div>
         <FormControlLabel
           value="12-months"
@@ -124,12 +124,12 @@ export function PaymentPlanView(props) {
               value={SUBSCRIPTION_PLAN.elite}
             />
           }
-          label={<Typography variant="h6">ELITE - 12 Months</Typography>}
+          label={<Typography variant="h6" style={{fontWeight: "bold"}}>ELITE - 12 Months</Typography>}
           className={classes.planBox}
         />
         <div className={classes.recommendedTag}>RECOMMENDED</div>
-        <div className={classes.optionDescriptor} style={{ top: "265px" }}>
-          1.50€/Month
+        <div className={classes.optionDescriptor} style={{ top: "259px" }}>
+          <Typography variant="h6">1,50€/M</Typography>
         </div>
       </RadioGroup>
       <PayPalCheckout planId={selectedValue} onSuccess={setReceipt} />

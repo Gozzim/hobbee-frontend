@@ -5,7 +5,7 @@ export const HOBBEE_CREAM = "#FFF3C2";
 export const HOBBEE_BLUE = "#1CE9E3";
 
 export const BUTTON_YELLOW = "#FFDB4D";
-export const BUTTON_YELLOW_HOVER = "#FFF03B";
+export const BUTTON_YELLOW_HOVER = "#FFF0B3";
 export const BUTTON_RED = "#FF7D66";
 export const BUTTON_RED_HOVER = "#FFD4CC";
 export const PAPER_BLUE = "#EAFAF9";

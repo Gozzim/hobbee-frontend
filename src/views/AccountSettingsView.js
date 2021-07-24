@@ -5,7 +5,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText,
+  ListItemText, Snackbar,
   Typography,
 } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -17,6 +17,7 @@ import { CancelPremiumDialog } from "../components/CancelPremiumDialog";
 import { ChangePasswordDialog } from "../components/ChangePasswordDialog";
 import { useSelector } from "react-redux";
 import { SUBSCRIPTION_PLAN } from "../shared/Constants";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   deactivatedCancelSubscriptionButton: {
@@ -222,6 +223,23 @@ export function AccountSettingsView(props) {
             </Grid>
           ) : null}
         </Grid>
+
+        <Snackbar
+            open={props.location.hash === "#redirect"}
+            autoHideDuration={3000}
+            onClose={(_event, reason) => {
+              // Only close after autoHideDuration expired
+              if (reason === "timeout") {
+                props.history.replace(props.location.pathname);
+              }
+            }}
+        >
+          <Alert variant="filled" onClose={() => {
+            props.history.replace(props.location.pathname);
+          }} severity="info">
+            You already have HOBB.EE Premium!
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

@@ -14,6 +14,7 @@ import {
 import { PasswordStrengthBar } from "./UserDataInput/PasswordStrengthBar";
 import { changePasswordRequest } from "../services/UserService";
 import { Alert } from "@material-ui/lab";
+import {BUTTON_YELLOW, BUTTON_YELLOW_HOVER} from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -22,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
   changePasswordButton: {
     width: "182px",
     padding: "8px 10px",
-    backgroundColor: "#ffdb4d",
+    backgroundColor: BUTTON_YELLOW,
     color: "black",
     "&:hover": {
-      backgroundColor: "#fff0b3",
+      backgroundColor: BUTTON_YELLOW_HOVER,
     },
   },
 }));

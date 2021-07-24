@@ -29,7 +29,7 @@ import { editGroupRequest } from "../services/GroupService";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { isValidGroupname } from "../validators/GroupDataValidator";
 import { ImageUploadComponent } from "./ImageUploadComponent";
-import { HOBBEE_YELLOW } from "../shared/Constants";
+import {BUTTON_RED, BUTTON_RED_HOVER, BUTTON_YELLOW, BUTTON_YELLOW_HOVER, HOBBEE_YELLOW} from "../shared/Constants";
 import {io} from "../services/SocketService";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,22 +46,19 @@ const useStyles = makeStyles((theme) => ({
     //marginLeft: "10px",
     marginTop: "30px",
     marginBottom: "30px",
-    backgroundColor: "#ff6347",
-    borderStyle: "solid",
-    borderWidth: "4px",
-    borderColor: "#ff5233",
+    backgroundColor: BUTTON_RED,
+    padding: "8px 10px",
     color: "black",
     "&:hover": {
-      borderColor: "#e6e6e6",
+      backgroundColor: BUTTON_RED_HOVER,
     },
   },
-  updateButton: {
-    backgroundColor: HOBBEE_YELLOW,
-    color: "black",
-  },
   deleteButton: {
-    backgroundColor: "#ff6347",
+    backgroundColor: BUTTON_RED,
     color: "black",
+    "&:hover": {
+      backgroundColor: BUTTON_RED_HOVER,
+    },
   },
 }));
 
@@ -477,7 +474,6 @@ export function EditGroupDialog(props) {
           <Button
             onClick={handleUpdate}
             color="inherit"
-            className={classes.updateButton}
           >
             Update
           </Button>
