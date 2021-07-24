@@ -4,6 +4,7 @@ import { getRecommendedGroups } from "../redux/reducers/groupsReducer";
 import { SearchBar } from "../components/Search/SearchBar";
 import { SearchResults } from "../components/Search/SearchResults";
 import { useSearch } from "../hooks/useSearch";
+import { RequireLoggedIn } from "../components/RequireLoggedIn";
 
 export function RecommendedView() {
   const groups = useSelector((state) => {
@@ -20,9 +21,9 @@ export function RecommendedView() {
   }, [user.isLoggedIn]);
 
   return (
-    <>
+    <RequireLoggedIn>
       <SearchBar search={search} />
       <SearchResults search={search} title="RECOMMENDED FOR YOU" />
-    </>
+    </RequireLoggedIn>
   );
 }

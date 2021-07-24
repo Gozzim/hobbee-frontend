@@ -9,11 +9,10 @@ import { logout } from "../redux/reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({
   firstMenuitem: {
-    display: "flex",
+    display: "block !important",
     minWidth: "200px",
   },
   menuitem: {
-    display: "flex",
     minWidth: "200px",
     marginTop: theme.spacing(1),
   },
@@ -46,6 +45,11 @@ function UserMenu(props) {
     props.history.push("/login");
   };
 
+  const onClickRegister = () => {
+    props.onClose();
+    props.history.push("/register");
+  };
+
   const onClickLogout = () => {
     // trigger redux logout action
     props.dispatch(logout());
@@ -54,7 +58,7 @@ function UserMenu(props) {
     // navigate to the home page
     props.history.push("/");
   };
-  console.log(user.user);
+
   return (
     <Menu
       open={props.open}
@@ -75,7 +79,8 @@ function UserMenu(props) {
                 return props.history.push("/profile");
               }}
             >
-              Signed in as&nbsp;<b>{user.user.username}</b>
+              Signed in as {user.user.username.length < 10 ? "&nbsp;" : <br />}
+              <b>{user.user.username}</b>
             </MenuItem>,
             <Divider />,
             <MenuItem
@@ -109,8 +114,14 @@ function UserMenu(props) {
               onClick={onClickLogin}
               className={classes.menuitem}
             >
-              <VerifiedUserIcon className={classes.avatar} />
               Login
+            </MenuItem>,
+            <MenuItem
+              key="login"
+              onClick={onClickRegister}
+              className={classes.menuitem}
+            >
+              Register
             </MenuItem>,
           ]}
     </Menu>
