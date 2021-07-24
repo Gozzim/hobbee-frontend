@@ -5,9 +5,11 @@ export const HOBBEE_CREAM = "#FFF3C2";
 export const HOBBEE_BLUE = "#1CE9E3";
 
 export const BUTTON_YELLOW = "#FFDB4D";
-export const BUTTON_YELLOW_HOVER = "#FFF03B";
+export const BUTTON_YELLOW_HOVER = "#FFF0B3";
 export const BUTTON_RED = "#FF7D66";
 export const BUTTON_RED_HOVER = "#FFD4CC";
+export const BUTTON_BLUE = "#6EDED5";
+export const BUTTON_BLUE_HOVER = "#C1F1ED";
 export const PAPER_BLUE = "#EAFAF9";
 export const RADIO_BUTTON_BLUE = "#17C2BC";
 export const PAPER_CREAM = "#FFFAE6";

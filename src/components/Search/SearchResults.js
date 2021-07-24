@@ -87,7 +87,9 @@ export function SearchResults(props) {
       </Grid>
 
       <center>
-        <h1>{props.title}</h1>
+        <Typography variant="h4" style={{ fontWeight: "bold", marginBottom: "20px"}}>
+          Search Results
+        </Typography>
         {groupsToShow.length > 0 ? (
           <div>
             <Grid container spacing={2} justify="center">

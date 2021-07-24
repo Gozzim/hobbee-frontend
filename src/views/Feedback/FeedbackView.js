@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import { Button, Divider, TextField, Typography } from "@material-ui/core";
 import { HobbeeRating } from "../../components/HobbeeRating";
 import { makeStyles } from "@material-ui/core/styles";
-import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../../shared/Constants";
+import {BUTTON_YELLOW, BUTTON_YELLOW_HOVER, HOBBEE_ORANGE, HOBBEE_YELLOW} from "../../shared/Constants";
 import {
   feedbackFormRequest,
   submitFeedbackRequest,
@@ -16,9 +16,9 @@ const useStyles = makeStyles((theme) => ({
     width: "80%",
   },
   submitButton: {
-    backgroundColor: HOBBEE_ORANGE,
+    backgroundColor: BUTTON_YELLOW,
     "&:hover": {
-      backgroundColor: HOBBEE_YELLOW,
+      backgroundColor: BUTTON_YELLOW_HOVER,
     },
   },
 }));
@@ -91,13 +91,13 @@ export function FeedbackView(props) {
       <div className={classes.feedbackRoot}>
         <div style={{ marginBottom: "2rem" }}>
           <Typography
-            variant={"h2"}
+            variant={"h3"}
             align="center"
             style={{ fontWeight: "bold" }}
           >
             FEEDBACK FORM
           </Typography>
-          <Typography variant={"h4"} align="center">
+          <Typography variant={"h4"} align="center" >
             {formStatus.groupName}
           </Typography>
         </div>
@@ -224,7 +224,7 @@ export function FeedbackView(props) {
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant={"body1"} color="textPrimary">
+                <Typography variant={"body1"} color="textPrimary" style={{marginBottom: "10px", marginTop: "10px"}}>
                   Would you like to add anything else?{" "}
                   {
                     <Typography
@@ -254,7 +254,7 @@ export function FeedbackView(props) {
                   className={classes.submitButton}
                   size={"large"}
                   style={{ width: "25%" }}
-                  variant="contained"
+                  //variant="contained"
                   type={"submit"}
                 >
                   Submit
