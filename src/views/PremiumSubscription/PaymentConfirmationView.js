@@ -6,6 +6,7 @@ import PrintIcon from "@material-ui/icons/Print";
 import { Divider, Grid } from "@material-ui/core";
 import ReactToPrint from "react-to-print";
 import HobbeePremiumLogo from "../../assets/hobbee_premium.svg";
+import { HOBBEE_ORANGE } from "../../shared/Constants";
 
 const useStyles = makeStyles(() => ({
   pageContent: {
@@ -28,42 +29,55 @@ export function PaymentConfirmationView(props) {
   const componentRef = useRef();
 
   return (
-      <div className={classes.pageContent} ref={componentRef}>
-        <div style={{ textAlign: "center" }}>
-          <img src={HobbeePremiumLogo} width={"90%"} alt={"logo"} />
-        </div>
-        <Grid container direction="column" spacing={1}>
-          <Grid item container spacing={7} alignItems={"center"}>
-            <Grid item xs={2}>
-              <CheckCircleIcon style={{ fontSize: "5.5rem" }} />
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h5">Success!</Typography>
-              <Typography variant="caption">
-                Thank you for purchasing Hobb.ee PREMIUM.
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <ReactToPrint
-                trigger={() => <PrintIcon className={classes.printIcon} />}
-                content={() => componentRef.current}
-              />
-            </Grid>
+    <div className={classes.pageContent} ref={componentRef}>
+      <div style={{ textAlign: "center", marginBottom: "35px" }}>
+        <img src={HobbeePremiumLogo} width={"90%"} alt={"logo"} />
+      </div>
+      <Grid container direction="column" spacing={1}>
+        <Grid item container spacing={7} alignItems={"center"}>
+          <Grid item xs={2}>
+            <CheckCircleIcon
+              style={{ fontSize: "5.5rem", fill: HOBBEE_ORANGE }}
+            />
           </Grid>
-          <Grid item>
-            <Divider style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }} />
+          <Grid item xs={8}>
+            <Typography variant="h4" style={{ fontWeight: "bold" }}>
+              SUCCESS!
+            </Typography>
+            <Typography>Thank you for purchasing HOBB.EE Premium.</Typography>
           </Grid>
-          {Object.entries(receipt).map(([k, v]) => (
-            <Grid item>
-              <Typography variant="body1" color="textPrimary">
-                {k + ": " + v}
-              </Typography>
-            </Grid>
-          ))}
-          <Grid item>
-            <Divider style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }} />
+          <Grid item xs>
+            <ReactToPrint
+              trigger={() => <PrintIcon className={classes.printIcon} />}
+              content={() => componentRef.current}
+            />
           </Grid>
         </Grid>
-      </div>
+        <Grid item>
+          <Divider style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }} />
+        </Grid>
+        {Object.entries(receipt).map(([k, v]) => (
+          <Grid container>
+            <Grid item xs={4}>
+              <Typography
+                variant="body1"
+                color="textPrimary"
+                style={{ fontWeight: "bold" }}
+              >
+                {k}
+              </Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="body1" color="textPrimary">
+                {v}
+              </Typography>
+            </Grid>
+          </Grid>
+        ))}
+        <Grid item>
+          <Divider style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }} />
+        </Grid>
+      </Grid>
+    </div>
   );
 }
