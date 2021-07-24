@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -97,18 +97,23 @@ export function EditGroupDialog(props) {
   const [groupForm, setGroupForm] = React.useState(props.group);
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const [selectedHobby, setSelectedHobby] = useState(null);
 
-  //connect socket
-  useEffect(() => {
-    //reconnect chat sockets if db disconnects for a short time
-    io.on("disconnect", async () => {
-      for (let i = 0; i < 10; i++) {
-        await new Promise((r) => setTimeout(r, 1000));
-        io.emit("room", props.group._id);
-      }
+  const onChangeTagInput = (event, hobbyTag) => {
+    setTouched((touched) => {
+      return { ...touched, tags: true };
     });
-    io.emit("room", props.group._id);
-  }, []);
+    if (!groupForm.tags.includes(hobbyTag._id)) {
+      try {
+        setGroupForm((groupForm) => {
+          return { ...groupForm, tags: [...groupForm.tags, hobbyTag._id] };
+        });
+        setSelectedHobby(null);
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
+  }
 
   const handleOpen = () => {
     setGroupForm(props.group);
@@ -266,15 +271,8 @@ export function EditGroupDialog(props) {
             </RadioGroup>
           </FormControl>
           <TagAutocomplete
-            onChange={(tags) => {
-              setTouched((touched) => {
-                return { ...touched, tags: true };
-              });
-              setGroupForm((groupForm) => {
-                return { ...groupForm, tags };
-              });
-            }}
-            value={groupForm.tags}
+            onChange={onChangeTagInput}
+            value={selectedHobby}
             error={touched.tags && groupForm.tags.length === 0}
             helperText={
               touched.tags && groupForm.tags.length === 0
@@ -296,9 +294,7 @@ export function EditGroupDialog(props) {
                       setGroupForm((groupForm) => {
                         return {
                           ...groupForm,
-                          tags: groupForm.tags.filter((tag) => {
-                            return x !== tag;
-                          }),
+                          tags: groupForm.tags.filter((tag) => x !== tag),
                         };
                       });
                     }}

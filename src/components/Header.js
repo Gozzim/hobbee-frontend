@@ -14,13 +14,13 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import UserMenu from "./UserMenu";
-import NotificationMenu from "./NotificationMenu";
+import NotificationMenu from "./Notifications/NotificationMenu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
 import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
 import HobbeeIcon from "../assets/hobbee_white.svg";
 import { useSelector } from "react-redux";
-import { NotificationBell } from "./NotificationBell";
+import { NotificationBell } from "./Notifications/NotificationBell";
 import { HOBBEE_ORANGE } from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({

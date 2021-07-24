@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TagComponent } from "../../components/TagComponent";
 import {
   FormControl,
@@ -12,6 +12,24 @@ import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
 
 export function CreateGroup(props) {
+  const [selectedHobby, setSelectedHobby] = useState(null);
+
+  const onChangeTagInput = (event, hobbyTag) => {
+    props.setTouched((touched) => {
+      return { ...touched, tags: true };
+    });
+    if (!props.groupForm.tags.includes(hobbyTag)) {
+      try {
+        props.setGroupForm((groupForm) => {
+          return { ...groupForm, tags: [...groupForm.tags, hobbyTag] };
+        });
+        setSelectedHobby(null);
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
+  };
+
   return (
     <>
       <Typography variant="h3" component={"h1"} align={"center"} className={""}>
@@ -106,15 +124,9 @@ export function CreateGroup(props) {
       </Typography>
 
       <TagAutocomplete
-        onChange={(tags) => {
-          props.setTouched((touched) => {
-            return { ...touched, tags: true };
-          });
-          props.setGroupForm((groupForm) => {
-            return { ...groupForm, tags };
-          });
-        }}
-        value={props.groupForm.tags}
+        style={{ width: 300 }}
+        onChange={onChangeTagInput}
+        value={selectedHobby}
         error={props.touched.tags && props.groupForm.tags.length === 0}
         helperText={
           props.touched.tags && props.groupForm.tags.length === 0
@@ -126,23 +138,23 @@ export function CreateGroup(props) {
       <div className={"creategroup-tags"}>
         {props.groupForm.tags.map((x) => {
           return (
-            <TagComponent
-              id={x}
-              key={x}
-              onDelete={() => {
-                props.setTouched((touched) => {
-                  return { ...touched, tags: true };
-                });
-                props.setGroupForm((groupForm) => {
-                  return {
-                    ...groupForm,
-                    tags: groupForm.tags.filter((tag) => {
-                      return x !== tag;
-                    }),
-                  };
-                });
-              }}
-            />
+            <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+              <TagComponent
+                id={x._id}
+                key={x._id}
+                onDelete={() => {
+                  props.setTouched((touched) => {
+                    return { ...touched, tags: true };
+                  });
+                  props.setGroupForm((groupForm) => {
+                    return {
+                      ...groupForm,
+                      tags: groupForm.tags.filter((tag) => x._id !== tag._id),
+                    };
+                  });
+                }}
+              />
+            </div>
           );
         })}
       </div>
