@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
 import { connect } from "react-redux";
 import { fetchNotifications } from "./redux/reducers/notificationReducer";
+import { ASCII_BEE } from "./shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   appRoot: {
@@ -35,6 +36,10 @@ function App() {
       dispatch(authReady());
     }
   }, []);
+
+  useEffect(() => {
+    console.log(ASCII_BEE)
+  })
 
   return (
     <div className={classes.appRoot}>

@@ -32,3 +32,22 @@ export const SUBSCRIPTION_PLAN = {
   advanced: "P-6RW02432GE006263HMDZRZZY",
   standard: "P-0MA943175X946230LMDZRZSQ",
 };
+
+export const ASCII_BEE =
+  "         `..`           ``         \n" +
+  "        `.smo.`      `.:so.`       \n" +
+  "        .+NNNy.`   `./hNNN+.       \n" +
+  "       `.mNNNN/.  `-yNNNNNy.`      \n" +
+  "       .:NNNNNy.``-hNNNNNNy.`      \n" +
+  "    `` .:NNNNdo...yNNNNNNN/.  ```` \n" +
+  "    .. `.dmy/:+s-:NNNNNNNy.:-...`` \n" +
+  "    `.` ./:-+yhh-:mdmddms-/yy-.`   \n" +
+  " `.` `.``.+syyyy+-::::-:-+syy+.`   \n" +
+  " ``````..-osyyyyssshyyyyyhyyy+.`   \n" +
+  "     `..oo+syysoosyyhhhhhhhyy:.    \n" +
+  "      `.hhhhy/-..+yyyyhhhhhh+.`    \n" +
+  "      `.yhhh+.-/+syyyyyhhhh+.`     \n" +
+  "       .:hhhsohhyyyyyyyyhy:.`      \n" +
+  "        .:yhs/:ohyyyyyso/.`        \n" +
+  "         `.....ohhyo+/-.`          \n" +
+  "           ````....```             \n";

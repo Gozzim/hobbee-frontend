@@ -22,78 +22,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-  pageContent: {
-    marginTop: "30px",
-    display: "flex",
-  },
   image: {
     borderRadius: "10px",
     objectFit: "contain",
     maxWidth: "100%",
     marginBottom: "10px",
     boxShadow: "0 3px 10px rgb(0 0 0 / 0.3)",
-  },
-  chat: {
-    fontFamily: "UD Digi KyoKasho NK-R",
-    verticalAlign: "top",
-    color: "#32210B",
-    flex: 2,
-  },
-  infoNotJoined: {
-    fontFamily: "UD Digi KyoKasho NK-R",
-    display: "inline-block",
-    verticalAlign: "top",
-    color: "#32210B",
-  },
-  infoJoined: {
-    fontFamily: "UD Digi KyoKasho NK-R",
-    verticalAlign: "top",
-    color: "#32210B",
-    position: "relative",
-  },
-  detailsItem: {
-    display: "flex",
-    alignItems: "center",
-    flexWrap: "wrap",
-    margin: "20px",
-  },
-  detailsItemText: {
-    wordBreak: "break-all",
-    color: "#32210B",
-    marginLeft: "20px",
-  },
-  joinButton: {
-    width: "200px",
-    backgroundColor: "#1CE9E3",
-    fontSize: 15,
-    padding: "2px",
-    "&:hover": {
-      backgroundColor: "#FFCC00",
-      color: "#32210B",
-    },
-  },
-  leaveButton: {
-    position: "absolute",
-    right: 50,
-    top: -5,
-  },
-  editButton: {
-    position: "absolute",
-    right: 50,
-    top: 205,
-  },
-  fab: {
-    margin: theme.spacing(2),
-  },
-  absolute: {
-    position: "absolute",
-    bottom: theme.spacing(2),
-    right: theme.spacing(3),
   },
 }));
 
@@ -120,11 +54,12 @@ const initialSnackbar = {
 export function GroupPageView(props) {
   const classes = useStyles();
   const groupId = props.match.params.id;
+
   const [joined, setJoined] = useState(false);
   const [group, setGroup] = useState(initialState);
   const [chatLoaded, setChatLoaded] = useState(false);
-  const [snackbar, setSnackbar] = React.useState(initialSnackbar);
-  const [pageLoaded, setPageLoaded] = React.useState(false);
+  const [snackbar, setSnackbar] = useState(initialSnackbar);
+  const [pageLoaded, setpageLoaded] = useState(false);
   const user = useSelector(
       (state) => {return state.user;}
   );
@@ -147,12 +82,14 @@ export function GroupPageView(props) {
   }, [user.user, joined]);
 
   //connect socket
-  useEffect(async () => {
-    io.on("return message", async (data) => {
+  useEffect(() => {
+    io.on("return message", async () => {
       const thisGroup = await fetchGroup(groupId);
       setGroup(thisGroup.data);
     });
-    return () => io.destroy();
+    return () => {
+      io.close();
+    };
   }, []);
 
   //dynamically adjust chat height to group info height
@@ -169,11 +106,8 @@ export function GroupPageView(props) {
   }, [group]);
 
   async function handleJoin() {
-    console.log("Joining Group");
     try {
-      const result = await joinGroupRequest(groupId);
-      console.log(result.data.message);
-      console.log("test");
+      const result = await joinGroupRequest(groupId); //TODO handling
       setJoined(true);
       io.emit("system update message", {
         groupId: groupId,
@@ -185,22 +119,18 @@ export function GroupPageView(props) {
   }
 
   async function handleLeave() {
-    console.log("Leaving Group");
     try {
-      const result = await leaveGroupRequest(groupId);
-      console.log(result.data);
+      const result = await leaveGroupRequest(groupId); //TODO handling
       setJoined(false);
       io.emit("system update message", {
         groupId: groupId,
       });
     } catch (e) {
-      console.log("Failed to leave group");
       handleError(e.response.data.message);
     }
   }
 
   async function handleDelete() {
-    console.log("Deleting Group");
     try {
       await deleteGroupRequest(groupId);
       setGroup((group) => {
@@ -238,7 +168,7 @@ export function GroupPageView(props) {
   };
 
   if (!pageLoaded) {
-    return (<div/>);
+    return <div/>;
   } else {
     if (group.deleted) {
       return (
