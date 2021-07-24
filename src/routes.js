@@ -16,7 +16,7 @@ import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PremiumSubscription/PaymentPlanView";
 import { PaymentConfirmationView } from "./views/PremiumSubscription/PaymentConfirmationView";
 import { FeedbackView } from "./views/Feedback/FeedbackView";
-import { AccountSettingsView} from "./views/PremiumSubscription/AccountSettingsView";
+import { AccountSettingsView} from "./views/AccountSettingsView";
 
 export const routes = [
   {

@@ -16,6 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import GroupInformationComponent from "../components/GroupInformationComponent";
 import { Alert } from "@material-ui/lab";
 import Typography from "@material-ui/core/Typography";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -123,23 +124,27 @@ export function GroupPageView(props) {
   const [group, setGroup] = useState(initialState);
   const [chatLoaded, setChatLoaded] = useState(false);
   const [snackbar, setSnackbar] = React.useState(initialSnackbar);
-  const [pageLoaded, setpageLoaded] = React.useState(false);
+  const [pageLoaded, setPageLoaded] = React.useState(false);
+  const user = useSelector(
+      (state) => {return state.user;}
+  );
 
-  useEffect(async () => {
+  useEffect(() => {
     try {
-      const thisGroup = fetchGroup(groupId);
-      thisGroup.then((response) => {
-        setpageLoaded(true);
-        setGroup(response.data);
-        if (response.data.chat) {
-          setJoined(true);
-        }
-      });
+      if(user.isLoggedIn) {
+        const thisGroup = fetchGroup(groupId);
+        thisGroup.then((response) => {
+          setPageLoaded(true);
+          setGroup(response.data);
+          if (response.data.chat) {
+            setJoined(true);
+          }
+        });
+      }
     } catch (e) {
       console.log(e.response.data.message);
     }
-  }, [joined]);
-  console.log(group);
+  }, [user.user, joined]);
 
   //connect socket
   useEffect(async () => {
@@ -225,7 +230,6 @@ export function GroupPageView(props) {
     if (reason === "clickaway") {
       return;
     }
-
     setSnackbar({ open: false, message: "" });
   };
 
@@ -234,7 +238,7 @@ export function GroupPageView(props) {
   };
 
   if (!pageLoaded) {
-    return <div/>;
+    return (<div/>);
   } else {
     if (group.deleted) {
       return (
@@ -313,7 +317,7 @@ export function GroupPageView(props) {
             autoHideDuration={4000}
             onClose={handleClose}
           >
-            <Alert onClose={handleClose} severity="error">
+            <Alert variant="filled" onClose={handleClose} severity="error">
               {snackbar.message}
             </Alert>
           </Snackbar>
@@ -328,7 +332,7 @@ export function GroupPageView(props) {
               }
             }}
           >
-            <Alert onClose={onClose} severity="success">
+            <Alert variant="filled" onClose={onClose} severity="success">
               Group created!
             </Alert>
           </Snackbar>

@@ -66,6 +66,10 @@ function GroupInformationComponent(props) {
     return state.user;
   });
 
+  if(props.group.groupName === "") {
+    return <div/>
+  }
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>

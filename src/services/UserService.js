@@ -32,6 +32,13 @@ export async function resetPasswordRequest(user, token, password) {
   return await processToken(resp.data.token);
 }
 
+export async function changePasswordRequest(current, password) {
+   return await HttpService.post("user/updatePass", {
+    current: current,
+    password: password,
+  });
+}
+
 export async function isUsernameAvailable(username) {
   try {
     const resp = await HttpService.post("auth/exists/username", {username: username});
