@@ -1,12 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRecommendedGroups } from "../redux/reducers/groupsReducer";
-import { SearchBarComponent } from "../components/SeachBarComponent";
+import { SearchBar } from "../components/Search/SearchBar";
+import { SearchResults } from "../components/Search/SearchResults";
+import { useSearch } from "../hooks/useSearch";
 
 export function RecommendedView() {
   const groups = useSelector((state) => {
     return state.groups.recommended.map((id) => state.groups.data[id]);
   });
+  const search = useSearch({ groups });
 
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -16,5 +19,10 @@ export function RecommendedView() {
     }
   }, [user.isLoggedIn]);
 
-  return <SearchBarComponent groups={groups} title="RECOMMENDED FOR YOU" />;
+  return (
+    <>
+      <SearchBar search={search} />
+      <SearchResults search={search} title="RECOMMENDED FOR YOU" />
+    </>
+  );
 }
