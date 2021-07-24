@@ -9,9 +9,9 @@ import { Alert } from "@material-ui/lab";
 import { login, setAuthError } from "../../redux/reducers/userReducer";
 import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../../shared/Constants";
 import HobbeeIcon from "../../assets/hobbee_white.svg";
-import { SignInUpInput } from "../../components/SignInUpInput";
-import { PasswordEye } from "../../components/PasswordEye";
-import { ForgotPasswordDialog } from "../../components/ForgotPasswordDialog";
+import { SignInUpInput } from "../../components/UserDataInput/SignInUpInput";
+import { PasswordEye } from "../../components/UserDataInput/PasswordEye";
+import { ForgotPasswordDialog } from "../../components/UserDataInput/ForgotPasswordDialog";
 
 const useStyles = makeStyles((theme) => ({
   userLoginRoot: {

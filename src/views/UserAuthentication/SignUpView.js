@@ -18,9 +18,9 @@ import {
 } from "../../validators/UserDataValidator";
 import { ERRORS, HOBBEE_ORANGE, HOBBEE_YELLOW } from "../../shared/Constants";
 import HobbeeIcon from "../../assets/hobbee_white.svg";
-import { SignInUpInput } from "../../components/SignInUpInput";
-import { PasswordEye } from "../../components/PasswordEye";
-import { PasswordStrengthBar } from "../../components/PasswordStrengthBar";
+import { SignInUpInput } from "../../components/UserDataInput/SignInUpInput";
+import { PasswordEye } from "../../components/UserDataInput/PasswordEye";
+import { PasswordStrengthBar } from "../../components/UserDataInput/PasswordStrengthBar";
 import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { TagComponent } from "../../components/TagComponent";
 

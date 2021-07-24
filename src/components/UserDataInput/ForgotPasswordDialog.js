@@ -9,8 +9,8 @@ import {
   DialogTitle,
   Typography,
 } from "@material-ui/core";
-import { HOBBEE_ORANGE } from "../shared/Constants";
-import { forgotPasswordRequest } from "../services/UserService";
+import { HOBBEE_ORANGE } from "../../shared/Constants";
+import { forgotPasswordRequest } from "../../services/UserService";
 import { SignInUpInput } from "./SignInUpInput";
 
 export function ForgotPasswordDialog(props) {
