@@ -137,7 +137,7 @@ export function HomeView(props) {
         <SearchBar search={search} />
       </div>
 
-      {search.searchValue ? (
+      {search.searchValue || search.hasFilters ? (
         <SearchResults search={search} title="Search results" />
       ) : (
         <div className={classes.bottomContent}>

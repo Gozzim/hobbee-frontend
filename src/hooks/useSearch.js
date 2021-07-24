@@ -1,9 +1,26 @@
 import * as React from "react";
+import equal from "fast-deep-equal";
 import Fuse from "fuse.js";
+
+const initialFiltersState = {
+  city: "",
+  from: null,
+  to: null,
+  participants: "",
+  slots: "",
+  online: true,
+  offline: true,
+  tags: [],
+};
 
 export function useSearch(args) {
   const { groups, initialGroupsOnPage = 15 } = args;
   let results = [...groups];
+
+  results = results.filter((group) => {
+    const expired = group.date && group.date < new Date().toISOString();
+    return !group.deleted && !expired;
+  });
 
   // Search
   const [searchValue, setSearchValue] = React.useState("");
@@ -15,16 +32,7 @@ export function useSearch(args) {
   }
 
   // Filters
-  const [filters, setFilters] = React.useState({
-    city: "",
-    from: null,
-    to: null,
-    participants: "",
-    slots: "",
-    online: true,
-    offline: true,
-    tags: [],
-  });
+  const [filters, setFilters] = React.useState(initialFiltersState);
   results = applyFilters(results, filters);
 
   // Sorting
@@ -51,6 +59,7 @@ export function useSearch(args) {
     groupsOnPage,
     setGroupsOnPage,
     results,
+    hasFilters: !equal(filters, initialFiltersState),
   };
 }
 
@@ -122,6 +131,15 @@ function applySorting(groups, sortBy, ascending) {
 
   if (sortBy === "timestamp") {
     sortedGroups.sort((a, b) => {
+      console.log(a);
+      const aPremium = a.groupOwner.premium.active;
+      const bPremium = b.groupOwner.premium.active;
+      if (aPremium && !bPremium) {
+        return -1;
+      }
+      if (!aPremium && bPremium) {
+        return 1;
+      }
       return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
     });
   }
