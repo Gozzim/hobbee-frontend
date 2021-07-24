@@ -76,17 +76,19 @@ function UserMenu(props) {
               key="user"
               className={classes.firstMenuitem}
               onClick={() => {
-                return props.history.push("/profile");
+                props.onClose();
+                props.history.push("/profile");
               }}
             >
-              Signed in as {user.user.username.length < 10 ? "&nbsp;" : <br />}
+              Signed in as {user.user.username.length < 10 ? "" : <br />}
               <b>{user.user.username}</b>
             </MenuItem>,
             <Divider />,
             <MenuItem
               className={classes.menuitem}
               onClick={() => {
-                return props.history.push("/profile");
+                props.onClose();
+                props.history.push("/profile");
               }}
             >
               My profile
@@ -94,7 +96,8 @@ function UserMenu(props) {
             <MenuItem
               className={classes.menuitem}
               onClick={() => {
-                return props.history.push("/account-settings");
+                props.onClose();
+                props.history.push("/account-settings");
               }}
             >
               Account Settings
