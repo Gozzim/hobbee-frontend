@@ -123,6 +123,13 @@ function SignUpView(props) {
     ) {
       return;
     }
+    if (registerState.hobbies.length < 2) {
+      changeRegisterError({
+        general:
+            "You need to select at least 2 hobbies.",
+      });
+      return;
+    }
     try {
       const date = formatISO(registerState.bday);
       props.dispatch(register({
