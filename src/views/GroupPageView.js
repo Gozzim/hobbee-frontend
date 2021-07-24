@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import "../views/style.css";
 import { Snackbar } from "@material-ui/core";
-import { Chat } from "../components/Chat";
+import { Chat } from "../components/Chat/Chat";
 import { TagComponent } from "../components/TagComponent";
 import {
   joinGroupRequest,

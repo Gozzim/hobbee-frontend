@@ -4,13 +4,13 @@ import TextField from "@material-ui/core/TextField";
 import { IconButton } from "@material-ui/core";
 import { ChatMessage } from "./ChatMessage";
 import { useSelector } from "react-redux";
-import { fetchProcessedGroupChat } from "../services/GroupService";
-import { io } from "../services/SocketService";
+import { fetchProcessedGroupChat } from "../../services/GroupService";
+import { io } from "../../services/SocketService";
 import SendIcon from "@material-ui/icons/Send";
 import { useHistory } from "react-router";
 
 import Picker from 'emoji-picker-react';
-import { PasswordEye } from "./UserDataInput/PasswordEye";
+import { PasswordEye } from "../UserDataInput/PasswordEye";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import EmojiMenu from "./EmojiMenu";
 
