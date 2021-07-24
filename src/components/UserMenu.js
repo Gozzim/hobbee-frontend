@@ -83,8 +83,9 @@ function UserMenu(props) {
               Signed in as {user.user.username.length < 10 ? "" : <br />}
               <b>{user.user.username}</b>
             </MenuItem>,
-            <Divider />,
+            <Divider key={"divider1"} />,
             <MenuItem
+              key={"profile"}
               className={classes.menuitem}
               onClick={() => {
                 props.onClose();
@@ -94,6 +95,7 @@ function UserMenu(props) {
               My profile
             </MenuItem>,
             <MenuItem
+              key={"settings"}
               className={classes.menuitem}
               onClick={() => {
                 props.onClose();
@@ -102,7 +104,7 @@ function UserMenu(props) {
             >
               Account Settings
             </MenuItem>,
-            <Divider />,
+            <Divider key={"divider2"} />,
             <MenuItem
               key="logout"
               onClick={onClickLogout}
@@ -120,7 +122,7 @@ function UserMenu(props) {
               Login
             </MenuItem>,
             <MenuItem
-              key="login"
+              key="register"
               onClick={onClickRegister}
               className={classes.menuitem}
             >

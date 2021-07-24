@@ -24,11 +24,11 @@ export function MyGroupsResultsComponent(props) {
         <h1> YOUR GROUPS </h1>
       </center>
 
-      <Grid container spacing={2} justify="center">
+      <Grid container spacing={2} justifyContent="center">
         {groups.map((a) => {
           return (
-            <Grid item>
-              <GroupComponent group={a} />{" "}
+            <Grid item key={a._id}>
+              <GroupComponent group={a} />
             </Grid>
           );
         })}
