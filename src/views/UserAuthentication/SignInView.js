@@ -1,20 +1,54 @@
-import React, { useEffect } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, withRouter } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
+import { Button, Divider, Snackbar, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import { Alert } from "@material-ui/lab";
 
-import { LoginComponent } from "../../components/UserLoginComponent";
-import { login } from "../../redux/reducers/userReducer";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+import { login, setAuthError } from "../../redux/reducers/userReducer";
+import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../../shared/Constants";
+import HobbeeIcon from "../../assets/hobbee_white.svg";
+import { SignInUpInput } from "../../components/SignInUpInput";
+import { PasswordEye } from "../../components/PasswordEye";
+import { ForgotPasswordDialog } from "../../components/ForgotPasswordDialog";
 
-/**
- * For user login
- * @param {props} props
- */
+const useStyles = makeStyles((theme) => ({
+  userLoginRoot: {
+    margin: "auto",
+    width: "60%",
+  },
+  submitButton: {
+    backgroundColor: HOBBEE_ORANGE,
+    "&:hover": {
+      backgroundColor: HOBBEE_YELLOW,
+    },
+  },
+}));
+
 function SignInView(props) {
+  const classes = useStyles();
   const user = useSelector((state) => state.user);
 
-  const showNotification = props.location.hash === "#forbidden";
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [loginError, setLoginError] = useState("");
+  const [forgotOpen, setForgotOpen] = useState(false);
+
+  useEffect(() => {
+    if (user.error) {
+      setLoginError("Invalid login credentials");
+      props.dispatch(setAuthError(null));
+    }
+  }, [user.error]);
+
+  useEffect(() => {
+    if (user.user) {
+      onAfterLogin();
+    }
+  }, [user, props.history]);
 
   const onAfterLogin = () => {
     let targetPath = "/";
@@ -27,24 +61,29 @@ function SignInView(props) {
     props.history.push(targetPath);
   };
 
-  useEffect(() => {
-    if (user.user) {
-      onAfterLogin();
-    }
-  }, [user, props.history]);
+  const onClose = () => {
+    props.history.replace(props.location.pathname);
+  };
 
-  const onLogin = (username, password) => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     props.dispatch(login({ username, password }));
   };
 
-  const onClose = () => {
-    props.history.replace(props.location.pathname);
+  const onChangeUsername = (e) => {
+    setUsername(e.target.value);
+    setLoginError("");
+  };
+
+  const onChangePassword = (e) => {
+    setPassword(e.target.value);
+    setLoginError("");
   };
 
   return (
     <>
       <Snackbar
-        open={showNotification}
+        open={props.location.hash === "#forbidden"}
         autoHideDuration={6000}
         onClose={(_event, reason) => {
           // Only close after autoHideDuration expired
@@ -53,11 +92,96 @@ function SignInView(props) {
           }
         }}
       >
-        <Alert onClose={onClose} severity="error">
-          You need to be logged in to access that page!
+        <Alert variant={"filled"} onClose={onClose} severity="error">
+          Please sign in to access this page.
         </Alert>
       </Snackbar>
-      <LoginComponent user={user} onLogin={onLogin} />
+      <div className={classes.userLoginRoot}>
+        <div>
+          <img src={HobbeeIcon} width={"100%"} alt={"logo"} />
+        </div>
+        <form onSubmit={onSubmit}>
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <SignInUpInput
+                id={"username"}
+                label={"Username or Email"}
+                fieldValue={username}
+                changeFunc={onChangeUsername}
+                inputLabelProps={{ required: false }}
+                inputError={loginError !== ""}
+                autoComplete={"username"}
+              />
+            </Grid>
+            <Grid item>
+              <SignInUpInput
+                id={"password"}
+                label={"Password"}
+                fieldValue={password}
+                changeFunc={onChangePassword}
+                fieldType={showPassword ? "text" : "password"}
+                inputProps={{
+                  endAdornment: (
+                    <PasswordEye
+                      onClickEye={() => {
+                        setShowPassword(!showPassword);
+                      }}
+                      isShown={showPassword}
+                    />
+                  ),
+                }}
+                inputLabelProps={{ required: false }}
+                inputError={loginError !== ""}
+                autoComplete={"current-password"}
+              />
+            </Grid>
+            {loginError !== "" && (
+              <Grid item>
+                <Typography color="error">{loginError}</Typography>
+              </Grid>
+            )}
+            <Grid item>
+              <Button
+                fullWidth
+                className={classes.submitButton}
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
+                Sign In
+              </Button>
+            </Grid>
+            <Grid item>
+              <Divider key={"divider"} />
+            </Grid>
+            <Grid item>
+              <Typography align="center" style={{ fontWeight: "bold" }}>
+                New to Hobb.ee?{" "}
+                <Link
+                  style={{ color: HOBBEE_ORANGE, textDecoration: "none" }}
+                  to={"/register"}
+                >
+                  Create an account
+                </Link>
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography align="center" variant="body2">
+                <Link
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  onClick={() => setForgotOpen(true)}
+                >
+                  Forgot Password?
+                </Link>
+              </Typography>
+            </Grid>
+          </Grid>
+        </form>
+        <ForgotPasswordDialog
+          open={forgotOpen}
+          onClose={() => setForgotOpen(false)}
+        />
+      </div>
     </>
   );
 }
