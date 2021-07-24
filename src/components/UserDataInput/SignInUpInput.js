@@ -17,6 +17,7 @@ export function SignInUpInput(props) {
       error={props.inputError}
       helperText={props.errorMessage}
       autoComplete={props.autoComplete}
+      className={props.className}
     />
   );
 }

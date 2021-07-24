@@ -86,8 +86,13 @@ function UserMenu(props) {
             >
               My profile
             </MenuItem>,
-            <MenuItem className={classes.menuitem}>
-              {user.user.premium.active ? "My premium" : "Get premium"}
+            <MenuItem
+              className={classes.menuitem}
+              onClick={() => {
+                return props.history.push("/account-settings");
+              }}
+            >
+              Account Settings
             </MenuItem>,
             <Divider />,
             <MenuItem
