@@ -2,12 +2,16 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { Menu, MenuItem, Avatar, Divider } from "@material-ui/core";
+import { Menu, MenuItem, Divider } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { logout } from "../redux/reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({
+  firstMenuitem: {
+    display: "flex",
+    minWidth: "200px",
+  },
   menuitem: {
     display: "flex",
     minWidth: "200px",
@@ -25,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
 function UserMenu(props) {
   const classes = useStyles();
 
-  const user = useSelector((state) => {return state.user});
+  const user = useSelector((state) => {
+    return state.user;
+  });
 
   const onClickLogin = () => {
     // store current site
@@ -48,7 +54,7 @@ function UserMenu(props) {
     // navigate to the home page
     props.history.push("/");
   };
-
+  console.log(user.user);
   return (
     <Menu
       open={props.open}
@@ -62,13 +68,28 @@ function UserMenu(props) {
     >
       {user.user
         ? [
-            <MenuItem key="user" className={classes.menuitem}>
-              <Avatar className={classes.avatar}>
-                {user.user.username ? user.user.username[0] : ""}
-              </Avatar>
-              {user.user.username}
+            <MenuItem
+              key="user"
+              className={classes.firstMenuitem}
+              onClick={() => {
+                return props.history.push("/profile");
+              }}
+            >
+              Signed in as&nbsp;<b>{user.user.username}</b>
             </MenuItem>,
-            <Divider key="divider" />,
+            <Divider />,
+            <MenuItem
+              className={classes.menuitem}
+              onClick={() => {
+                return props.history.push("/profile");
+              }}
+            >
+              My profile
+            </MenuItem>,
+            <MenuItem className={classes.menuitem}>
+              {user.user.premium.active ? "My premium" : "Get premium"}
+            </MenuItem>,
+            <Divider />,
             <MenuItem
               key="logout"
               onClick={onClickLogout}

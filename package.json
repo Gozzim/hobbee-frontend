@@ -1,7 +1,6 @@
 {
   "name": "hobbee-webapp",
   "version": "1.0.0",
-  "proxy": "http://localhost:4000",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
@@ -51,6 +50,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-to-print": "^2.12.6",
+    "react-transition-group": "^4.4.2",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
     "serve": "^12.0.0",
