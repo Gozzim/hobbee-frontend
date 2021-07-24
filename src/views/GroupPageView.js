@@ -66,7 +66,7 @@ export function GroupPageView(props) {
 
   useEffect(() => {
     try {
-      if(user.isLoggedIn) {
+      if(user.authReady) {
         const thisGroup = fetchGroup(groupId);
         thisGroup.then((response) => {
           setPageLoaded(true);
@@ -79,7 +79,7 @@ export function GroupPageView(props) {
     } catch (e) {
       console.log(e.response.data.message);
     }
-  }, [user.user, joined]);
+  }, [user.authReady, joined]);
 
   //connect socket
   useEffect(() => {
