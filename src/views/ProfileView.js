@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -43,10 +43,24 @@ export function ProfileView(props) {
   const [tags, setTags] = React.useState([]);
   const user = useSelector((state) => state.user.user);
   const [formData, setFormData] = React.useState(user);
+  const [selectedHobby, setSelectedHobby] = useState(null);
 
   React.useEffect(() => {
     setFormData(user);
   }, [user]);
+
+  const onChangeTagInput = (event, hobbyTag) => {
+    if (!formData.hobbies.includes(hobbyTag._id)) {
+      try {
+        setFormData(() => {
+          return { ...formData, hobbies: [...formData.hobbies, hobbyTag._id] };
+        });
+        setSelectedHobby(null);
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
+  };
 
   return (
     <Editable
@@ -150,36 +164,34 @@ export function ProfileView(props) {
             <Grid container spacing={2}>
               {formData.hobbies.map((x) => {
                 return (
-                  <TagComponent
-                    id={x}
-                    key={x}
-                    onDelete={
-                      editing
-                        ? () => {
-                            setFormData((formData) => {
-                              return {
-                                ...formData,
-                                hobbies: formData.hobbies.filter((hobby) => {
-                                  return x !== hobby;
-                                }),
-                              };
-                            });
-                          }
-                        : undefined
-                    }
-                  />
+                  <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+                    <TagComponent
+                      id={x}
+                      key={x}
+                      onDelete={
+                        editing
+                          ? () => {
+                              setFormData((formData) => {
+                                return {
+                                  ...formData,
+                                  hobbies: formData.hobbies.filter((hobby) => {
+                                    return x !== hobby;
+                                  }),
+                                };
+                              });
+                            }
+                          : undefined
+                      }
+                    />
+                  </div>
                 );
               })}
 
               <Grid item>
                 {editing ? (
                   <TagAutocomplete
-                    onChange={(hobbies) => {
-                      setFormData((formData) => {
-                        return { ...formData, hobbies };
-                      });
-                    }}
-                    value={formData.hobbies}
+                    onChange={onChangeTagInput}
+                    value={selectedHobby}
                   />
                 ) : null}
               </Grid>

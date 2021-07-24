@@ -1,43 +1,29 @@
 import { Autocomplete } from "@material-ui/lab";
-import { IconButton, TextField } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+import { TextField } from "@material-ui/core";
 import React from "react";
 import { useTags } from "../hooks/useTags";
 
 export function TagAutocomplete(props) {
   const hobbies = useTags();
-  const [autocompleteValue, setAutocompleteValue] = React.useState(null);
+
   return (
-    <div className={"creategroup-tags"}>
+    <div className={"creategroup-tags"} style={props.style}>
       <Autocomplete
         options={hobbies}
         getOptionLabel={(option) => option.title}
-        onChange={(event, autoValue) => {
-          setAutocompleteValue(autoValue);
-        }}
-        value={autocompleteValue}
-        style={{ width: 300 }}
+        onChange={props.onChange}
+        value={props.value}
+        fullWidth
         renderInput={(params) => (
           <TextField
             {...params}
+            value={props.value}
             variant="outlined"
             error={props.error}
             helperText={props.helperText}
           />
         )}
       />
-      <IconButton
-        onClick={() => {
-          if (
-            autocompleteValue &&
-            !props.value.includes(autocompleteValue._id)
-          ) {
-            props.onChange([...props.value, autocompleteValue._id]);
-          }
-        }}
-      >
-        <AddIcon />
-      </IconButton>
     </div>
   );
 }

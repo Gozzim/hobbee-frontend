@@ -31,6 +31,7 @@ import { GroupComponent } from "./GroupComponent";
 import { formatISO } from "date-fns";
 import { ArrowDownward, ArrowUpward, Tune } from "@material-ui/icons";
 import GroupIcon from "@material-ui/icons/Group";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -155,6 +156,20 @@ export function SearchBarComponent(props) {
   const classes = useStyles();
   const [searchValue, setSearchValue] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
+  const [selectedHobby, setSelectedHobby] = useState(null);
+
+  const onChangeTagInput = (event, hobbyTag) => {
+    if (!filters.tags.includes(hobbyTag._id)) {
+      try {
+        setFilters((filters) => {
+          return { ...filters, tags: [...filters.tags, hobbyTag._id] };
+        });
+        setSelectedHobby(null);
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
+  };
 
   const fuse = new Fuse(props.groups, {
     keys: ["groupName"],
@@ -194,6 +209,9 @@ export function SearchBarComponent(props) {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Paper
+            style={{
+              boxShadow: "0 3px 10px rgb(0 0 0 / 0.3)",
+            }}
             component="form"
             className={classes.root}
             onSubmit={(e) => {
@@ -389,32 +407,30 @@ export function SearchBarComponent(props) {
 
               <Grid item xs={6}>
                 <TagAutocomplete
-                  onChange={(tags) => {
-                    setFilters((filters) => {
-                      return { ...filters, tags };
-                    });
-                  }}
-                  value={filters.tags}
+                  onChange={onChangeTagInput}
+                  value={selectedHobby}
                 />
               </Grid>
               <Grid item xs={6}>
                 <div className={"creategroup-tags"}>
                   {filters.tags.map((x) => {
                     return (
-                      <TagComponent
-                        id={x}
-                        key={x}
-                        onDelete={() => {
-                          setFilters((filters) => {
-                            return {
-                              ...filters,
-                              tags: filters.tags.filter((tag) => {
-                                return x !== tag;
-                              }),
-                            };
-                          });
-                        }}
-                      />
+                      <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+                        <TagComponent
+                          id={x}
+                          key={x}
+                          onDelete={() => {
+                            setFilters((filters) => {
+                              return {
+                                ...filters,
+                                tags: filters.tags.filter((tag) => {
+                                  return x !== tag;
+                                }),
+                              };
+                            });
+                          }}
+                        />
+                      </div>
                     );
                   })}
                 </div>

@@ -71,6 +71,7 @@ export function SignUpComponent(props) {
   const [registerState, setRegisterState] = useState(initialRegisterState);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [selectedHobby, setSelectedHobby] = useState(null);
 
   const minAge = new Date();
   minAge.setFullYear(minAge.getFullYear() - 18);
@@ -97,6 +98,18 @@ export function SignUpComponent(props) {
       ...registerState,
       ...fieldWithValue,
     });
+  };
+
+  const onChangeHobbyInput = (event, hobbyTag) => {
+    setSelectedHobby(hobbyTag);
+    if (!registerState.hobbies.includes(hobbyTag)) {
+      try {
+        changeRegisterState({ hobbies: [...registerState.hobbies, hobbyTag] });
+        setSelectedHobby(null);
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
   };
 
   const onSubmit = (e) => {
@@ -293,7 +306,9 @@ export function SignUpComponent(props) {
                 format={"dd.MM.yyyy"}
                 KeyboardButtonProps={{ edge: "end", tabIndex: "-1" }}
                 maxDate={minAge}
-                maxDateMessage={"You must be at least 18 years old to join Hobb.ee"}
+                maxDateMessage={
+                  "You must be at least 18 years old to join Hobb.ee"
+                }
                 invalidDateMessage={""}
                 autoComplete={"bday"}
               />
@@ -310,25 +325,25 @@ export function SignUpComponent(props) {
           </Grid>
           <Grid item>
             <TagAutocomplete
-              onChange={(tags) => {
-                changeRegisterState({ hobbies: tags });
-              }}
-              value={registerState.hobbies}
+              onChange={onChangeHobbyInput}
+              value={selectedHobby}
             />
             <div className={"creategroup-tags"}>
               {registerState.hobbies.map((x) => {
                 return (
-                  <TagComponent
-                    id={x}
-                    key={x}
-                    onDelete={() => {
-                      changeRegisterState({
-                        hobbies: registerState.hobbies.filter((tag) => {
-                          return x !== tag;
-                        }),
-                      });
-                    }}
-                  />
+                  <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+                    <TagComponent
+                      id={x._id}
+                      key={x._id}
+                      onDelete={() => {
+                        changeRegisterState({
+                          hobbies: registerState.hobbies.filter((tag) => {
+                            return x !== tag;
+                          }),
+                        });
+                      }}
+                    />
+                  </div>
                 );
               })}
             </div>
