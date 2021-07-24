@@ -15,7 +15,7 @@ import { TransitionGroup } from "react-transition-group";
 import {
   readAllNotifications,
   readNotification,
-} from "../redux/reducers/notificationReducer";
+} from "../../redux/reducers/notificationReducer";
 
 function NotificationMenu(props) {
   const dispatch = useDispatch();
