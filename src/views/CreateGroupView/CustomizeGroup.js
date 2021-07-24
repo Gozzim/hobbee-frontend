@@ -36,6 +36,7 @@ export function CustomizeGroup(props) {
   const fileInput = React.useRef();
   const [temporaryImage, setTemporaryImage] = React.useState(null);
   const [scale, setScale] = React.useState(1);
+  const [fileUploadError, setFileUploadError] = React.useState("");
   const avatarEditor = React.useRef();
 
   const handleClose = () => {
@@ -44,19 +45,22 @@ export function CustomizeGroup(props) {
 
   const handleSave = () => {
     if (avatarEditor.current) {
-      const image = avatarEditor.current.getImage();
-      image.toBlob(async (blob) => {
-        const response = await uploadRequest(blob);
+      try {
+        const image = avatarEditor.current.getImage();
+        image.toBlob(async (blob) => {
+          const response = await uploadRequest(blob);
 
-        props.setGroupForm((groupForm) => {
-          return { ...groupForm, pic: response.data.id };
-        });
+          props.setGroupForm((groupForm) => {
+            return { ...groupForm, pic: response.data.id };
+          });
+          setTemporaryImage(null);
+        }, "image/png");
+      } catch (error) {
+        setFileUploadError("The file is not supported");
         setTemporaryImage(null);
-      }, "image/png");
+      }
     }
   };
-
-  console.log(temporaryImage);
 
   return (
     <div>
@@ -89,7 +93,6 @@ export function CustomizeGroup(props) {
                   onChange={(_event, value) => {
                     setScale(value);
                   }}
-                  aria-labelledby="continuous-slider"
                 />
               </DialogContent>
               <DialogActions>
@@ -149,6 +152,24 @@ export function CustomizeGroup(props) {
                 });
 
                 const file = event.target.files[0];
+                if (file.size > 500 * 1024) {
+                  setFileUploadError(
+                    "The file size has to be smaller than 500 KB"
+                  );
+                  return;
+                }
+                const allowedFileTypes = [
+                  "image/png",
+                  "image/jpeg",
+                  "image/jpg",
+                ];
+                if (!allowedFileTypes.includes(file.type)) {
+                  setFileUploadError(
+                    "The file has to be of type jpg, jpeg or png"
+                  );
+                  return;
+                }
+                setFileUploadError("");
                 const reader = new FileReader();
 
                 reader.addEventListener(
@@ -184,6 +205,9 @@ export function CustomizeGroup(props) {
                   You need to upload or to select a picture
                 </FormHelperText>
               ) : null}
+              {fileUploadError ? (
+                <FormHelperText error>{fileUploadError}</FormHelperText>
+              ) : null}
             </div>
             <div className={"customizegroup-avatare"}>
               {examplePics.map((id) => {
@@ -198,6 +222,7 @@ export function CustomizeGroup(props) {
                           return { ...groupForm, pic: id };
                         });
                         fileInput.current.value = "";
+                        setFileUploadError("");
                       }}
                     >
                       <img width={130} height={95} src={getFileUrl(id)} />
@@ -211,27 +236,6 @@ export function CustomizeGroup(props) {
           <Grid item xs={6} className={"border"}>
             <Typography>Limit the number of participants:</Typography>
           </Grid>
-
-          {/*<Grid item xs={6} className={"border"}>*/}
-          {/*  <Typography id="discrete-slider" gutterBottom></Typography>*/}
-          {/*  <Slider*/}
-          {/*    defaultValue={100}*/}
-          {/*    //getAriaValueText={valuetext}*/}
-          {/*    aria-labelledby="discrete-slider"*/}
-          {/*    valueLabelDisplay="auto"*/}
-          {/*    step={null}*/}
-          {/*    marks={marks}*/}
-          {/*    min={2}*/}
-          {/*    max={100}*/}
-          {/*    valueLabelFormat={(x) => {*/}
-          {/*      if (x === 100) {*/}
-          {/*        return "∞";*/}
-          {/*      } else {*/}
-          {/*        return x;*/}
-          {/*      }*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*</Grid>*/}
           <Grid item xs={6} className={"border"}>
             <TextField
               id="standard-number"
@@ -268,6 +272,7 @@ export function CustomizeGroup(props) {
                 <KeyboardDatePicker
                   margin="normal"
                   format={"dd.MM.yyyy"}
+                  disablePast
                   onChange={(date) => {
                     if (date instanceof Date && !isNaN(date)) {
                       props.setGroupForm((groupForm) => {
@@ -286,7 +291,7 @@ export function CustomizeGroup(props) {
                 <KeyboardTimePicker
                   keyboardIcon={<ScheduleIcon />}
                   margin="normal"
-                  format={"HH:ii"}
+                  format={"HH:mm"}
                   onChange={(date) => {
                     if (date instanceof Date && !isNaN(date)) {
                       props.setGroupForm((groupForm) => {
@@ -298,9 +303,6 @@ export function CustomizeGroup(props) {
                     }
                   }}
                   value={props.groupForm.date}
-                  KeyboardButtonProps={{
-                    "aria-label": "change time",
-                  }}
                 />
                 <Tooltip title="Reset date">
                   <IconButton
