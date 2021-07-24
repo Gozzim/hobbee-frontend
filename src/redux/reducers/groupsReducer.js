@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   data: {},
+  all: [],
   mine: [],
   recommended: [],
   inMyArea: [],
@@ -22,6 +23,7 @@ const groupsSlice = createSlice({
         const group = action.payload[i];
         state.data[group._id] = group;
       }
+      state.all = action.payload.map((group) => group._id);
     },
     myGroups: (state, action) => {
       for (let i = 0; i < action.payload.length; i++) {
