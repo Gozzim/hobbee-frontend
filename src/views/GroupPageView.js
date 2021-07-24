@@ -59,7 +59,7 @@ export function GroupPageView(props) {
   const [group, setGroup] = useState(initialState);
   const [chatLoaded, setChatLoaded] = useState(false);
   const [snackbar, setSnackbar] = useState(initialSnackbar);
-  const [pageLoaded, setpageLoaded] = useState(false);
+  const [pageLoaded, setPageLoaded] = useState(false);
   const user = useSelector(
       (state) => {return state.user;}
   );
