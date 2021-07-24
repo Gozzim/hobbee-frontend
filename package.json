@@ -38,6 +38,7 @@
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.22.1",
+    "emoji-picker-react": "^3.4.8",
     "fuse.js": "^6.4.6",
     "jsonwebtoken": "^8.5.1",
     "material-ui-popup-state": "^1.8.4",

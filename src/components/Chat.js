@@ -9,6 +9,11 @@ import { io } from "../services/SocketService";
 import SendIcon from "@material-ui/icons/Send";
 import { useHistory } from "react-router";
 
+import Picker from 'emoji-picker-react';
+import { PasswordEye } from "./UserDataInput/PasswordEye";
+import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
+import EmojiMenu from "./EmojiMenu";
+
 const useStyles = makeStyles((theme) => ({
   inputField: {
     "& > *": {
@@ -32,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     left: "50%",
     transform: "translate(-50%,-50%)",
   },
+  emojiButton: {
+    marginRight: 5,
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
 }));
 
 export function Chat(props) {
@@ -45,6 +56,7 @@ export function Chat(props) {
 
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const [emojiMenuAnchor, setEmojiMenuAnchor] = useState(null);
 
   //get initial chat
   useEffect(async () => {
@@ -136,6 +148,17 @@ export function Chat(props) {
                 variant="outlined"
                 value={input}
                 onInput={(e) => setInput(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                      <EmojiEmotionsIcon
+                          color={"disabled"}
+                          className={classes.emojiButton}
+                          onClick={
+                            (event) => setEmojiMenuAnchor(event.currentTarget)
+                          }
+                      />
+                  ),
+                }}
             />
           </form>
           <div className={classes.messageButtonDiv}>
@@ -148,6 +171,15 @@ export function Chat(props) {
             </IconButton>
           </div>
         </div>
+      <EmojiMenu
+          open={Boolean(emojiMenuAnchor)}
+          anchor={emojiMenuAnchor}
+          onClose={() => setEmojiMenuAnchor(null)}
+          onEmojiClick={(event, emojiObject) => {
+            setInput(input + emojiObject.emoji);
+            setEmojiMenuAnchor(null)
+          }}
+      />
     </div>
   );
 }
