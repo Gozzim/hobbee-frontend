@@ -84,6 +84,7 @@ export function GroupPageView(props) {
 
   //connect socket
   useEffect(() => {
+    io.connect();
     io.on("return message", async () => {
       const thisGroup = await fetchGroup(groupId);
       setGroup(thisGroup.data);

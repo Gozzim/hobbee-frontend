@@ -13,6 +13,13 @@ import { SearchResults } from "../components/Search/SearchResults";
 import { useSearch } from "../hooks/useSearch";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroups } from "../redux/reducers/groupsReducer";
+import {
+  BUTTON_BLUE_HOVER,
+  BUTTON_YELLOW,
+  BUTTON_YELLOW_HOVER,
+  HOBBEE_BROWN,
+  HOBBEE_ORANGE,
+} from "../shared/Constants";
 
 const useStyles = makeStyles(() => ({
   topContent: {
@@ -28,23 +35,25 @@ const useStyles = makeStyles(() => ({
     marginTop: "10px",
   },
   createGroupButton: {
-    color: "#32210B",
-    backgroundColor: "#1CE9E3",
+    color: HOBBEE_BROWN,
+    backgroundColor: BUTTON_YELLOW,
     "&:hover": {
-      backgroundColor: "#FFCC00",
-      color: "#32210B",
+      backgroundColor: BUTTON_YELLOW_HOVER,
+      color: HOBBEE_BROWN,
     },
     marginTop: "10px",
   },
   bottomContent: {
-    borderColor: "#E98F1C",
+    color: HOBBEE_BROWN,
+    borderColor: BUTTON_BLUE_HOVER,
+    backgroundColor: "white",
     borderStyle: "solid",
-    borderWidth: "10px",
-    borderRadius: "10px",
+    borderWidth: "17px",
+    borderRadius: "25px",
     paddingTop: "10px",
   },
   stepsContainer: {
-    color: "#32210B",
+    color: HOBBEE_BROWN,
     display: "flex",
     justifyContent: "space-around",
     marginLeft: 0,
@@ -55,12 +64,8 @@ const useStyles = makeStyles(() => ({
     height: "200px",
     width: "200px",
   },
-  stepDescription: {
-    fontWeight: "normal",
-    fontSize: "16px",
-  },
   stepIcon: {
-    //color: "#E08B1B",
+    color: "#13a09b",
     margin: "30px",
     marginBottom: "15px",
     fontSize: "5rem",
@@ -71,7 +76,7 @@ const useStyles = makeStyles(() => ({
     top: "50px",
     left: "50%",
     transform: "translateX(-50%)",
-    color: "#FFCC00",
+    color: HOBBEE_ORANGE,
   },
   searchBar: {
     marginTop: "40px",
@@ -137,44 +142,40 @@ export function HomeView(props) {
       ) : (
         <div className={classes.bottomContent}>
           <Typography
-            variant="h5"
-            style={{ width: "100%", textAlign: "center", marginTop: "15px" }}
+            variant="h4"
+            align="center"
+            style={{ fontWeight: "bold", marginTop: "20px" }}
           >
-            MEETING UP MADE EASY
+            MEETING MUTUALS - MADE EASY
           </Typography>
           <div className={classes.stepsContainer}>
             <div className={classes.stepContent}>
               <AssignmentIndIcon className={classes.stepIcon} />
-              <Typography variant="h6" className={classes.stepDescription}>
-                create an account and input your interests
-              </Typography>
+              <Typography>Create an Account</Typography>
+              <Typography>Input Your Interests</Typography>
             </div>
             <div style={{ position: "relative" }}>
               <ArrowForwardIosIcon className={classes.arrowIcon} />
             </div>
             <div className={classes.stepContent}>
               <TocIcon className={classes.stepIcon} />
-              <Typography variant="h6" className={classes.stepDescription}>
-                receive recommendations or search on your own
-              </Typography>
+              <Typography>Receive Recommendations</Typography>
+              <Typography>or Search on Your Own</Typography>
             </div>
             <div style={{ position: "relative" }}>
               <ArrowForwardIosIcon className={classes.arrowIcon} />
             </div>
             <div className={classes.stepContent}>
               <GroupAddIcon className={classes.stepIcon} />
-              <Typography variant="h6" className={classes.stepDescription}>
-                join an activity group and arrange your hangout
-              </Typography>
+              <Typography>Join an Activity Group</Typography>
+              <Typography>Arrange Your Hangout</Typography>
             </div>
             <div style={{ position: "relative" }}>
               <ArrowForwardIosIcon className={classes.arrowIcon} />
             </div>
             <div className={classes.stepContent}>
               <EmojiEmotionsIcon className={classes.stepIcon} />
-              <Typography variant="h6" className={classes.stepDescription}>
-                meet up!
-              </Typography>
+              <Typography variant="h6">Meet Up!</Typography>
             </div>
           </div>
         </div>
