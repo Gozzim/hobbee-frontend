@@ -87,7 +87,6 @@ function Header(props) {
   const useFullWidthNavigation = useMediaQuery("(min-width:1114px)");
 
   useEffect(() => {
-    // noinspection JSCheckFunctionSignatures -- inspection bug in Webstorm
     dispatch(fetchNotifications());
   }, [dispatch, props.location])
 
@@ -202,7 +201,7 @@ function Header(props) {
             {user.isLoggedIn ? (
               <Avatar>
                 {user.user.avatar
-                  ? <img alt="user-image" width={50} height={50} src={getFileUrl(user.user.avatar)} />
+                  ? <img alt="user" width={50} height={50} src={getFileUrl(user.user.avatar)} />
                   : user.user.username
                   ? user.user.username[0]
                   : "🍯"}
