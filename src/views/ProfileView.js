@@ -1,15 +1,23 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import HobbeeIcon from "../assets/bee_cream.png";
-import TextField from "@material-ui/core/TextField";
 import { TagComponent } from "../components/TagComponent";
-import { TagAutocomplete } from "../components/TagAutocomplete";
-import { Editable } from "../components/Editable";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { MyGroupsResultsComponent } from "../components/MyGroupsResultsComponent";
+import { fetchUser } from "../services/UserService";
+import UserIcon from "@material-ui/icons/AccountCircle";
+import { HOBBEE_BROWN } from "../shared/Constants";
+import Tooltip from "@material-ui/core/Tooltip";
+import CakeIcon from '@material-ui/icons/Cake';
+import Typography from "@material-ui/core/Typography";
+import TagIcon from '@material-ui/icons/LocalOffer';
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
+import { EditUserDialogComponent } from "../components/EditUserDialogComponent";
+import { getFileUrl } from "../services/FileService";
+import ExploreIcon from "@material-ui/icons/Explore";
+import { withRouter } from "react-router-dom"
+import { ReportUserDialog } from "../components/ReportUserDialog";
+import  PlaceHolderAvatar from "../assets/bee_white.png"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,203 +25,215 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "Left",
+    textAlign: "Center",
     color: "#32210B",
   },
-  image: {
-    width: 256,
-    height: 256,
-  },
   img: {
-    margin: "auto",
-    display: "block",
+    borderRadius: "10px",
+    objectFit: "contain",
+    minWidth: "100%",
     maxWidth: "100%",
-    maxHeight: "100%",
+    marginBottom: "10px",
+    boxShadow: "0 3px 10px rgb(0 0 0 / 0.3)",
+  },
+  detailsItem: {
+    alignItems: "center",
+    marginTop: "5px",
+    marginLeft: "20px",
   },
 }));
 
-export function ProfileView(props) {
+const CustomTooltip = withStyles((theme) => ({
+  tooltip: {
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    margin: 0,
+  },
+}))(Tooltip);
+
+function ProfileView(props) {
   const classes = useStyles();
+  const usernameInURL = props.match.params.username;
 
-  const name = "Jaina Jainason";
-  const city = "Munich";
-  const birthday = new Date("July 19, 1998 13:37").toLocaleDateString();
-  const mail = "jaina@gmail.com";
+  const [formData, setFormData] = React.useState(null);
+  const user = useSelector((state) => state.user);
 
-  const [tags, setTags] = React.useState([]);
-  const user = useSelector((state) => state.user.user);
-  const [formData, setFormData] = React.useState(user);
-  const [selectedHobby, setSelectedHobby] = useState(null);
-  const [inputValue, setInputValue] = useState("");
-
-  React.useEffect(() => {
-    setFormData(user);
-  }, [user]);
-
-  const onChangeTagInput = (event, hobbyTag) => {
-    if (hobbyTag && !formData.hobbies.includes(hobbyTag._id)) {
+  React.useEffect(async () => {
+    if (user.authReady) {
       try {
-        setFormData(() => {
-          return { ...formData, hobbies: [...formData.hobbies, hobbyTag._id] };
-        });
-        setSelectedHobby(null);
+        if (user.isLoggedIn && (user.user.username === usernameInURL || !usernameInURL)) {
+          setFormData(user.user);
+        } else {
+          console.log(false)
+          const profileData = await fetchUser(usernameInURL);
+          setFormData(profileData.data);
+        }
       } catch (e) {
-        console.log(e.message);
+        console.log(e);
       }
     }
-    setInputValue("");
-    setSelectedHobby(null);
-  };
+  }, [user.authReady]);
+
+
+  if (!formData) return (<div className={classes.root}> <h1>User Does Not Exist</h1> </div>) //TODO
 
   return (
-    <Editable
-      render={(editing) => {
-        if (!formData) return null;
+    <div className={classes.root}>
+        <h1>
+          Profile of {formData.username}
+        </h1>
 
-        console.log(formData);
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={4}>
 
-        return (
-          <div className={classes.root}>
-            <h1>
-              Welcome to your profile, {formData.username}. Thanks for using
-              Hobb.ee!
-            </h1>
+            {!formData.avatar ?
+              (
+                <img className={classes.img} src={PlaceHolderAvatar} alt={"Profile"}/>
+            )
+            :
+              (
+                <img className={classes.img} src={getFileUrl(formData.avatar)} alt={"Profile"}/>
+              )
+            }
 
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={1} sm={3}>
-                <Paper className={classes.paper} elevation={1}>
-                  <Link className={"linkDefault"} to={"/profile"}>
-                    <img src={HobbeeIcon} height={200} alt={"Profile"} />
-                  </Link>
-                </Paper>
-              </Grid>
+          </Grid>
 
-              <Grid item xs={9}>
-                <Grid>
-                  <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                      <Paper className={classes.paper}>
-                        My name is:
-                        <TextField
-                          id="outlined-required"
-                          value={formData.username}
-                          onChange={(event) => {
-                            setFormData((formData) => {
-                              return {
-                                ...formData,
-                                username: event.target.value,
-                              };
-                            });
-                          }}
-                          disabled={!editing}
-                        />
-                      </Paper>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Paper className={classes.paper}>
-                        My mail is:
-                        <form
-                          className={classes.root}
-                          noValidate
-                          autoComplete="off"
-                        >
-                          <TextField
-                            id="standard-basic"
-                            value={formData.email}
-                            disabled={!editing}
-                            onChange={(event) => {
-                              setFormData((formData) => {
-                                return {
-                                  ...formData,
-                                  email: event.target.value,
-                                };
-                              });
-                            }}
-                          />
-                        </form>
-                      </Paper>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Paper className={classes.paper}>
-                        My birthday is:
-                        <form
-                          className={classes.root}
-                          noValidate
-                          autoComplete="off"
-                        >
-                          <TextField
-                            id="standard-basic"
-                            value={formData.dateOfBirth}
-                            disabled={!editing}
-                            onChange={(event) => {
-                              setFormData((formData) => {
-                                return {
-                                  ...formData,
-                                  dateOfBirth: event.target.value,
-                                };
-                              });
-                            }}
-                          />
-                        </form>
-                      </Paper>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
+          <Grid item xs={8}>
+            <Grid>{/**/}
+              <Grid container spacing={2}>
 
-            <h3> These are your interests: </h3>
-
-            <Grid container spacing={2}>
-              {formData.hobbies.map((x) => {
-                return (
-                  <div style={{ marginRight: "10px", marginBottom: "5px" }}>
-                    <TagComponent
-                      id={x}
-                      key={x}
-                      onDelete={
-                        editing
-                          ? () => {
-                              setFormData((formData) => {
-                                return {
-                                  ...formData,
-                                  hobbies: formData.hobbies.filter((hobby) => {
-                                    return x !== hobby;
-                                  }),
-                                };
-                              });
-                            }
-                          : undefined
-                      }
-                    />
+                <Grid item xs={2}>
+                  <div className={classes.detailsItem}>
+                    <CustomTooltip title="Username">
+                      <UserIcon style={{fill: HOBBEE_BROWN}}/>
+                    </CustomTooltip>
                   </div>
-                );
-              })}
+                </Grid>
 
-              <Grid item>
-                {editing ? (
-                  <TagAutocomplete
-                    onChange={onChangeTagInput}
-                    value={selectedHobby}
-                    inputValue={inputValue}
-                    onInputChange={(e, v) => {
-                      setInputValue(v);
-                    }}
-                    filterOptions={(options) => {
-                      return options.filter((option) =>
-                          !formData.hobbies.includes(option._id)
+                <Grid item xs={6}>
+                  <div className={classes.detailsItem}>
+                    <Typography variant="h6">
+                      {formData.username} {formData.premium.active
+                      ? (
+                        <CustomTooltip
+                          title={
+                            formData.username + " is supporting hobb.ee ❤"
+                          }
+                        >
+                          <TrendingUpIcon
+                            style={{
+                              fill: "#17C2BC",
+                              marginTop: "4px",
+                              marginLeft: "8px",
+                            }}
+                          />
+                        </CustomTooltip>
+                      ) : null
+                    }
+                    </Typography>
 
-                      )
-                    }}
-                  />
-                ) : null}
+
+                  </div>
+                </Grid>
+
+                <Grid item xs={2}>
+                  <div className={classes.detailsItem}>
+                    <Typography variant="h6">
+                      {(formData.username === usernameInURL || !usernameInURL) &&
+                      <EditUserDialogComponent user={formData} setUser={setFormData}/>}
+                    </Typography>
+                  </div>
+                </Grid>
+
+
+                <Grid item xs={2}>
+                  <div className={classes.detailsItem}>
+                    <Typography variant="h6">
+                      {(formData.username !== usernameInURL && usernameInURL) &&
+                        <ReportUserDialog/>}
+                    </Typography>
+                  </div>
+                </Grid>
+
+
+                {(formData.username === usernameInURL || !usernameInURL) && [
+                <Grid item xs={2}>
+                  <div className={classes.detailsItem}>
+                    <CustomTooltip title="Birthday">
+                      <CakeIcon style={{fill: HOBBEE_BROWN}}/>
+                    </CustomTooltip>
+                  </div>
+                </Grid>,
+
+                  <Grid item xs={10}>
+                  <div className={classes.detailsItem}>
+                  <Typography variant="h6">
+                {new Date(formData.dateOfBirth).toLocaleString("en-GB", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                })}
+                  </Typography>
+                  </div>
+                  </Grid>
+                ]}
+
+                <Grid item xs={2}>
+                  <div className={classes.detailsItem}>
+                    <CustomTooltip title="City">
+                      <ExploreIcon style={{fill: HOBBEE_BROWN}}/>
+                    </CustomTooltip>
+                  </div>
+                </Grid>
+
+                <Grid item xs={10}>
+                  <div className={classes.detailsItem}>
+                    <Typography variant="h6">
+                      {formData.city}
+                    </Typography>
+                  </div>
+                </Grid>
+
+                <Grid item xs={2}>
+                  <div className={classes.detailsItem}>
+                    <CustomTooltip title="Hobbies">
+                      <TagIcon style={{fill: HOBBEE_BROWN}}/>
+                    </CustomTooltip>
+                  </div>
+                </Grid>
+
+                <Grid item xs={10}>
+                  <div className={classes.detailsItem}>
+                    <Grid container spacing={2}>
+                      <div style={{display: "flex", flexWrap: "wrap"}}>
+                        {formData.hobbies.map((x) => {
+                          return (
+                            <div style={{marginRight: "10px", marginBottom: "5px"}}>
+                              <TagComponent
+                                id={x}
+                                key={x}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </Grid>
+                  </div>
+                </Grid>
+
               </Grid>
             </Grid>
+          </Grid>
+        </Grid>
 
-            <MyGroupsResultsComponent />
-          </div>
-        );
-      }}
-    />
-  );
+
+      {(formData.username === usernameInURL || !usernameInURL) && [
+        <MyGroupsResultsComponent/> //TODO SHOW WOLFGANG GROUPS IF NOT OWN PROFILE MINUS DELETED
+      ]
+      }
+
+    </div>
+  )
 }
+
+export default connect()(withRouter(ProfileView))

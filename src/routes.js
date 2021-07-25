@@ -10,7 +10,7 @@ import { MyGroupsView } from "./views/MyGroupsView";
 import { Imprint } from "./views/Legal/Imprint";
 import { PrivacyPolicy } from "./views/Legal/PrivacyPolicy";
 import { ToS } from "./views/Legal/TermsOfService";
-import { ProfileView } from "./views/ProfileView";
+import ProfileView from "./views/ProfileView";
 import ResetPasswordView from "./views/UserAuthentication/ResetPasswordView";
 import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PremiumSubscription/PaymentPlanView";
@@ -25,7 +25,7 @@ export const routes = [
     label: "Home",
   },
   {
-    path: "/profile",
+    path: ["/profile","/user/:username"],
     Component: ProfileView,
     label: "User-Profile",
   },
