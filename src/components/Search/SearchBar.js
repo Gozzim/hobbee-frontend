@@ -40,9 +40,10 @@ export function SearchBar(props) {
   const classes = useStyles();
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedHobby, setSelectedHobby] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
   const onChangeTagInput = (event, hobbyTag) => {
-    if (!search.filters.tags.includes(hobbyTag._id)) {
+    if (hobbyTag && !search.filters.tags.includes(hobbyTag._id)) {
       try {
         search.setFilters((filters) => {
           return { ...filters, tags: [...filters.tags, hobbyTag._id] };
@@ -52,6 +53,8 @@ export function SearchBar(props) {
         console.log(e.message);
       }
     }
+    setInputValue("");
+    setSelectedHobby(null);
   };
 
   const searchString = "What do you like doing?";
@@ -260,6 +263,16 @@ export function SearchBar(props) {
               <TagAutocomplete
                 onChange={onChangeTagInput}
                 value={selectedHobby}
+                inputValue={inputValue}
+                onInputChange={(e, v) => {
+                  setInputValue(v);
+                }}
+                filterOptions={(options) => {
+                  return options.filter((option) =>
+                      !search.filters.tags.includes(option._id)
+
+                  )
+                }}
               />
             </Grid>
             <Grid item xs={6}>

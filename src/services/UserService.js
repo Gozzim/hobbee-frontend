@@ -1,4 +1,4 @@
-import HttpService, {getToken, setToken} from "./HttpService";
+import HttpService, { setToken } from "./HttpService";
 
 export async function registrationRequest(userdata) {
   const resp = await HttpService.post("auth/register", userdata);
@@ -48,8 +48,17 @@ export async function isUsernameAvailable(username) {
   }
 }
 
+export async function fetchUser(data) {
+  return await HttpService.get("user/"+ data );
+}
+
 export async function fetchMe() {
   return await HttpService.get("user/me");
+}
+
+export async function updateMeRequest(data) {
+
+  return await HttpService.post("user/update", data);
 }
 
 export async function reportUserRequest(data) {

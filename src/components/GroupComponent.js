@@ -1,4 +1,5 @@
 import * as React from "react";
+import { connect } from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import GroupIcon from "@material-ui/icons/Group";
@@ -16,7 +17,7 @@ import PropTypes from "prop-types";
 import { getFileUrl } from "../services/FileService";
 import Tooltip from "@material-ui/core/Tooltip";
 import LabelRoundedIcon from "@material-ui/icons/LabelRounded";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { TagComponent } from "./TagComponent";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -89,10 +90,21 @@ const CustomTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-export function GroupComponent(props) {
+function GroupComponent(props) {
   const classes = useStyles();
   const user = useSelector((state) => state.user);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const path = () => {
+    switch (props.location.pathname) {
+      case "/my-groups":
+      case "/recommended":
+      case "/in-my-area":
+        return props.location.pathname + "/";
+      default:
+        return "/group/"
+    }
+  }
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -108,7 +120,7 @@ export function GroupComponent(props) {
   const maxMembers = props.group.maxMembers;
 
   return (
-    <Link to={"/group/" + props.group._id} className={"linkDefault"}>
+    <Link to={path() + props.group._id} className={"linkDefault"}>
       <Paper
         className={classes.paper}
         elevation={0}
@@ -241,3 +253,5 @@ export function GroupComponent(props) {
 GroupComponent.propTypes = {
   group: PropTypes.object.isRequired,
 };
+
+export default connect()(withRouter(GroupComponent))

@@ -55,7 +55,7 @@ const CustomTooltip = withStyles((theme) => ({
 export function AccountSettingsView(props) {
   const classes = useStyles();
   const [pageLoaded, setPageLoaded] = React.useState(false);
-  const [canceled, setCanceled] = React.useState(false);
+  const [cancelled, setCancelled] = React.useState(false);
   const user = useSelector((state) => {
     return state.user;
   });
@@ -63,7 +63,7 @@ export function AccountSettingsView(props) {
   useEffect(() => {
     if (user.isLoggedIn) {
       setPageLoaded(true);
-      setCanceled(user.user.premium.canceled);
+      setCancelled(user.user.premium.cancelled);
       console.log(user);
     }
   }, [user.user]);
@@ -136,7 +136,7 @@ export function AccountSettingsView(props) {
                   day: "numeric",
                 })}
               </Typography>
-              {canceled ? (
+              {cancelled ? (
                 <Typography variant="h7" style={{ fontWeight: "normal" }}>
                   The subscription has been cancelled and will terminate at the
                   end of the payment period.
@@ -152,7 +152,7 @@ export function AccountSettingsView(props) {
           {user.user.premium.active ? <Grid item xs={1}></Grid> : null}
           {user.user.premium.active ? (
             <Grid item xs={4}>
-              {canceled ? (
+              {cancelled ? (
                 <CustomTooltip
                   title={"Your subscription has already been cancelled."}
                 >
@@ -167,8 +167,8 @@ export function AccountSettingsView(props) {
                 </CustomTooltip>
               ) : (
                 <CancelPremiumDialog
-                  canceled={canceled}
-                  setCanceled={setCanceled}
+                  cancelled={cancelled}
+                  setCancelled={setCancelled}
                 />
               )}
             </Grid>

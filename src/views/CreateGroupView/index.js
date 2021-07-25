@@ -114,7 +114,7 @@ export function CreateGroupView(props) {
             onClick={async () => {
               if (groupForm.pic !== "") {
                 const response = await createRequest(groupForm);
-                props.history.push("/group/" + response.data.id + "#new");
+                props.history.push("/my-groups/" + response.data.id + "#new");
               } else {
                 setTouched((touched) => {
                   return {

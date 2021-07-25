@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -37,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
 function ResetPasswordView(props) {
   const classes = useStyles();
 
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
@@ -44,7 +48,11 @@ function ResetPasswordView(props) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
 
-  const [error, setError] = useState("");
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      props.history.push("/");
+    }
+  }, [user.isLoggedIn, props.history])
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -58,8 +66,7 @@ function ResetPasswordView(props) {
           props.match.params.token,
           password
         )
-      ); // TODO: Server answer handling
-      props.history.push("/"); // TODO: Only if successful
+      );
     } catch (e) {
       console.log(e.message);
     }
@@ -153,11 +160,6 @@ function ResetPasswordView(props) {
               <PasswordStrengthBar passStrength={passwordStrength} />
             </Grid>
           )}
-          {error ? (
-            <Grid item>
-              <Typography color="error">{error}</Typography>
-            </Grid>
-          ) : null}
           <Grid item>
             <Button
               fullWidth
