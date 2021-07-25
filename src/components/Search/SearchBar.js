@@ -64,7 +64,7 @@ export function SearchBar(props) {
       <Grid item xs={12}>
         <Paper
           style={{
-            boxShadow: "0 3px 10px rgb(0 0 0 / 0.3)",
+            boxShadow: "0 3px 10px rgb(0 0 0 / 0.1)",
           }}
           component="form"
           className={classes.root}
@@ -73,7 +73,7 @@ export function SearchBar(props) {
             setShowFilters(true);
           }}
         >
-          <SearchIcon />
+          <SearchIcon style={{marginLeft: "12px"}}/>
           <InputBase
             className={classes.input}
             placeholder={searchString}

@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "100%",
     marginBottom: "10px",
     boxShadow: "0 3px 10px rgb(0 0 0 / 0.3)",
+    minWidth: "100%",
   },
 }));
 
@@ -83,6 +84,7 @@ export function GroupPageView(props) {
 
   //connect socket
   useEffect(() => {
+    io.connect();
     io.on("return message", async () => {
       const thisGroup = await fetchGroup(groupId);
       setGroup(thisGroup.data);
@@ -176,7 +178,7 @@ export function GroupPageView(props) {
           <Typography
             variant="h4"
             align={"center"}
-            style={{ marginTop: "40px" }}
+            style={{ marginTop: "40px", fontWeight: "bold" }}
           >
             This group has been deleted.
           </Typography>
@@ -227,10 +229,10 @@ export function GroupPageView(props) {
               ) : null}
             </Grid>
             <Grid item xs={12}>
-              <div style={{ display: "flex" }}>
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
                 {group.tags.map((x) => {
                   return (
-                    <div style={{ marginRight: "10px" }}>
+                    <div style={{ marginRight: "10px", marginBottom: "5px" }}>
                       <TagComponent id={x} key={x} />
                     </div>
                   );
@@ -274,7 +276,7 @@ export function GroupPageView(props) {
           <Typography
             variant="h4"
             align={"center"}
-            style={{ marginTop: "40px" }}
+            style={{ marginTop: "40px", fontWeight: "bold" }}
           >
             This group doesn't exist.
           </Typography>

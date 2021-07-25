@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
@@ -6,13 +6,14 @@ import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import { Button, Tooltip } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import {
   BUTTON_YELLOW,
   BUTTON_YELLOW_HOVER,
   PAPER_CREAM,
 } from "../../shared/Constants";
 import HobbeePremiumLogo from "../../assets/hobbee_premium.svg";
+import { connect, useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -53,6 +54,13 @@ const CustomTooltip = withStyles((theme) => ({
 
 export function PremiumView(props) {
   const classes = useStyles();
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user.user && user.user.premium.active) {
+      props.history.push("/account-settings/#redirect");
+    }
+  }, [user, props.history]);
 
   return (
     <div className={classes.pageContent}>
@@ -102,11 +110,15 @@ export function PremiumView(props) {
           </div>
         </CustomTooltip>
       </div>
-      <Link className={"linkDefault"} to={"/premium/payment-plan"}>
-        <Button className={classes.choosePlanButton} type="button">
-          CHOOSE YOUR PAYMENT PLAN
-        </Button>
-      </Link>
+      {user.user && user.isLoggedIn ? (
+        <Link className={"linkDefault"} to={"/premium/payment-plan"}>
+          <Button className={classes.choosePlanButton} type="button">
+            CHOOSE YOUR PAYMENT PLAN
+          </Button>
+        </Link>
+      ) : null}
     </div>
   );
 }
+
+export default connect()(withRouter(PremiumView));

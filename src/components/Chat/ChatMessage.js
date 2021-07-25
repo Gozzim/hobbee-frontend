@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   messageBox: {
@@ -8,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px",
     display: "inline-block",
     padding: "10px",
+    maxWidth: "300px",
   },
   systemMessage: {
     backgroundColor: "#99E8E1",
@@ -67,7 +69,7 @@ export function ChatMessage(props) {
       return (
           <div className={classes.right}>
             <div className={classes.messageBox} style={{ backgroundColor: "#FFe680" }}>
-              <div className={"linkDefault"} style={{ textAlign: "left" }}>
+              <div className={"linkDefault"} style={{ textAlign: "left", wordWrap: "break-word" }}>
                 {message}
               </div>
               <div className={classes.timestampDiv}>{timestamp}</div>
@@ -78,8 +80,10 @@ export function ChatMessage(props) {
       return (
           <div className={classes.left}>
             <div className={classes.messageBox} style={{ backgroundColor: "#FFF3C2" }}>
-              <div className={classes.nameDiv}>{sender}</div>
-              <div className={"linkDefault"} style={{ textAlign: "left" }}>
+              <Link className={"linkDefault"} to={"/user/" + sender}>
+                <div className={classes.nameDiv}>{sender}</div>
+              </Link>
+              <div className={"linkDefault"} style={{ textAlign: "left", wordWrap: "break-word" }}>
                 {message}
               </div>
               <div className={classes.timestampDiv}>{timestamp}</div>

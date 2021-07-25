@@ -6,15 +6,16 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import { makeStyles } from "@material-ui/core/styles";
 import { sendPremiumCancelRequest } from "../services/paymentService";
+import {BUTTON_RED, BUTTON_RED_HOVER} from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   cancelSubscriptionButton: {
     width: "182px",
     padding: "8px 10px",
-    backgroundColor: "#ff7d66",
+    backgroundColor: BUTTON_RED,
     color: "black",
     "&:hover": {
-      backgroundColor: "#ffd4cc",
+      backgroundColor: BUTTON_RED_HOVER,
     },
   },
 }));

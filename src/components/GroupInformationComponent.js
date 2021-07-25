@@ -77,7 +77,7 @@ function GroupInformationComponent(props) {
           <Typography
             variant="h4"
             color="inherit"
-            style={{ wordWrap: "break-word" }}
+            style={{ wordWrap: "break-word", fontWeight: "bold" }}
           >
             {props.group.groupName}
           </Typography>
@@ -162,9 +162,14 @@ function GroupInformationComponent(props) {
         </Grid>
         <Grid item xs={10}>
           {props.joined && !props.group.location == "" ? (
+              <div>
             <Typography variant="h6" style={{ wordWrap: "break-word" }}>
               {props.group.location}
             </Typography>
+              <Typography variant="h6" style={{ wordWrap: "break-word" }}>
+                {props.group.city}
+              </Typography>
+              </div>
           ) : (
             <Typography variant="h6" style={{ wordWrap: "break-word" }}>
               {props.group.city}
@@ -186,7 +191,10 @@ function GroupInformationComponent(props) {
                         {...bindTrigger(popupState)}
                       />
                     </CustomTooltip>
-                    <Menu {...bindMenu(popupState)}>
+                    <Menu {...bindMenu(popupState)}
+                          getContentAnchorEl={null}
+                          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                          transformOrigin={{ vertical: "bottom", horizontal: "left" }}>
                       {props.group.groupMembers.map((member) => {
                         return (
                           <MenuItem onClick={() => props.history.push("/user/" + member.username)}>
