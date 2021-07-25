@@ -87,8 +87,10 @@ function Header(props) {
   const useFullWidthNavigation = useMediaQuery("(min-width:1114px)");
 
   useEffect(() => {
-    dispatch(fetchNotifications());
-  }, [dispatch, props.location])
+    if (user.isLoggedIn) {
+      dispatch(fetchNotifications());
+    }
+  }, [dispatch, props.location, user.isLoggedIn])
 
   return (
     <AppBar position="sticky">
