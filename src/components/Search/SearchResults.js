@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
-import { GroupComponent } from "../GroupComponent";
+import GroupComponent from "../GroupComponent";
 import Pagination from "@material-ui/lab/Pagination";
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";

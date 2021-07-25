@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
-import { GroupComponent } from "./GroupComponent";
+import GroupComponent from "./GroupComponent";
 import { getMyGroups } from "../redux/reducers/groupsReducer";
 
 export function MyGroupsResultsComponent(props) {
