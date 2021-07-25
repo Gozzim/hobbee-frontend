@@ -90,7 +90,7 @@ export function SearchResults(props) {
           variant="h4"
           style={{ fontWeight: "bold", marginBottom: "20px" }}
         >
-          Search Results
+          {props.search.searchValue ? "SEARCH RESULTS" : props.title}
         </Typography>
         {groupsToShow.length > 0 ? (
           <div>
