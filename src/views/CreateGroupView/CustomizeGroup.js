@@ -56,28 +56,37 @@ export function CustomizeGroup(props) {
   const [temporaryImage, setTemporaryImage] = React.useState(null);
   const [scale, setScale] = React.useState(1);
   const [fileUploadError, setFileUploadError] = React.useState("");
+  const [isUploading, setIsUploading] = React.useState(false);
   const avatarEditor = React.useRef();
 
-  const handleClose = () => {
+  const resetTemporaryImage = () => {
+    fileInput.current.value = null;
     setTemporaryImage(null);
   };
 
-  const handleSave = () => {
-    if (avatarEditor.current) {
-      try {
-        const image = avatarEditor.current.getImage();
-        image.toBlob(async (blob) => {
-          const response = await uploadRequest(blob);
+  const handleClose = () => {
+    resetTemporaryImage();
+  };
 
-          props.setGroupForm((groupForm) => {
-            return { ...groupForm, pic: response.data.id };
-          });
-          setTemporaryImage(null);
-        }, "image/png");
-      } catch (error) {
-        setFileUploadError("The file is not supported");
-        setTemporaryImage(null);
-      }
+  const handleSave = () => {
+    if (isUploading || !avatarEditor.current) return;
+
+    setIsUploading(true);
+    try {
+      const image = avatarEditor.current.getImage();
+      image.toBlob(async (blob) => {
+        const response = await uploadRequest(blob);
+
+        props.setGroupForm((groupForm) => {
+          return { ...groupForm, pic: response.data.id };
+        });
+        setIsUploading(false);
+        resetTemporaryImage();
+      }, "image/png");
+    } catch (error) {
+      setFileUploadError("The file is not supported");
+      setIsUploading(false);
+      resetTemporaryImage();
     }
   };
 
@@ -118,7 +127,12 @@ export function CustomizeGroup(props) {
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleSave} color="primary" autoFocus>
+              <Button
+                onClick={handleSave}
+                color="primary"
+                autoFocus
+                disabled={isUploading}
+              >
                 Save
               </Button>
             </DialogActions>
@@ -374,6 +388,7 @@ export function CustomizeGroup(props) {
         variant="outlined"
         fullWidth
         style={{ marginBottom: "30px" }}
+        inputProps={{ maxLength: 1000 }}
         onChange={(event) => {
           props.setGroupForm((groupForm) => {
             return { ...groupForm, description: event.target.value };

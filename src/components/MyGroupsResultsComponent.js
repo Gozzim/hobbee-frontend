@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import GroupComponent from "./GroupComponent";
 import { getMyGroups } from "../redux/reducers/groupsReducer";
+import { useLocation } from "react-router";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -31,12 +32,13 @@ export function MyGroupsResultsComponent(props) {
 
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   React.useEffect(() => {
-    if (user.isLoggedIn && currentGroups.length === 0) {
+    if (user.isLoggedIn) {
       dispatch(getMyGroups());
     }
-  }, [user.isLoggedIn]);
+  }, [user.isLoggedIn, location]);
 
   return currentGroups.length > 0 || pastGroups.length > 0 ? (
     <div>

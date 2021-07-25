@@ -82,19 +82,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export function HomeView(props) {
+export function HomeView() {
   const classes = useStyles();
-  const groups = useSelector((state) => {
-    return state.groups.all.map((id) => state.groups.data[id]);
-  });
-
-  const dispatch = useDispatch();
-  React.useEffect(() => {
-    if (groups.length === 0) {
-      dispatch(getGroups());
-    }
-  }, []);
-  const search = useSearch({ groups, initialGroupsOnPage: 9 });
+  const search = useSearch({ groups: [], initialGroupsOnPage: 9 });
 
   return (
     <div>

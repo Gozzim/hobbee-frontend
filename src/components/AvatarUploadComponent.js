@@ -7,16 +7,15 @@ import {
   Button,
   Dialog,
   DialogActions,
-  DialogContent, DialogContentText,
+  DialogContent,
+  DialogContentText,
   IconButton,
   Slider,
   Tooltip,
   Typography,
 } from "@material-ui/core";
 import { getFileUrl, uploadRequest } from "../services/FileService";
-import {withStyles} from "@material-ui/core/styles";
-
-
+import { withStyles } from "@material-ui/core/styles";
 
 const CustomTooltip = withStyles((theme) => ({
   tooltip: {
@@ -29,15 +28,25 @@ const CustomTooltip = withStyles((theme) => ({
 export function AvatarUploadComponent(props) {
   const fileInput = React.useRef();
   const [temporaryImage, setTemporaryImage] = React.useState(null);
+  const [isUploading, setIsUploading] = React.useState(false);
   const [scale, setScale] = React.useState(1);
+  const [fileUploadError, setFileUploadError] = React.useState("");
   const avatarEditor = React.useRef();
 
-  const handleClose = () => {
+  const resetTemporaryImage = () => {
+    fileInput.current.value = null;
     setTemporaryImage(null);
   };
 
+  const handleClose = () => {
+    resetTemporaryImage();
+  };
+
   const handleSave = () => {
-    if (avatarEditor.current) {
+    if (isUploading || !avatarEditor.current) return;
+
+    setIsUploading(true);
+    try {
       const image = avatarEditor.current.getImage();
       image.toBlob(async (blob) => {
         const response = await uploadRequest(blob);
@@ -46,8 +55,13 @@ export function AvatarUploadComponent(props) {
           console.log(userForm);
           return { ...userForm, avatar: response.data.id };
         });
-        setTemporaryImage(null);
+        setIsUploading(false);
+        resetTemporaryImage();
       }, "image/png");
+    } catch (error) {
+      setFileUploadError("The file is not supported");
+      setIsUploading(false);
+      resetTemporaryImage();
     }
   };
 
@@ -80,7 +94,12 @@ export function AvatarUploadComponent(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSave} color="primary" autoFocus>
+          <Button
+            onClick={handleSave}
+            color="primary"
+            autoFocus
+            disabled={isUploading}
+          >
             Save
           </Button>
         </DialogActions>
@@ -91,7 +110,12 @@ export function AvatarUploadComponent(props) {
             fileInput.current.click();
           }}
         >
-          <img alt="group-image" width={200} height={200} src={getFileUrl(props.userForm.avatar)} />
+          <img
+            alt="group-image"
+            width={200}
+            height={200}
+            src={getFileUrl(props.userForm.avatar)}
+          />
         </Button>
       ) : (
         <Button
@@ -129,6 +153,16 @@ export function AvatarUploadComponent(props) {
           });
 
           const file = event.target.files[0];
+          if (file.size > 500 * 1024) {
+            setFileUploadError("The file size has to be smaller than 500 KB");
+            return;
+          }
+          const allowedFileTypes = ["image/png", "image/jpeg", "image/jpg"];
+          if (!allowedFileTypes.includes(file.type)) {
+            setFileUploadError("The file has to be of type jpg, jpeg or png");
+            return;
+          }
+          setFileUploadError("");
           const reader = new FileReader();
 
           reader.addEventListener(
@@ -146,7 +180,6 @@ export function AvatarUploadComponent(props) {
         }}
         accept={".jpg, .jpeg, .png"}
       />
-
 
       <DialogContentText className={"imageupload-description"}>
         Choose or upload an image:

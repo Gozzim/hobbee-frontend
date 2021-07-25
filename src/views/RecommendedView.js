@@ -6,7 +6,7 @@ import { SearchResults } from "../components/Search/SearchResults";
 import { useSearch } from "../hooks/useSearch";
 import { RequireLoggedIn } from "../components/RequireLoggedIn";
 
-export function RecommendedView() {
+export function RecommendedView(props) {
   const groups = useSelector((state) => {
     return state.groups.recommended.map((id) => state.groups.data[id]);
   });
@@ -15,10 +15,10 @@ export function RecommendedView() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   React.useEffect(() => {
-    if (user.isLoggedIn && groups.length === 0) {
+    if (user.isLoggedIn) {
       dispatch(getRecommendedGroups());
     }
-  }, [user.isLoggedIn]);
+  }, [user.isLoggedIn, props.location]);
 
   return (
     <RequireLoggedIn>

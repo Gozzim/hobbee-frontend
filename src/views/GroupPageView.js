@@ -240,7 +240,9 @@ export function GroupPageView(props) {
               </div>
             </Grid>
             <Grid item xs={12}>
+              <div style={{flexWrap: "wrap" , wordWrap: "break-word"}}>
               {group.description}
+              </div>
             </Grid>
           </Grid>
 
