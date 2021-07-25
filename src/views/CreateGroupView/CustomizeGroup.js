@@ -405,6 +405,7 @@ export function CustomizeGroup(props) {
         variant="outlined"
         fullWidth
         style={{ marginBottom: "30px" }}
+        inputProps={{ maxLength: 1000 }}
         onChange={(event) => {
           props.setGroupForm((groupForm) => {
             return { ...groupForm, description: event.target.value };
