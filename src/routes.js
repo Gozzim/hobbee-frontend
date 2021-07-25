@@ -42,7 +42,8 @@ export const routes = [
   {
     path: "/create-group",
     Component: CreateGroupView,
-    label: "Create Group"
+    label: "Create Group",
+    loginOnly: true,
   },
   {
     path: "/premium",
@@ -53,36 +54,43 @@ export const routes = [
     path: "/premium/payment-plan",
     Component: PaymentPlanView,
     label: "Payment Plan",
+    loginOnly: true,
   },
   {
     path: "/premium/payment-confirmation",
     Component: PaymentConfirmationView,
     label: "Confirmation",
+    loginOnly: true,
   },
   {
     path: "/account-settings",
     Component: AccountSettingsView,
     label: "Account Settings",
+    loginOnly: true,
   },
   {
     path: "/recommended",
     Component: RecommendedView,
     label: "Recommendations",
+    loginOnly: true,
   },
   {
     path: "/in-my-area",
     Component: InMyAreaView,
     label: "In my Area",
+    loginOnly: true,
   },
   {
     path: "/my-groups",
     Component: MyGroupsView,
     label: "My Groups",
+    loginOnly: true,
   },
   {
     path: "/feedback/:id",
     Component: FeedbackView,
     label: "Your Feedback",
+    loginOnly: true,
   },
   {
     path: ["/group/:id", "/my-groups/:id", "/recommended/:id", "/in-my-area/:id"],

@@ -13,6 +13,7 @@ import { authReady, authUser } from "./redux/reducers/userReducer";
 import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
 import { ASCII_BEE } from "./shared/Constants";
 import { fetchHobbyTags } from "./redux/reducers/tagsReducer";
+import { RequireLoggedIn } from "./components/RequireLoggedIn";
 
 const useStyles = makeStyles(() => ({
   appRoot: {
@@ -38,8 +39,8 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(ASCII_BEE)
-  })
+    console.log(ASCII_BEE);
+  });
 
   return (
     <div className={classes.appRoot}>
@@ -47,7 +48,7 @@ function App() {
       <Header />
       <ContentContainer footer={<Footer />}>
         <Switch>
-          {routes.map(({ path, Component, label }, i) => (
+          {routes.map(({ path, Component, label, loginOnly }, i) => (
             <Route
               exact
               key={i}
@@ -62,10 +63,17 @@ function App() {
                     : routeProps.match.path.includes(path)
                 );
                 return (
-                  <div>
-                    <DynamicBreadcrumbs crumbs={crumbs} />
-                    <Component {...routeProps} />
-                  </div>
+                  loginOnly ? (
+                    <RequireLoggedIn>
+                      <DynamicBreadcrumbs crumbs={crumbs} />
+                      <Component {...routeProps} />
+                    </RequireLoggedIn>
+                  ) : (
+                    <div>
+                      <DynamicBreadcrumbs crumbs={crumbs} />
+                      <Component {...routeProps} />
+                    </div>
+                    )
                 );
               }}
             />

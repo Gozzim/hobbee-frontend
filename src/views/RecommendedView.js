@@ -21,9 +21,9 @@ export function RecommendedView() {
   }, [user.isLoggedIn]);
 
   return (
-    <RequireLoggedIn>
+    <div>
       <SearchBar search={search} />
       <SearchResults search={search} title="RECOMMENDED FOR YOU" />
-    </RequireLoggedIn>
+    </div>
   );
 }

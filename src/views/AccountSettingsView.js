@@ -17,7 +17,7 @@ import { CancelPremiumDialog } from "../components/CancelPremiumDialog";
 import { ChangePasswordDialog } from "../components/ChangePasswordDialog";
 import { useSelector } from "react-redux";
 import { SUBSCRIPTION_PLAN } from "../shared/Constants";
-import {Alert} from "@material-ui/lab";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   deactivatedCancelSubscriptionButton: {

@@ -21,9 +21,9 @@ export function InMyAreaView() {
   }, [user.isLoggedIn]);
 
   return (
-    <RequireLoggedIn>
+    <div>
       <SearchBar search={search} />
       <SearchResults search={search} title="GROUPS IN YOUR AREA" />
-    </RequireLoggedIn>
+    </div>
   );
 }
