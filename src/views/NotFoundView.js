@@ -1,8 +1,5 @@
 import React from "react";
-/**
- * For my groups
- * @param {props} props
- */
+
 export function NotFoundView(props) {
   return (
     <center>
