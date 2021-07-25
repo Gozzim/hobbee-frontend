@@ -23,7 +23,6 @@ import { useSelector } from "react-redux";
 import { NotificationBell } from "./Notifications/NotificationBell";
 import {
   BUTTON_YELLOW,
-  BUTTON_YELLOW_HOVER,
   HOBBEE_ORANGE,
 } from "../shared/Constants";
 import { getFileUrl } from "../services/FileService";
@@ -56,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: BUTTON_YELLOW,
     fontWeight: "bold",
     "&:hover": {
-      backgroundColor: BUTTON_YELLOW_HOVER,
+      backgroundColor: "white",
       color: "black",
     },
     fontSize: 17,
