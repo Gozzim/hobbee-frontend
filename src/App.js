@@ -1,19 +1,19 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { Route, Switch } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+
 import { ContentContainer } from "./components/ContentContainer";
 import { routes } from "./routes";
-import { Header } from "./components/Header";
+import Header from "./components/Header";
 import { Footer } from "./components/Footer";
 import { getToken, setToken } from "./services/HttpService";
 import { authReady, authUser } from "./redux/reducers/userReducer";
-import { useDispatch } from "react-redux";
 import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
-import { connect } from "react-redux";
-import { fetchNotifications } from "./redux/reducers/notificationReducer";
 import { ASCII_BEE } from "./shared/Constants";
 import { fetchHobbyTags } from "./redux/reducers/tagsReducer";
+import { RequireLoggedIn } from "./components/RequireLoggedIn";
 import { NotFoundView } from "./views/NotFoundView";
 
 const useStyles = makeStyles(() => ({
@@ -34,7 +34,6 @@ function App() {
     if (token) {
       setToken(token);
       dispatch(authUser());
-      dispatch(fetchNotifications());
     } else {
       dispatch(authReady());
     }
@@ -42,8 +41,8 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(ASCII_BEE)
-  })
+    console.log(ASCII_BEE);
+  });
 
   return (
     <div className={classes.appRoot}>
@@ -51,7 +50,7 @@ function App() {
       <Header />
       <ContentContainer footer={<Footer />}>
         <Switch>
-          {routes.map(({ path, Component, label }, i) => (
+          {routes.map(({ path, Component, label, loginOnly }, i) => (
             <Route
               exact
               key={i}
@@ -66,10 +65,17 @@ function App() {
                     : routeProps.match.path.includes(path)
                 );
                 return (
-                  <div>
-                    <DynamicBreadcrumbs crumbs={crumbs} />
-                    <Component {...routeProps} />
-                  </div>
+                  loginOnly ? (
+                    <RequireLoggedIn>
+                      <DynamicBreadcrumbs crumbs={crumbs} />
+                      <Component {...routeProps} />
+                    </RequireLoggedIn>
+                  ) : (
+                    <div>
+                      <DynamicBreadcrumbs crumbs={crumbs} />
+                      <Component {...routeProps} />
+                    </div>
+                    )
                 );
               }}
             />

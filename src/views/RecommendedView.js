@@ -21,7 +21,7 @@ export function RecommendedView(props) {
   }, [user.isLoggedIn, props.location, dispatch]);
 
   return (
-    <RequireLoggedIn>
+    <div>
       <SearchBar search={search} />
       <SearchResults search={search} title="RECOMMENDED FOR ME" />
     </RequireLoggedIn>

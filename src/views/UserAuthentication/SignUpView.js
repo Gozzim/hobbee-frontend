@@ -38,6 +38,7 @@ import { PasswordEye } from "../../components/UserDataInput/PasswordEye";
 import { PasswordStrengthBar } from "../../components/UserDataInput/PasswordStrengthBar";
 import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { TagComponent } from "../../components/TagComponent";
+import { createFilterOptions } from "@material-ui/lab";
 
 const useStyles = makeStyles(() => ({
   userSignUpRoot: {
@@ -245,123 +246,124 @@ function SignUpView(props) {
         <Grid container direction="column" spacing={2}>
           <Grid item>
             <SignInUpInput
-              id={"username"}
-              label={"Username"}
-              fieldValue={registerState.username}
-              changeFunc={onChangeUsername}
-              inputError={registerError.username !== ""}
-              errorMessage={registerError.username}
-              autoComplete={"username"}
+                id={"username"}
+                label={"Username"}
+                fieldValue={registerState.username}
+                changeFunc={onChangeUsername}
+                inputError={registerError.username !== ""}
+                errorMessage={registerError.username}
+                autoComplete={"username"}
             />
           </Grid>
           <Grid item>
             <SignInUpInput
-              id={"email"}
-              label={"Email"}
-              fieldValue={registerState.email}
-              changeFunc={onChangeEmail}
-              inputError={registerError.email !== ""}
-              errorMessage={registerError.email}
-              autoComplete={"email"}
+                id={"email"}
+                label={"Email"}
+                fieldValue={registerState.email}
+                changeFunc={onChangeEmail}
+                inputError={registerError.email !== ""}
+                errorMessage={registerError.email}
+                autoComplete={"email"}
             />
           </Grid>
           <Grid item>
             <SignInUpInput
-              id={"password"}
-              label={"Password"}
-              fieldValue={registerState.password}
-              changeFunc={onChangePassword}
-              fieldType={showPassword ? "text" : "password"}
-              inputProps={{
-                endAdornment: (
-                  <PasswordEye
-                    onClickEye={() => {
-                      setShowPassword(!showPassword);
-                    }}
-                    isShown={showPassword}
-                  />
-                ),
-              }}
-              inputError={registerError.password !== ""}
-              errorMessage={registerError.password}
-              autoComplete={"new-password"}
+                id={"password"}
+                label={"Password"}
+                fieldValue={registerState.password}
+                changeFunc={onChangePassword}
+                fieldType={showPassword ? "text" : "password"}
+                inputProps={{
+                  endAdornment: (
+                      <PasswordEye
+                          onClickEye={() => {
+                            setShowPassword(!showPassword);
+                          }}
+                          isShown={showPassword}
+                      />
+                  ),
+                }}
+                inputError={registerError.password !== ""}
+                errorMessage={registerError.password}
+                autoComplete={"new-password"}
             />
           </Grid>
           <Grid item>
             <SignInUpInput
-              id={"password2"}
-              label={"Repeat Password"}
-              fieldValue={registerState.confirmPassword}
-              changeFunc={onChangeConfirmPassword}
-              fieldType={showPassword ? "text" : "password"}
-              inputProps={{
-                endAdornment: (
-                  <PasswordEye
-                    onClickEye={() => {
-                      setShowPassword(!showPassword);
-                    }}
-                    isShown={showPassword}
-                  />
-                ),
-              }}
-              inputError={
-                registerError.password !== "" &&
-                registerState.confirmPassword !== ""
-              }
-              autoComplete={"new-password"}
+                id={"password2"}
+                label={"Repeat Password"}
+                fieldValue={registerState.confirmPassword}
+                changeFunc={onChangeConfirmPassword}
+                fieldType={showPassword ? "text" : "password"}
+                inputProps={{
+                  endAdornment: (
+                      <PasswordEye
+                          onClickEye={() => {
+                            setShowPassword(!showPassword);
+                          }}
+                          isShown={showPassword}
+                      />
+                  ),
+                }}
+                inputError={
+                  registerError.password !== "" &&
+                  registerState.confirmPassword !== ""
+                }
+                autoComplete={"new-password"}
             />
           </Grid>
           {passwordStrength > 0 && (
-            <Grid item>
-              <PasswordStrengthBar passStrength={passwordStrength} />
-            </Grid>
+              <Grid item>
+                <PasswordStrengthBar passStrength={passwordStrength} />
+              </Grid>
           )}
           <Grid item>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
-                disableFuture
-                fullWidth
-                required
-                variant={"inline"}
-                inputVariant={"outlined"}
-                id={"bday"}
-                label={"Date of birth"}
-                value={registerState.bday}
-                onChange={onChangeBday}
-                format={"dd.MM.yyyy"}
-                KeyboardButtonProps={{ edge: "end", tabIndex: "-1" }}
-                maxDate={minAge}
-                maxDateMessage={
-                  "You must be at least 18 years old to join Hobb.ee"
-                }
-                invalidDateMessage={""}
-                autoComplete={"bday"}
+                  disableFuture
+                  fullWidth
+                  required
+                  variant={"inline"}
+                  inputVariant={"outlined"}
+                  id={"bday"}
+                  label={"Date of birth"}
+                  value={registerState.bday}
+                  onChange={onChangeBday}
+                  format={"dd.MM.yyyy"}
+                  KeyboardButtonProps={{ edge: "end", tabIndex: "-1" }}
+                  maxDate={minAge}
+                  maxDateMessage={
+                    "You must be at least 18 years old to join Hobb.ee"
+                  }
+                  invalidDateMessage={""}
+                  autoComplete={"bday"}
               />
             </MuiPickersUtilsProvider>
           </Grid>
           <Grid item>
             <SignInUpInput
-              id={"city"}
-              label={"City of residence"}
-              fieldValue={registerState.city}
-              changeFunc={onChangeCity}
-              autoComplete={"address-level2"}
+                id={"city"}
+                label={"City of residence"}
+                fieldValue={registerState.city}
+                changeFunc={onChangeCity}
+                autoComplete={"address-level2"}
             />
           </Grid>
           <Grid item>
             <TagAutocomplete
-              onChange={onChangeHobbyInput}
-              value={selectedHobby}
-              inputValue={inputValue}
-              onInputChange={(e, v) => {
-                setInputValue(v);
-              }}
-              filterOptions={(options) => {
-                return options.filter((option) =>
-                    !registerState.hobbies.includes(option)
+                onChange={onChangeHobbyInput}
+                value={selectedHobby}
+                inputValue={inputValue}
+                onInputChange={(e, v) => {
+                  setInputValue(v);
+                }}
+                filterSelectedOptions
+                filterOptions={createFilterOptions({
+                  matchFrom: 'start',
+                  stringify: (option => !registerState.hobbies.includes(option) ? option.title : "")
 
-                )
-              }}
+                })
+              }
             />
             <div className={"creategroup-tags"}>
               {registerState.hobbies.map((x) => {

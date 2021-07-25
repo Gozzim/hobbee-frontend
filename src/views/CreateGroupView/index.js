@@ -74,10 +74,10 @@ export function CreateGroupView(props) {
   };
 
   return (
-    <RequireLoggedIn>
+    <div>
       {renderForm()}
       {renderButtons()}
-    </RequireLoggedIn>
+    </div>
   );
 
   function renderForm() {

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   AppBar,
@@ -13,19 +13,21 @@ import {
   Toolbar,
   useMediaQuery,
 } from "@material-ui/core";
-import UserMenu from "./UserMenu";
-import NotificationMenu from "./Notifications/NotificationMenu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
 import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
+import { connect, useDispatch, useSelector } from "react-redux";
+
+import UserMenu from "./UserMenu";
+import NotificationMenu from "./Notifications/NotificationMenu";
 import HobbeeIcon from "../assets/hobbee_white.svg";
-import { useSelector } from "react-redux";
 import { NotificationBell } from "./Notifications/NotificationBell";
 import {
   BUTTON_YELLOW,
   HOBBEE_ORANGE,
 } from "../shared/Constants";
 import { getFileUrl } from "../services/FileService";
+import { fetchNotifications } from "../redux/reducers/notificationReducer";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -72,8 +74,10 @@ const useStyles = makeStyles((theme) => ({
  * Navigation bar of the app
  * @param {props} props
  */
-export function Header(props) {
+function Header(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => {
     return state.user;
   });
@@ -86,6 +90,12 @@ export function Header(props) {
   const [drawerState, setDrawerState] = useState(false);
 
   const useFullWidthNavigation = useMediaQuery("(min-width:1114px)");
+
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      dispatch(fetchNotifications());
+    }
+  }, [dispatch, props.location, user.isLoggedIn])
 
   return (
     <AppBar position="sticky">
@@ -198,7 +208,7 @@ export function Header(props) {
             {user.isLoggedIn ? (
               <Avatar>
                 {user.user.avatar
-                  ? <img alt="user-image" width={50} height={50} src={getFileUrl(user.user.avatar)} />
+                  ? <img alt="user" width={50} height={50} src={getFileUrl(user.user.avatar)} />
                   : user.user.username
                   ? user.user.username[0]
                   : "🍯"}
@@ -217,3 +227,5 @@ export function Header(props) {
     </AppBar>
   );
 }
+
+export default connect()(withRouter(Header))

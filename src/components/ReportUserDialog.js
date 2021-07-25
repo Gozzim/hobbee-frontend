@@ -62,25 +62,15 @@ export function ReportUserDialog(props) {
   const [touched, setTouched] = React.useState({checkboxes: false, comment: false});
   const [confirmationOpen, setConfirmationOpen] = React.useState(false);
 
-  const {
-    comment,
-    inappropriateUsername,
-    threatsEtc,
-    hateSpeechEtc,
-    spamEtc,
-    inappropriateContent,
-    noShow,
-    other,
-  } = reportForm;
   const checkedElements =
     [
-      inappropriateUsername,
-      threatsEtc,
-      hateSpeechEtc,
-      spamEtc,
-      inappropriateContent,
-      noShow,
-      other,
+      reportForm.inappropriateUsername,
+      reportForm.threatsEtc,
+      reportForm.hateSpeechEtc,
+      reportForm.spamEtc,
+      reportForm.inappropriateContent,
+      reportForm.noShow,
+      reportForm.other,
     ].filter((v) => v).length;
 
   const handleOpen = () => {

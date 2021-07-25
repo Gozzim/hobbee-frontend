@@ -19,6 +19,7 @@ import { TagComponent } from "../TagComponent";
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
+import { createFilterOptions } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -263,11 +264,12 @@ export function SearchBar(props) {
                 onInputChange={(e, v) => {
                   setInputValue(v);
                 }}
-                filterOptions={(options) => {
-                  return options.filter(
-                    (option) => !search.filters.tags.includes(option._id)
-                  );
-                }}
+                filterSelectedOptions
+                filterOptions={createFilterOptions({
+                  matchFrom: 'start',
+                  stringify: (option => !search.filters.tags.includes(option._id) ? option.title : "")
+
+                })}
               />
             </Grid>
             <Grid item xs={6}>
