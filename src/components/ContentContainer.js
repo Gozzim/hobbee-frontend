@@ -44,13 +44,13 @@ export function ContentContainer(props) {
 
   return (
     <div className={classes.contentContainerRoot}>
-      <AdBanner />
       <div className={classes.scrollContainer}>
+        <AdBanner />
         <Container className={classes.wrapper} maxWidth="md">
           <main className={classes.main}>{children}</main>
           {footer}
         </Container>
-        <div className={classes.spacer} />
+        <AdBanner />
       </div>
     </div>
   );
