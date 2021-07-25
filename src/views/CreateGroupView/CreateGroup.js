@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TagComponent } from "../../components/TagComponent";
+import { withStyles } from "@material-ui/core/styles";
 import {
   FormControl,
   FormControlLabel,
@@ -8,11 +8,10 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import {
-  TagAutocomplete,
-} from "../../components/TagAutocomplete";
+
+import { TagComponent } from "../../components/TagComponent";
+import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
-import { withStyles } from "@material-ui/core/styles";
 import { RADIO_BUTTON_BLUE } from "../../shared/Constants";
 
 export function CreateGroup(props) {
@@ -24,13 +23,9 @@ export function CreateGroup(props) {
       return { ...touched, tags: true };
     });
     if (hobbyTag && !props.groupForm.tags.includes(hobbyTag)) {
-      try {
-        props.setGroupForm((groupForm) => {
-          return { ...groupForm, tags: [...groupForm.tags, hobbyTag] };
-        });
-      } catch (e) {
-        console.log(e.message);
-      }
+      props.setGroupForm((groupForm) => {
+        return { ...groupForm, tags: [...groupForm.tags, hobbyTag] };
+      });
     }
     setInputValue("");
     setSelectedHobby(null);
@@ -49,13 +44,14 @@ export function CreateGroup(props) {
   return (
     <>
       <Typography
-        variant={"h3"}
+        variant="h3"
         align="center"
         style={{ fontWeight: "bold", marginBottom: "40px" }}
       >
         CREATE GROUP
       </Typography>
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+
+      <Typography className="creategroup-padding" variant="h6">
         What do you want to call your group?
       </Typography>
       <TextField
@@ -84,10 +80,9 @@ export function CreateGroup(props) {
         }
       />
 
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className="creategroup-padding" variant="h6">
         In what city will your activity take place?
       </Typography>
-
       <TextField
         label="e.g. Munich"
         className=""
@@ -109,13 +104,12 @@ export function CreateGroup(props) {
         }
       />
 
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className="creategroup-padding" variant="h6">
         Do you want to meet online or in real life?
       </Typography>
-
       <FormControl component="fieldset">
         <RadioGroup
-          className={"creategroup-radios"}
+          className="creategroup-radios"
           onChange={(event) => {
             props.setGroupForm((groupForm) => {
               return { ...groupForm, onOffline: event.target.value };
@@ -141,7 +135,7 @@ export function CreateGroup(props) {
         </RadioGroup>
       </FormControl>
 
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className="creategroup-padding" variant="h6">
         Choose some tags!
         <Typography>This way, other users can find your group.</Typography>
       </Typography>
@@ -153,10 +147,9 @@ export function CreateGroup(props) {
         }}
         style={{ width: 300 }}
         filterOptions={(options) => {
-            return options.filter((option) =>
-                !props.groupForm.tags.includes(option)
-
-            )
+          return options.filter(
+            (option) => !props.groupForm.tags.includes(option)
+          );
         }}
         onChange={onChangeTagInput}
         value={selectedHobby}
@@ -168,7 +161,7 @@ export function CreateGroup(props) {
         }
       />
 
-      <div className={"creategroup-tags"}>
+      <div className="creategroup-tags">
         {props.groupForm.tags.map((x) => {
           return (
             <div style={{ marginRight: "10px", marginBottom: "10px" }}>

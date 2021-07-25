@@ -18,7 +18,7 @@ export function InMyAreaView(props) {
     if (user.isLoggedIn) {
       dispatch(getGroupsInMyArea());
     }
-  }, [user.isLoggedIn, props.location]);
+  }, [user.isLoggedIn, props.location, dispatch]);
 
   return (
     <RequireLoggedIn>

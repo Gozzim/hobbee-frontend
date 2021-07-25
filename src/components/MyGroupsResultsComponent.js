@@ -5,7 +5,7 @@ import GroupComponent from "./GroupComponent";
 import { getMyGroups } from "../redux/reducers/groupsReducer";
 import { useLocation } from "react-router";
 
-export function MyGroupsResultsComponent(props) {
+export function MyGroupsResultsComponent() {
   const currentGroups = useSelector((state) => {
     return state.groups.mine
       .map((id) => state.groups.data[id])
@@ -26,7 +26,7 @@ export function MyGroupsResultsComponent(props) {
     if (user.isLoggedIn) {
       dispatch(getMyGroups());
     }
-  }, [user.isLoggedIn, location]);
+  }, [user.isLoggedIn, location, dispatch]);
 
   return currentGroups.length > 0 || pastGroups.length > 0 ? (
     <div>

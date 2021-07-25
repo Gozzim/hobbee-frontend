@@ -11,8 +11,6 @@ import { Link } from "react-router-dom";
 import { SearchBar } from "../components/Search/SearchBar";
 import { SearchResults } from "../components/Search/SearchResults";
 import { useSearch } from "../hooks/useSearch";
-import { useDispatch, useSelector } from "react-redux";
-import { getGroups } from "../redux/reducers/groupsReducer";
 import {
   BUTTON_BLUE,
   BUTTON_BLUE_HOVER,

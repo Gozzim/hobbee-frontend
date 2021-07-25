@@ -27,7 +27,7 @@ import {
 import { getFileUrl, uploadRequest } from "../../services/FileService";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   deleteDateIcon: {
     width: "60px",
     height: "60px",
@@ -93,12 +93,13 @@ export function CustomizeGroup(props) {
   return (
     <div>
       <Typography
-        variant={"h3"}
+        variant="h3"
         align="center"
         style={{ fontWeight: "bold", marginBottom: "40px" }}
       >
         CUSTOMIZE
       </Typography>
+
       <Grid container spacing={3}>
         <Grid item xs={6} style={{ marginBottom: "20px" }}>
           <Dialog open={temporaryImage !== null} onClose={handleClose}>
@@ -144,6 +145,7 @@ export function CustomizeGroup(props) {
               }}
             >
               <img
+                alt=""
                 width={300}
                 height={225}
                 src={getFileUrl(props.groupForm.pic)}
@@ -151,7 +153,7 @@ export function CustomizeGroup(props) {
             </Button>
           ) : (
             <Button
-              className={"customizegroup-ButtonCard"}
+              className="customizegroup-ButtonCard"
               onClick={() => {
                 fileInput.current.click();
               }}
@@ -159,14 +161,14 @@ export function CustomizeGroup(props) {
               <div>
                 {props.groupForm.pic ? null : (
                   <>
-                    <div className={"imageIcon"}>
-                      <ImageIcon color={"disabled"} fontSize={"inherit"} />
+                    <div className="imageIcon">
+                      <ImageIcon color="disabled" fontSize="inherit" />
                     </div>
                     <Typography
-                      className={"selectImageText"}
-                      color={"textSecondary"}
-                      align={"center"}
-                      variant={"h6"}
+                      className="selectImageText"
+                      color="textSecondary"
+                      align="center"
+                      variant="h6"
                     >
                       Upload image
                     </Typography>
@@ -176,8 +178,8 @@ export function CustomizeGroup(props) {
             </Button>
           )}
           <input
-            type={"file"}
-            className={"customizegroup-file"}
+            type="file"
+            className="customizegroup-file"
             ref={fileInput}
             onChange={async (event) => {
               props.setTouched((touched) => {
@@ -214,13 +216,13 @@ export function CustomizeGroup(props) {
                 reader.readAsDataURL(file);
               }
             }}
-            accept={".jpg, .jpeg, .png"}
+            accept=".jpg, .jpeg, .png"
           />
         </Grid>
         <Grid item xs={6}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant={"h6"} style={{ marginTop: "20px" }}>
+              <Typography variant="h6" style={{ marginTop: "20px" }}>
                 Upload or choose a profile picture:
                 <IconButton
                   onClick={() => {
@@ -259,7 +261,12 @@ export function CustomizeGroup(props) {
                           setFileUploadError("");
                         }}
                       >
-                        <img width={130} height={95} src={getFileUrl(id)} />
+                        <img
+                          alt=""
+                          width={130}
+                          height={95}
+                          src={getFileUrl(id)}
+                        />
                       </Button>
                     </div>
                   );
@@ -269,15 +276,14 @@ export function CustomizeGroup(props) {
           </Grid>
         </Grid>
         <Grid item xs={6}>
-          <Typography variant={"h6"} style={{ marginTop: "12px" }}>
+          <Typography variant="h6" style={{ marginTop: "12px" }}>
             Limit the number of participants:
           </Typography>
         </Grid>
         <Grid item xs={6}>
           <TextField
-            id="standard-number"
             type="number"
-            placeholder={"unlimited"}
+            placeholder="unlimited"
             variant="outlined"
             onChange={(event) => {
               props.setGroupForm((groupForm) => {
@@ -299,14 +305,14 @@ export function CustomizeGroup(props) {
           />
         </Grid>
         <Grid item xs={6} style={{ marginTop: "24px" }}>
-          <Typography variant={"h6"}>Set a time and date:</Typography>
+          <Typography variant="h6">Set a time and date:</Typography>
         </Grid>
         <Grid item xs={6}>
           <div style={{ display: "flex", marginBottom: "10px" }}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 margin="normal"
-                format={"dd.MM.yyyy"}
+                format="dd.MM.yyyy"
                 disablePast
                 inputVariant="outlined"
                 style={{ marginRight: "10px" }}
@@ -331,7 +337,7 @@ export function CustomizeGroup(props) {
               <KeyboardTimePicker
                 keyboardIcon={<ScheduleIcon />}
                 margin="normal"
-                format={"HH:mm"}
+                format="HH:mm"
                 inputVariant="outlined"
                 onChange={(date) => {
                   props.setTouched((touched) => {
@@ -378,12 +384,11 @@ export function CustomizeGroup(props) {
           </div>
         </Grid>
         <Grid item xs={6} style={{ marginTop: "12px" }}>
-          <Typography variant={"h6"}>Choose a specific location:</Typography>
+          <Typography variant="h6">Choose a specific location:</Typography>
         </Grid>
         <Grid item xs={6}>
           <TextField
-            label="e.g. TUMStammgelände, Arcisstr. 21 80333"
-            id="TitleField"
+            label="e.g. TUM Stammgelände, Arcisstr. 21 80333"
             type="text"
             className=""
             fullWidth
@@ -396,7 +401,7 @@ export function CustomizeGroup(props) {
           />
         </Grid>
       </Grid>
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className="creategroup-padding" variant="h6">
         Give a short description of the planned activity:
       </Typography>
       <TextField
