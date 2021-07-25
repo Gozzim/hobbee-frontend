@@ -25,6 +25,24 @@ import {
   Typography,
 } from "@material-ui/core";
 import { getFileUrl, uploadRequest } from "../../services/FileService";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  deleteDateIcon: {
+    width: "60px",
+    height: "60px",
+    marginLeft: "10px",
+    marginTop: "14px",
+  },
+}));
+
+const CustomTooltip = withStyles((theme) => ({
+  tooltip: {
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    margin: 0,
+  },
+}))(Tooltip);
 
 const examplePics = [
   "60ec51d7e0edf15bb9e1993a",
@@ -33,6 +51,7 @@ const examplePics = [
 ];
 
 export function CustomizeGroup(props) {
+  const classes = useStyles();
   const fileInput = React.useRef();
   const [temporaryImage, setTemporaryImage] = React.useState(null);
   const [scale, setScale] = React.useState(1);
@@ -64,299 +83,302 @@ export function CustomizeGroup(props) {
 
   return (
     <div>
-      <Typography variant="h3" component={"h1"} align={"center"} className={""}>
-        Customize Group
+      <Typography
+        variant={"h3"}
+        align="center"
+        style={{ fontWeight: "bold", marginBottom: "40px" }}
+      >
+        CUSTOMIZE
       </Typography>
-      <Typography variant="h6" component={"h2"} align={"center"} className={""}>
-        Add some personality
-      </Typography>
-      <div className={"customizegroup-grid"}>
-        <Grid container spacing={6}>
-          <Grid item xs={6}>
-            <Dialog open={temporaryImage !== null} onClose={handleClose}>
-              <DialogContent>
-                <AvatarEditor
-                  image={temporaryImage}
-                  scale={scale}
-                  width={300}
-                  height={225}
-                  border={50}
-                  color={[0, 0, 0, 0.6]}
-                  rotate={0}
-                  ref={avatarEditor}
-                />
-                <Slider
-                  min={0.1}
-                  max={5}
-                  step={0.1}
-                  value={scale}
-                  onChange={(_event, value) => {
-                    setScale(value);
-                  }}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                  Cancel
-                </Button>
-                <Button onClick={handleSave} color="primary" autoFocus>
-                  Save
-                </Button>
-              </DialogActions>
-            </Dialog>
-            {props.groupForm.pic ? (
-              <Button
-                onClick={() => {
-                  fileInput.current.click();
+      <Grid container spacing={3}>
+        <Grid item xs={6} style={{ marginBottom: "20px" }}>
+          <Dialog open={temporaryImage !== null} onClose={handleClose}>
+            <DialogContent>
+              <AvatarEditor
+                image={temporaryImage}
+                scale={scale}
+                width={300}
+                height={225}
+                border={50}
+                color={[0, 0, 0, 0.6]}
+                rotate={0}
+                ref={avatarEditor}
+              />
+              <Slider
+                min={0.1}
+                max={5}
+                step={0.1}
+                value={scale}
+                onChange={(_event, value) => {
+                  setScale(value);
                 }}
-              >
-                <img
-                  width={300}
-                  height={225}
-                  src={getFileUrl(props.groupForm.pic)}
-                />
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Cancel
               </Button>
-            ) : (
-              <Button
-                className={"customizegroup-ButtonCard"}
-                onClick={() => {
-                  fileInput.current.click();
-                }}
-              >
-                <div>
-                  {props.groupForm.pic ? null : (
-                    <>
-                      <div className={"imageIcon"}>
-                        <ImageIcon color={"disabled"} fontSize={"inherit"} />
-                      </div>
-                      <Typography
-                        className={"selectImageText"}
-                        color={"textSecondary"}
-                        align={"center"}
-                        variant={"h6"}
-                      >
-                        Upload image
-                      </Typography>
-                    </>
-                  )}
-                </div>
+              <Button onClick={handleSave} color="primary" autoFocus>
+                Save
               </Button>
-            )}
-            <input
-              type={"file"}
-              className={"customizegroup-file"}
-              ref={fileInput}
-              onChange={async (event) => {
-                props.setTouched((touched) => {
-                  return { ...touched, pic: true };
-                });
-
-                const file = event.target.files[0];
-                if (file.size > 500 * 1024) {
-                  setFileUploadError(
-                    "The file size has to be smaller than 500 KB"
-                  );
-                  return;
-                }
-                const allowedFileTypes = [
-                  "image/png",
-                  "image/jpeg",
-                  "image/jpg",
-                ];
-                if (!allowedFileTypes.includes(file.type)) {
-                  setFileUploadError(
-                    "The file has to be of type jpg, jpeg or png"
-                  );
-                  return;
-                }
-                setFileUploadError("");
-                const reader = new FileReader();
-
-                reader.addEventListener(
-                  "load",
-                  function () {
-                    // convert image file to base64 string
-                    setTemporaryImage(reader.result);
-                  },
-                  false
-                );
-
-                if (file) {
-                  reader.readAsDataURL(file);
-                }
+            </DialogActions>
+          </Dialog>
+          {props.groupForm.pic ? (
+            <Button
+              onClick={() => {
+                fileInput.current.click();
               }}
-              accept={".jpg, .jpeg, .png"}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>
-              Upload or choose a profile picture:
-              <IconButton
-                onClick={() => {
-                  fileInput.current.click();
-                }}
-              >
-                <PublishIcon />
-              </IconButton>
-            </Typography>
-            <div className={"customizegroup-filename"}>
-              {props.groupForm.pic === "" && props.touched.pic ? (
-                <FormHelperText error>
-                  You need to upload or to select a picture
-                </FormHelperText>
-              ) : null}
-              {fileUploadError ? (
-                <FormHelperText error>{fileUploadError}</FormHelperText>
-              ) : null}
-            </div>
-            <div className={"customizegroup-avatare"}>
-              {examplePics.map((id) => {
-                return (
-                  <div className="customizegroup-avatar-container" key={id}>
-                    <Button
-                      onClick={() => {
-                        props.setTouched((touched) => {
-                          return { ...touched, pic: true };
-                        });
-                        props.setGroupForm((groupForm) => {
-                          return { ...groupForm, pic: id };
-                        });
-                        fileInput.current.value = "";
-                        setFileUploadError("");
-                      }}
+            >
+              <img
+                width={300}
+                height={225}
+                src={getFileUrl(props.groupForm.pic)}
+              />
+            </Button>
+          ) : (
+            <Button
+              className={"customizegroup-ButtonCard"}
+              onClick={() => {
+                fileInput.current.click();
+              }}
+            >
+              <div>
+                {props.groupForm.pic ? null : (
+                  <>
+                    <div className={"imageIcon"}>
+                      <ImageIcon color={"disabled"} fontSize={"inherit"} />
+                    </div>
+                    <Typography
+                      className={"selectImageText"}
+                      color={"textSecondary"}
+                      align={"center"}
+                      variant={"h6"}
                     >
-                      <img width={130} height={95} src={getFileUrl(id)} />
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-          </Grid>
-
-          <Grid item xs={6} className={"border"}>
-            <Typography>Limit the number of participants:</Typography>
-          </Grid>
-          <Grid item xs={6} className={"border"}>
-            <TextField
-              id="standard-number"
-              type="number"
-              placeholder={"unlimited"}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={(event) => {
-                props.setGroupForm((groupForm) => {
-                  if (parseInt(event.target.value, 10) < 1) {
-                    return { ...groupForm, maxMembers: "" };
-                  } else if (
-                    event.target.value === "1" &&
-                    groupForm.maxMembers === "2"
-                  ) {
-                    return { ...groupForm, maxMembers: "" };
-                  } else if (event.target.value === "1") {
-                    return { ...groupForm, maxMembers: "2" };
-                  } else {
-                    return { ...groupForm, maxMembers: event.target.value };
-                  }
-                });
-              }}
-              value={props.groupForm.maxMembers}
-            />
-          </Grid>
-          <Grid item xs={6} className={"border"}>
-            <Typography>Set a time and date:</Typography>
-          </Grid>
-          <Grid item xs={6} className={"border"}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <div className={"customizegroup-datetime-container"}>
-                <KeyboardDatePicker
-                  margin="normal"
-                  format={"dd.MM.yyyy"}
-                  disablePast
-                  onChange={(date) => {
-                    if (date instanceof Date && !isNaN(date)) {
-                      props.setGroupForm((groupForm) => {
-                        return {
-                          ...groupForm,
-                          date: date.toISOString(),
-                        };
-                      });
-                    }
-                  }}
-                  value={props.groupForm.date}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-                <KeyboardTimePicker
-                  keyboardIcon={<ScheduleIcon />}
-                  margin="normal"
-                  format={"HH:mm"}
-                  onChange={(date) => {
-                    if (date instanceof Date && !isNaN(date)) {
-                      props.setGroupForm((groupForm) => {
-                        return {
-                          ...groupForm,
-                          date: date.toISOString(),
-                        };
-                      });
-                    }
-                  }}
-                  value={props.groupForm.date}
-                />
-                <Tooltip title="Reset date">
-                  <IconButton
-                    al
-                    className={"creategroup-nodatebutton"}
-                    onClick={() => {
-                      props.setGroupForm((groupForm) => {
-                        return { ...groupForm, date: null };
-                      });
-                    }}
-                    disabled={!props.groupForm.date}
-                  >
-                    <DeleteForeverIcon />
-                  </IconButton>
-                </Tooltip>
+                      Upload image
+                    </Typography>
+                  </>
+                )}
               </div>
-            </MuiPickersUtilsProvider>
+            </Button>
+          )}
+          <input
+            type={"file"}
+            className={"customizegroup-file"}
+            ref={fileInput}
+            onChange={async (event) => {
+              props.setTouched((touched) => {
+                return { ...touched, pic: true };
+              });
+
+              const file = event.target.files[0];
+              if (file.size > 500 * 1024) {
+                setFileUploadError(
+                  "The file size has to be smaller than 500 KB"
+                );
+                return;
+              }
+              const allowedFileTypes = ["image/png", "image/jpeg", "image/jpg"];
+              if (!allowedFileTypes.includes(file.type)) {
+                setFileUploadError(
+                  "The file has to be of type jpg, jpeg or png"
+                );
+                return;
+              }
+              setFileUploadError("");
+              const reader = new FileReader();
+
+              reader.addEventListener(
+                "load",
+                function () {
+                  // convert image file to base64 string
+                  setTemporaryImage(reader.result);
+                },
+                false
+              );
+
+              if (file) {
+                reader.readAsDataURL(file);
+              }
+            }}
+            accept={".jpg, .jpeg, .png"}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant={"h6"} style={{ marginTop: "20px" }}>
+                Upload or choose a profile picture:
+                <IconButton
+                  onClick={() => {
+                    fileInput.current.click();
+                  }}
+                  style={{ marginLeft: "10px" }}
+                >
+                  <PublishIcon />
+                </IconButton>
+              </Typography>
+              <div>
+                {props.groupForm.pic === "" && props.touched.pic ? (
+                  <FormHelperText error>
+                    You need to upload or to select a picture
+                  </FormHelperText>
+                ) : null}
+                {fileUploadError ? (
+                  <FormHelperText error>{fileUploadError}</FormHelperText>
+                ) : null}
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <div style={{ display: "flex", marginLeft: "-8px" }}>
+                {examplePics.map((id) => {
+                  return (
+                    <div key={id}>
+                      <Button
+                        onClick={() => {
+                          props.setTouched((touched) => {
+                            return { ...touched, pic: true };
+                          });
+                          props.setGroupForm((groupForm) => {
+                            return { ...groupForm, pic: id };
+                          });
+                          fileInput.current.value = "";
+                          setFileUploadError("");
+                        }}
+                      >
+                        <img width={130} height={95} src={getFileUrl(id)} />
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            </Grid>
           </Grid>
-          <Grid item xs={6} className={"border"}>
-            <Typography>Choose a specific location:</Typography>
-          </Grid>
-          <Grid item xs={6} className={"border"}>
-            <TextField
-              label="e.g. Arcisstr.21, 80333 Munich"
-              id="TitleField"
-              type="text"
-              className=""
-              fullWidth
-              onChange={(event) => {
-                props.setGroupForm((groupForm) => {
-                  return { ...groupForm, location: event.target.value };
-                });
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} className={"border"}>
-            <Typography>
-              Give a short description of the planned activity:
-            </Typography>
-          </Grid>
-          <Grid item xs={6} />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant={"h6"} style={{ marginTop: "12px" }}>
+            Limit the number of participants:
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
           <TextField
-            multiline
-            rows={6}
+            id="standard-number"
+            type="number"
+            placeholder={"unlimited"}
             variant="outlined"
-            fullWidth
             onChange={(event) => {
               props.setGroupForm((groupForm) => {
-                return { ...groupForm, description: event.target.value };
+                if (parseInt(event.target.value, 10) < 1) {
+                  return { ...groupForm, maxMembers: "" };
+                } else if (
+                  event.target.value === "1" &&
+                  groupForm.maxMembers === "2"
+                ) {
+                  return { ...groupForm, maxMembers: "" };
+                } else if (event.target.value === "1") {
+                  return { ...groupForm, maxMembers: "2" };
+                } else {
+                  return { ...groupForm, maxMembers: event.target.value };
+                }
+              });
+            }}
+            value={props.groupForm.maxMembers}
+          />
+        </Grid>
+        <Grid item xs={6} style={{ marginTop: "24px" }}>
+          <Typography variant={"h6"}>Set a time and date:</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <div style={{ display: "flex", marginBottom: "10px" }}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                margin="normal"
+                format={"dd.MM.yyyy"}
+                disablePast
+                inputVariant="outlined"
+                style={{ marginRight: "10px" }}
+                onChange={(date) => {
+                  if (date instanceof Date && !isNaN(date)) {
+                    props.setGroupForm((groupForm) => {
+                      return {
+                        ...groupForm,
+                        date: date.toISOString(),
+                      };
+                    });
+                  }
+                }}
+                value={props.groupForm.date}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <KeyboardTimePicker
+                keyboardIcon={<ScheduleIcon />}
+                margin="normal"
+                format={"HH:mm"}
+                inputVariant="outlined"
+                onChange={(date) => {
+                  if (date instanceof Date && !isNaN(date)) {
+                    props.setGroupForm((groupForm) => {
+                      return {
+                        ...groupForm,
+                        date: date.toISOString(),
+                      };
+                    });
+                  }
+                }}
+                value={props.groupForm.date}
+              />
+              <CustomTooltip title="Reset date">
+                <IconButton
+                  al
+                  className={classes.deleteDateIcon}
+                  onClick={() => {
+                    props.setGroupForm((groupForm) => {
+                      return { ...groupForm, date: null };
+                    });
+                  }}
+                  disabled={!props.groupForm.date}
+                >
+                  <DeleteForeverIcon />
+                </IconButton>
+              </CustomTooltip>
+            </MuiPickersUtilsProvider>
+          </div>
+        </Grid>
+        <Grid item xs={6} style={{ marginTop: "12px" }}>
+          <Typography variant={"h6"}>Choose a specific location:</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            label="e.g. TUMStammgelände, Arcisstr. 21 80333"
+            id="TitleField"
+            type="text"
+            className=""
+            fullWidth
+            variant="outlined"
+            onChange={(event) => {
+              props.setGroupForm((groupForm) => {
+                return { ...groupForm, location: event.target.value };
               });
             }}
           />
         </Grid>
-      </div>
+      </Grid>
+      <Typography className={"creategroup-padding"} variant={"h6"}>
+        Give a short description of the planned activity:
+      </Typography>
+      <TextField
+        multiline
+        rows={6}
+        variant="outlined"
+        fullWidth
+        style={{ marginBottom: "30px" }}
+        onChange={(event) => {
+          props.setGroupForm((groupForm) => {
+            return { ...groupForm, description: event.target.value };
+          });
+        }}
+      />
     </div>
   );
 }

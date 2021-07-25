@@ -9,7 +9,6 @@ import {
   DialogTitle,
   Typography,
 } from "@material-ui/core";
-import { HOBBEE_ORANGE } from "../../shared/Constants";
 import { forgotPasswordRequest } from "../../services/UserService";
 import { SignInUpInput } from "./SignInUpInput";
 
@@ -26,9 +25,9 @@ export function ForgotPasswordDialog(props) {
       setFinished(true);
     } catch (e) {
       if (e.response.status && e.response.status === 404) {
-        setError("No user with this email found")
+        setError("No user with this email found");
       } else {
-        setError(e.message)
+        setError(e.message);
       }
     }
   };
@@ -58,33 +57,26 @@ export function ForgotPasswordDialog(props) {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button
-              onClick={closeMe}
-              variant="contained"
-              color="primary"
-              style={{ backgroundColor: HOBBEE_ORANGE }}
-            >
-              Close
-            </Button>
+            <Button onClick={closeMe}>Close</Button>
           </DialogActions>
         </div>
       ) : (
         <div>
           <DialogContent>
             <DialogContentText>
-              Enter your email address below and we will send you instructions on
-              how to reset your password.
+              Enter your email address below and we will send you instructions
+              on how to reset your password.
             </DialogContentText>
             <SignInUpInput
-                id={"email"}
-                label={"Email"}
-                autoFocus
-                fieldValue={email}
-                changeFunc={(event) => {
-                  setEmail(event.currentTarget.value);
-                }}
-                inputLabelProps={{ required: false }}
-                autoComplete={"email"}
+              id={"email"}
+              label={"Email"}
+              autoFocus
+              fieldValue={email}
+              changeFunc={(event) => {
+                setEmail(event.currentTarget.value);
+              }}
+              inputLabelProps={{ required: false }}
+              autoComplete={"email"}
             />
             {error ? (
               <div>
@@ -93,16 +85,10 @@ export function ForgotPasswordDialog(props) {
             ) : null}
           </DialogContent>
           <DialogActions>
-            <Button onClick={props.onClose} color="primary" type={"button"}>
+            <Button onClick={props.onClose} type={"button"}>
               Cancel
             </Button>
-            <Button
-                onClick={onSubmit}
-              variant="contained"
-              color="primary"
-              type="submit"
-              style={{ backgroundColor: HOBBEE_ORANGE }}
-            >
+            <Button onClick={onSubmit} type="submit">
               Submit
             </Button>
           </DialogActions>

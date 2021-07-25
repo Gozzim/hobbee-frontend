@@ -7,6 +7,8 @@ import { Button, IconButton } from "@material-ui/core";
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import UserIcon from "@material-ui/icons/AccountCircle";
 import {
+  BUTTON_BLUE,
+  BUTTON_BLUE_HOVER,
   HOBBEE_BROWN,
 } from "../shared/Constants";
 import EventIcon from "@material-ui/icons/Event";
@@ -36,13 +38,12 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "20px",
   },
   joinButton: {
-    width: "200px",
-    backgroundColor: "#1CE9E3",
-    fontSize: 15,
-    padding: "2px",
+    width: "182px",
+    backgroundColor: BUTTON_BLUE,
+    padding: "8px 10px",
+    color: "black",
     "&:hover": {
-      backgroundColor: "#FFCC00",
-      color: "#32210B",
+      backgroundColor: BUTTON_BLUE_HOVER,
     },
   },
   expiredIcon: {
@@ -66,8 +67,8 @@ function GroupInformationComponent(props) {
     return state.user;
   });
 
-  if(props.group.groupName === "") {
-    return <div/>
+  if (props.group.groupName === "") {
+    return <div />;
   }
 
   return (
@@ -77,7 +78,11 @@ function GroupInformationComponent(props) {
           <Typography
             variant="h4"
             color="inherit"
-            style={{ wordWrap: "break-word", fontWeight: "bold" }}
+            style={{
+              wordWrap: "break-word",
+              fontWeight: "bold",
+              marginBottom: "-5px",
+            }}
           >
             {props.group.groupName}
           </Typography>
@@ -111,23 +116,21 @@ function GroupInformationComponent(props) {
             <Typography variant="h6">
               {props.group.groupOwner.username}
             </Typography>
-            {props.group.groupOwner.premium.active
-                ? (
-                  <CustomTooltip
-                      title={
-                        props.group.groupOwner.username + " is boosting this group."
-                      }
-                  >
-                    <TrendingUpIcon
-                        style={{
-                          fill: "#17C2BC",
-                          marginTop: "4px",
-                          marginLeft: "8px",
-                        }}
-                    />
-                  </CustomTooltip>
-              ) : null
-            }
+            {props.group.groupOwner.premium.active ? (
+              <CustomTooltip
+                title={
+                  props.group.groupOwner.username + " is boosting this group."
+                }
+              >
+                <TrendingUpIcon
+                  style={{
+                    fill: "#17C2BC",
+                    marginTop: "4px",
+                    marginLeft: "8px",
+                  }}
+                />
+              </CustomTooltip>
+            ) : null}
           </div>
         </Grid>
         <Grid item xs={2}>
@@ -162,14 +165,14 @@ function GroupInformationComponent(props) {
         </Grid>
         <Grid item xs={10}>
           {props.joined && !props.group.location == "" ? (
-              <div>
-            <Typography variant="h6" style={{ wordWrap: "break-word" }}>
-              {props.group.location}
-            </Typography>
+            <div>
+              <Typography variant="h6" style={{ wordWrap: "break-word" }}>
+                {props.group.location}
+              </Typography>
               <Typography variant="h6" style={{ wordWrap: "break-word" }}>
                 {props.group.city}
               </Typography>
-              </div>
+            </div>
           ) : (
             <Typography variant="h6" style={{ wordWrap: "break-word" }}>
               {props.group.city}
@@ -191,13 +194,22 @@ function GroupInformationComponent(props) {
                         {...bindTrigger(popupState)}
                       />
                     </CustomTooltip>
-                    <Menu {...bindMenu(popupState)}
-                          getContentAnchorEl={null}
-                          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                          transformOrigin={{ vertical: "bottom", horizontal: "left" }}>
+                    <Menu
+                      {...bindMenu(popupState)}
+                      getContentAnchorEl={null}
+                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                      transformOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                      }}
+                    >
                       {props.group.groupMembers.map((member) => {
                         return (
-                          <MenuItem onClick={() => props.history.push("/user/" + member.username)}>
+                          <MenuItem
+                            onClick={() =>
+                              props.history.push("/user/" + member.username)
+                            }
+                          >
                             {member.username}
                           </MenuItem>
                         );
@@ -226,7 +238,11 @@ function GroupInformationComponent(props) {
           props.group.groupOwner._id === user.user._id &&
           (props.group.date === null ||
             props.group.date > new Date().toISOString()) ? (
-            <EditGroupDialog group={props.group} setGroup={props.setGroup} handleDelete={props.handleDelete}/>
+            <EditGroupDialog
+              group={props.group}
+              setGroup={props.setGroup}
+              handleDelete={props.handleDelete}
+            />
           ) : null}
         </Grid>
         {!props.joined ? (
@@ -242,12 +258,15 @@ function GroupInformationComponent(props) {
             </Grid>
           ) : (
             <Grid item xs={12}>
-              <div style={{ display: "flex"}}>
+              <div style={{ display: "flex" }}>
                 <div className={classes.detailsItem}>
                   <ErrorIcon style={{ fill: "tomato" }} />
                 </div>
-                <div style={{marginTop: "8px", marginLeft: "15px"}}>
-                  <Typography variant="h7" style={{ color: "tomato", fontWeight: 800 }}>
+                <div style={{ marginTop: "8px", marginLeft: "15px" }}>
+                  <Typography
+                    variant="h7"
+                    style={{ color: "tomato", fontWeight: 800 }}
+                  >
                     This group has expired and can't be joined.
                   </Typography>
                 </div>

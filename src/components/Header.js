@@ -21,7 +21,12 @@ import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
 import HobbeeIcon from "../assets/hobbee_white.svg";
 import { useSelector } from "react-redux";
 import { NotificationBell } from "./Notifications/NotificationBell";
-import { HOBBEE_ORANGE } from "../shared/Constants";
+import {
+  BUTTON_YELLOW,
+  BUTTON_YELLOW_HOVER,
+  HOBBEE_BROWN,
+  HOBBEE_ORANGE,
+} from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -37,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   navButton: {
     color: "white",
+    fontWeight: "bold",
     "&:hover": {
       backgroundColor: "#FFFFFF",
       color: "#32210B",
@@ -46,11 +52,12 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 20,
   },
   createGroupButton: {
-    color: "#32210B",
-    backgroundColor: "#FFCC00",
+    color: HOBBEE_BROWN,
+    backgroundColor: BUTTON_YELLOW,
+    fontWeight: "bold",
     "&:hover": {
-      backgroundColor: "#1CE9E3",
-      color: "#32210B",
+      backgroundColor: BUTTON_YELLOW_HOVER,
+      color: HOBBEE_BROWN,
     },
     fontSize: 17,
     marginLeft: 20,

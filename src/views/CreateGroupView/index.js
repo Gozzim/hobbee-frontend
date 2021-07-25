@@ -5,6 +5,20 @@ import { CustomizeGroup } from "./CustomizeGroup";
 import { createRequest } from "../../services/GroupService";
 import { RequireLoggedIn } from "../../components/RequireLoggedIn";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
+import { makeStyles } from "@material-ui/core/styles";
+import { BUTTON_BLUE, BUTTON_BLUE_HOVER } from "../../shared/Constants";
+
+const useStyles = makeStyles(() => ({
+  button: {
+    padding: "8px 10px",
+    backgroundColor: BUTTON_BLUE,
+    width: "100px",
+    color: "black",
+    "&:hover": {
+      backgroundColor: BUTTON_BLUE_HOVER,
+    },
+  },
+}));
 
 const initialGroupFormState = {
   groupName: "",
@@ -25,6 +39,7 @@ const initialTouchedState = {
 };
 
 export function CreateGroupView(props) {
+  const classes = useStyles();
   const [groupForm, setGroupForm] = React.useState(initialGroupFormState);
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [formStep, setFormStep] = React.useState(0);
@@ -56,7 +71,7 @@ export function CreateGroupView(props) {
         <div className="creategroup-continuebutton">
           <Button
             type="button"
-            variant="contained"
+            className={classes.button}
             onClick={() => {
               if (
                 isValidGroupname(groupForm.groupName) &&
@@ -85,17 +100,17 @@ export function CreateGroupView(props) {
         <div className="customizegroup-bottombuttons">
           <Button
             type="button"
-            variant="contained"
             onClick={() => {
               setFormStep(0);
             }}
+            className={classes.button}
           >
-            Back
+            BACK
           </Button>
 
           <Button
             type="button"
-            variant="contained"
+            className={classes.button}
             onClick={async () => {
               if (groupForm.pic !== "") {
                 const response = await createRequest(groupForm);

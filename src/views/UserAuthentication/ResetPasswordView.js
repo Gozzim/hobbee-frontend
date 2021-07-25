@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
 import { resetPassword } from "../../redux/reducers/userReducer";
-import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../../shared/Constants";
+import { BUTTON_BLUE, BUTTON_BLUE_HOVER } from "../../shared/Constants";
 import {
   getPasswordStrength,
   isValidPassword,
@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
   },
   submitButton: {
-    backgroundColor: HOBBEE_ORANGE,
+    backgroundColor: BUTTON_BLUE,
     "&:hover": {
-      backgroundColor: HOBBEE_YELLOW,
+      backgroundColor: BUTTON_BLUE_HOVER,
     },
   },
 }));
@@ -163,8 +163,6 @@ function ResetPasswordView(props) {
               fullWidth
               className={classes.submitButton}
               size={"large"}
-              variant="contained"
-              color="primary"
               type="submit"
             >
               Change password

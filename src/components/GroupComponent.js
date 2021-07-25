@@ -21,7 +21,7 @@ import { TagComponent } from "./TagComponent";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useSelector } from "react-redux";
-import { PAPER_CREAM } from "../shared/Constants";
+import { PAPER_CREAM, RADIO_BUTTON_BLUE } from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   icons: {
@@ -193,9 +193,11 @@ export function GroupComponent(props) {
             <div>
               {user.authReady &&
               user.isLoggedIn &&
-              props.group.groupMembers.includes(user.user._id) ? (
+              props.group.groupMembers.some(
+                (member) => member._id === user.user._id
+              ) ? (
                 <CustomTooltip title={"Joined"}>
-                  <CheckCircleIcon style={{ color: "mediumseagreen" }} />
+                  <CheckCircleIcon style={{ color: RADIO_BUTTON_BLUE }} />
                 </CustomTooltip>
               ) : null}
             </div>
@@ -225,7 +227,7 @@ export function GroupComponent(props) {
         <div>
           {props.group.tags.slice(1).map((x) => {
             return (
-              <div style={{ marginRight: "5px", marginBottom: "5px" }}>
+              <div style={{ marginBottom: "5px" }}>
                 <TagComponent id={x} />
               </div>
             );
