@@ -14,16 +14,15 @@ import { useSearch } from "../hooks/useSearch";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroups } from "../redux/reducers/groupsReducer";
 import {
+  BUTTON_BLUE,
   BUTTON_BLUE_HOVER,
   BUTTON_YELLOW,
-  BUTTON_YELLOW_HOVER,
   HOBBEE_BROWN,
   HOBBEE_ORANGE,
 } from "../shared/Constants";
 
 const useStyles = makeStyles(() => ({
   topContent: {
-    marginTop: "40px",
     display: "flex",
     color: "#32210B",
   },
@@ -36,21 +35,22 @@ const useStyles = makeStyles(() => ({
   },
   createGroupButton: {
     color: HOBBEE_BROWN,
-    backgroundColor: BUTTON_YELLOW,
+    backgroundColor: BUTTON_BLUE,
     "&:hover": {
-      backgroundColor: BUTTON_YELLOW_HOVER,
+      backgroundColor: BUTTON_BLUE_HOVER,
       color: HOBBEE_BROWN,
     },
     marginTop: "10px",
   },
   bottomContent: {
     color: HOBBEE_BROWN,
-    borderColor: BUTTON_BLUE_HOVER,
+    borderColor: BUTTON_YELLOW,
     backgroundColor: "white",
     borderStyle: "solid",
     borderWidth: "17px",
     borderRadius: "25px",
     paddingTop: "10px",
+    marginBottom: "30px",
   },
   stepsContainer: {
     color: HOBBEE_BROWN,
@@ -65,7 +65,7 @@ const useStyles = makeStyles(() => ({
     width: "200px",
   },
   stepIcon: {
-    color: "#13a09b",
+    color: HOBBEE_ORANGE,
     margin: "30px",
     marginBottom: "15px",
     fontSize: "5rem",
@@ -76,7 +76,7 @@ const useStyles = makeStyles(() => ({
     top: "50px",
     left: "50%",
     transform: "translateX(-50%)",
-    color: HOBBEE_ORANGE,
+    color: HOBBEE_BROWN,
   },
   searchBar: {
     marginTop: "40px",

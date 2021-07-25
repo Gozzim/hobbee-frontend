@@ -5,16 +5,21 @@ import { Link, Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 function DynamicBreadcrumbs(props) {
-
   return (
     <Route>
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
+        style={{ marginBottom: "30px" }}
       >
         {props.crumbs.map(({ path, label }, i) => {
           return i < props.crumbs.length - 1 ? (
-            <Link color={"linkDefault"} to={path} key={i}>
+            <Link
+              className={"linkDefault"}
+              to={path}
+              key={i}
+              style={{ color: "black" }}
+            >
               {label}
             </Link>
           ) : (

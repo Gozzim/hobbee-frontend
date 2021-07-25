@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   messageBox: {
@@ -14,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
   systemMessage: {
     backgroundColor: "#99E8E1",
     borderRadius: "5px",
-    //height: "auto",
     margin: "5px",
     display: "inline-block",
     padding: "5px",
@@ -61,34 +61,54 @@ export function ChatMessage(props) {
   if (isSystemMessage) {
     return (
       <div className={classes.systemMessageContainer}>
-        <div className={classes.systemMessage}>{message}</div>
+        <div className={classes.systemMessage}>
+          <Typography style={{ fontSize: "14px" }}>{message}</Typography>
+        </div>
       </div>
     );
   } else {
-    if(props.isCurrentUser) {
+    if (props.isCurrentUser) {
       return (
-          <div className={classes.right}>
-            <div className={classes.messageBox} style={{ backgroundColor: "#FFe680" }}>
-              <div className={"linkDefault"} style={{ textAlign: "left", wordWrap: "break-word" }}>
-                {message}
-              </div>
-              <div className={classes.timestampDiv}>{timestamp}</div>
+        <div className={classes.right}>
+          <div
+            className={classes.messageBox}
+            style={{ backgroundColor: "#FFe680" }}
+          >
+            <div
+              className={"linkDefault"}
+              style={{ textAlign: "left", wordWrap: "break-word" }}
+            >
+              <Typography style={{ fontSize: "16px" }}>{message}</Typography>
+            </div>
+            <div className={classes.timestampDiv}>
+              <Typography style={{ fontSize: "12px" }}>{timestamp}</Typography>
             </div>
           </div>
+        </div>
       );
     } else {
       return (
-          <div className={classes.left}>
-            <div className={classes.messageBox} style={{ backgroundColor: "#FFF3C2" }}>
-              <Link className={"linkDefault"} to={"/user/" + sender}>
-                <div className={classes.nameDiv}>{sender}</div>
-              </Link>
-              <div className={"linkDefault"} style={{ textAlign: "left", wordWrap: "break-word" }}>
-                {message}
+        <div className={classes.left}>
+          <div
+            className={classes.messageBox}
+            style={{ backgroundColor: "#FFF3C2" }}
+          >
+            <Link className={"linkDefault"} to={"/user/" + sender}>
+              <div className={classes.nameDiv}>
+                <Typography style={{ fontSize: "14px" }}>{sender}</Typography>
               </div>
-              <div className={classes.timestampDiv}>{timestamp}</div>
+            </Link>
+            <div
+              className={"linkDefault"}
+              style={{ textAlign: "left", wordWrap: "break-word" }}
+            >
+              <Typography style={{ fontSize: "16px" }}>{message}</Typography>
+            </div>
+            <div className={classes.timestampDiv}>
+              <Typography style={{ fontSize: "12px" }}>{timestamp}</Typography>
             </div>
           </div>
+        </div>
       );
     }
   }
