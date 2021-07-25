@@ -91,7 +91,7 @@ export function AvatarUploadComponent(props) {
             fileInput.current.click();
           }}
         >
-          <img alt="group-image" width={300} height={220} src={getFileUrl(props.userForm.avatar)} />
+          <img alt="group-image" width={200} height={200} src={getFileUrl(props.userForm.avatar)} />
         </Button>
       ) : (
         <Button

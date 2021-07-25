@@ -125,7 +125,7 @@ export function ReportUserDialog(props) {
     <div>
       <div style={{ position: "relative" }}>
         <CustomTooltip title="Report User">
-          <IconButton onClick={handleOpen} color="inherit">
+          <IconButton onClick={handleOpen} style={{ position: "absolute", transform: "translateY(-12px)" }}>
             <FlagIcon />
           </IconButton>
         </CustomTooltip>

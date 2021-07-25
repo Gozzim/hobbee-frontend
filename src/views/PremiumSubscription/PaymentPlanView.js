@@ -98,7 +98,7 @@ export function PaymentPlanView(props) {
           className={classes.planBox}
         />
         <div className={classes.optionDescriptor} style={{ top: "19px" }}>
-          <Typography variant="h6">2,00€/M</Typography>
+          <Typography variant="h6" >2,00€/M</Typography>
         </div>
         <FormControlLabel
           value="3-months"
