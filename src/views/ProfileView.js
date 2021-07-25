@@ -52,6 +52,7 @@ const CustomTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
 function ProfileView(props) {
+  console.log(props);
   const classes = useStyles();
   const usernameInURL = props.match.params.username;
 
@@ -64,7 +65,6 @@ function ProfileView(props) {
         if (user.isLoggedIn && (user.user.username === usernameInURL || !usernameInURL)) {
           setFormData(user.user);
         } else {
-          console.log(false)
           const profileData = await fetchUser(usernameInURL);
           setFormData(profileData.data);
         }
@@ -72,7 +72,7 @@ function ProfileView(props) {
         console.log(e);
       }
     }
-  }, [user.authReady]);
+  }, [user.authReady, props.location]);
 
 
   if (!formData) return (<div className={classes.root}> <h1>User Does Not Exist</h1> </div>) //TODO
@@ -228,7 +228,7 @@ function ProfileView(props) {
 
 
       {(formData.username === usernameInURL || !usernameInURL) && [
-        <MyGroupsResultsComponent/> //TODO SHOW WOLFGANG GROUPS IF NOT OWN PROFILE MINUS DELETED
+        <MyGroupsResultsComponent/>
       ]
       }
 
