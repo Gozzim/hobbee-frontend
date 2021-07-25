@@ -4,17 +4,18 @@ import ImageIcon from "@material-ui/icons/Image";
 import PublishIcon from "@material-ui/icons/Publish";
 
 import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent, DialogContentText,
-    IconButton,
-    Slider,
-    Tooltip,
-    Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  IconButton,
+  Slider,
+  Tooltip,
+  Typography,
 } from "@material-ui/core";
 import { getFileUrl, uploadRequest } from "../services/FileService";
-import {withStyles} from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 const examplePics = [
   "60ec51d7e0edf15bb9e1993a",
@@ -23,25 +24,35 @@ const examplePics = [
 ];
 
 const CustomTooltip = withStyles((theme) => ({
-    tooltip: {
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
-        margin: 0,
-    },
+  tooltip: {
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    margin: 0,
+  },
 }))(Tooltip);
 
 export function ImageUploadComponent(props) {
   const fileInput = React.useRef();
   const [temporaryImage, setTemporaryImage] = React.useState(null);
+  const [isUploading, setIsUploading] = React.useState(false);
   const [scale, setScale] = React.useState(1);
+  const [fileUploadError, setFileUploadError] = React.useState("");
   const avatarEditor = React.useRef();
 
-  const handleClose = () => {
+  const resetTemporaryImage = () => {
+    fileInput.current.value = null;
     setTemporaryImage(null);
   };
 
+  const handleClose = () => {
+    resetTemporaryImage();
+  };
+
   const handleSave = () => {
-    if (avatarEditor.current) {
+    if (isUploading || !avatarEditor.current) return;
+
+    setIsUploading(true);
+    try {
       const image = avatarEditor.current.getImage();
       image.toBlob(async (blob) => {
         const response = await uploadRequest(blob);
@@ -49,8 +60,13 @@ export function ImageUploadComponent(props) {
         props.setGroupForm((groupForm) => {
           return { ...groupForm, pic: response.data.id };
         });
-        setTemporaryImage(null);
+        setIsUploading(false);
+        resetTemporaryImage();
       }, "image/png");
+    } catch (error) {
+      setFileUploadError("The file is not supported");
+      setIsUploading(false);
+      resetTemporaryImage();
     }
   };
 
@@ -83,7 +99,12 @@ export function ImageUploadComponent(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSave} color="primary" autoFocus>
+          <Button
+            onClick={handleSave}
+            color="primary"
+            autoFocus
+            disabled={isUploading}
+          >
             Save
           </Button>
         </DialogActions>
@@ -94,7 +115,12 @@ export function ImageUploadComponent(props) {
             fileInput.current.click();
           }}
         >
-          <img alt="group-image" width={300} height={220} src={getFileUrl(props.groupForm.pic)} />
+          <img
+            alt="group-image"
+            width={300}
+            height={220}
+            src={getFileUrl(props.groupForm.pic)}
+          />
         </Button>
       ) : (
         <Button
@@ -132,6 +158,16 @@ export function ImageUploadComponent(props) {
           });
 
           const file = event.target.files[0];
+          if (file.size > 500 * 1024) {
+            setFileUploadError("The file size has to be smaller than 500 KB");
+            return;
+          }
+          const allowedFileTypes = ["image/png", "image/jpeg", "image/jpg"];
+          if (!allowedFileTypes.includes(file.type)) {
+            setFileUploadError("The file has to be of type jpg, jpeg or png");
+            return;
+          }
+          setFileUploadError("");
           const reader = new FileReader();
 
           reader.addEventListener(
@@ -150,10 +186,9 @@ export function ImageUploadComponent(props) {
         accept={".jpg, .jpeg, .png"}
       />
 
-
-        <DialogContentText className={"imageupload-description"}>
-            Choose or upload an image:
-        </DialogContentText>
+      <DialogContentText className={"imageupload-description"}>
+        Choose or upload an image:
+      </DialogContentText>
       <div className={"imageupload-avatare"}>
         {examplePics.map((id) => {
           return (
@@ -169,22 +204,27 @@ export function ImageUploadComponent(props) {
                   fileInput.current.value = "";
                 }}
               >
-                <img alt="example-image" width={130} height={95} src={getFileUrl(id)} />
+                <img
+                  alt="example-image"
+                  width={130}
+                  height={95}
+                  src={getFileUrl(id)}
+                />
               </Button>
             </div>
           );
         })}
-          <CustomTooltip title="Upload Image">
-              <IconButton
-                  onClick={() => {
-                      fileInput.current.click();
-                  }}
-                  className={"imageupload-button"}
-                  fontSize="large"
-              >
-                  <PublishIcon />
-              </IconButton>
-          </CustomTooltip>
+        <CustomTooltip title="Upload Image">
+          <IconButton
+            onClick={() => {
+              fileInput.current.click();
+            }}
+            className={"imageupload-button"}
+            fontSize="large"
+          >
+            <PublishIcon />
+          </IconButton>
+        </CustomTooltip>
       </div>
     </div>
   );
