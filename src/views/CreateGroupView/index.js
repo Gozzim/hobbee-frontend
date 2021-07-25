@@ -1,6 +1,6 @@
-import { Button } from "@material-ui/core";
+import {Button, Snackbar} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import React from "react";
+import React, {useState} from "react";
 
 import { CreateGroup } from "./CreateGroup";
 import { CustomizeGroup } from "./CustomizeGroup";
@@ -8,6 +8,7 @@ import { createRequest } from "../../services/GroupService";
 import { RequireLoggedIn } from "../../components/RequireLoggedIn";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
 import { BUTTON_BLUE, BUTTON_BLUE_HOVER } from "../../shared/Constants";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles(() => ({
   continueButtonContainer: {
@@ -53,11 +54,24 @@ const initialTouchedState = {
   date: false,
 };
 
+const initialSnackbar = {
+  open: false,
+  message: "",
+};
+
 export function CreateGroupView(props) {
   const classes = useStyles();
   const [groupForm, setGroupForm] = React.useState(initialGroupFormState);
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [formStep, setFormStep] = React.useState(0);
+  const [snackbar, setSnackbar] = useState(initialSnackbar);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbar({ open: false, message: "" });
+  };
 
   return (
     <div>
@@ -80,15 +94,39 @@ export function CreateGroupView(props) {
     }
   }
 
+  async function createGroup() {
+    if (
+        groupForm.pic !== "" &&
+        (!groupForm.date || groupForm.date >= new Date().toISOString())
+    ) {
+      try {
+        const response = await createRequest(groupForm);
+        props.history.push("/my-groups/" + response.data.id + "#new");
+      } catch (e) {
+        if(e.response) {
+          setSnackbar({ open: true, message: e.response.data.message });
+        }
+      }
+    } else {
+      setTouched((touched) => {
+        return {
+          ...touched,
+          pic: true,
+          date: true,
+        };
+      });
+    }
+  }
+
   function renderButtons() {
     if (formStep === 0) {
       return (
         <div className={classes.continueButtonContainer}>
           <Button
             className={classes.button}
-            onClick={() => {
+            onClick={async () => {
               if (
-                isValidGroupname(groupForm.groupName) &&
+                await isValidGroupname(groupForm.groupName) &&
                 groupForm.city !== "" &&
                 groupForm.tags.length > 0
               ) {
@@ -123,26 +161,20 @@ export function CreateGroupView(props) {
 
           <Button
             className={classes.button}
-            onClick={async () => {
-              if (
-                groupForm.pic !== "" &&
-                (!groupForm.date || groupForm.date >= new Date().toISOString())
-              ) {
-                const response = await createRequest(groupForm);
-                props.history.push("/my-groups/" + response.data.id + "#new");
-              } else {
-                setTouched((touched) => {
-                  return {
-                    ...touched,
-                    pic: true,
-                    date: true,
-                  };
-                });
-              }
-            }}
+            onClick={createGroup}
           >
             Create
           </Button>
+
+          <Snackbar
+              open={snackbar.open}
+              autoHideDuration={6000}
+              onClose={handleClose}
+          >
+            <Alert variant="filled" onClose={handleClose} severity="error">
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
         </div>
       );
     }

@@ -238,7 +238,7 @@ function SignUpView(props) {
     <div className={classes.userSignUpRoot}>
       <div>
         <img src={HobbeeIcon} width={"100%"} alt={"logo"} />
-        <Typography variant="h4" align="center">
+        <Typography variant="h4" align="center" style={{fontWeight: "bold", marginBottom: "20px"}}>
           Let's Bee Active!
         </Typography>
       </div>
