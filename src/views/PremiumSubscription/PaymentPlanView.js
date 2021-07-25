@@ -15,7 +15,7 @@ import {
 } from "../../shared/Constants";
 import HobbeePremiumLogo from "../../assets/hobbee_premium.svg";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageContent: {
     width: "60%",
     margin: "auto",
@@ -73,7 +73,7 @@ export function PaymentPlanView(props) {
         state: { receipt: receipt },
       });
     }
-  }, [receipt]);
+  }, [receipt, props.history]);
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);

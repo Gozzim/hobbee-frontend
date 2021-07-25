@@ -9,8 +9,6 @@ import { io } from "../../services/SocketService";
 import SendIcon from "@material-ui/icons/Send";
 import { useHistory } from "react-router";
 
-import Picker from 'emoji-picker-react';
-import { PasswordEye } from "../UserDataInput/PasswordEye";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import EmojiMenu from "./EmojiMenu";
 
@@ -59,10 +57,13 @@ export function Chat(props) {
   const [emojiMenuAnchor, setEmojiMenuAnchor] = useState(null);
 
   //get initial chat
-  useEffect(async () => {
-    const thisGroupChat = await fetchProcessedGroupChat(groupID); //TODO never call http request without try catch
-    setMessages(thisGroupChat.data);
-  }, []);
+  useEffect(() => {
+    async function processGroupChat() {
+      const thisGroupChat = await fetchProcessedGroupChat(groupID); //TODO never call http request without try catch
+      setMessages(thisGroupChat.data);
+    }
+    processGroupChat();
+  }, [groupID]);
 
   //connect socket
   useEffect(() => {
@@ -77,7 +78,7 @@ export function Chat(props) {
       setMessages(data);
     });
     io.emit("room", groupID, user.user._id);
-  }, []);
+  }, [groupID, user.user._id]);
 
   useEffect(() => {
     //reconnect chat on back to page without new render

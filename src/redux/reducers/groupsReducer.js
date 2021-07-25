@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  fetchGroups as fetchGroupsFromBackend,
+  fetchGroups,
   fetchGroupsInMyArea,
   fetchMyGroups,
   fetchRecommendedGroups,
@@ -54,7 +54,7 @@ const { allGroups, myGroups, recommendedGroups, groupsInMyArea } =
 
 export const getGroups = () => async (dispatch) => {
   try {
-    const result = await fetchGroupsFromBackend();
+    const result = await fetchGroups();
     dispatch(allGroups(result.data));
   } catch (e) {
     console.log(e.message);

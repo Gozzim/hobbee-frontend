@@ -1,10 +1,10 @@
 import { Autocomplete } from "@material-ui/lab";
 import { TextField } from "@material-ui/core";
 import React from "react";
-import { useTags } from "../hooks/useTags";
+import { useSelector } from "react-redux";
 
 export function TagAutocomplete(props) {
-  const hobbies = useTags();
+    const hobbies = useSelector((state) => state.tags.items);
 
   return (
     <div className={"creategroup-tags"} style={props.style}>

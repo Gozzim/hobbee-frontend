@@ -1,9 +1,9 @@
 import React from "react";
 import Chip from "@material-ui/core/Chip";
-import { useTags } from "../hooks/useTags";
+import { useSelector } from "react-redux";
 
 export function TagComponent(props) {
-  const hobbies = useTags();
+  const hobbies = useSelector((state) => state.tags.items);
   const index = hobbies.findIndex((x) => {
     return x._id === props.id;
   });

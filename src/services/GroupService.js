@@ -1,40 +1,34 @@
-import HttpService, { getToken, setToken } from "./HttpService";
+import HttpService from "./HttpService";
 
 export async function createRequest(data) {
   return await HttpService.post("group/create", data);
 }
 
 export async function fetchGroups() {
-  return await HttpService.get("group/groups");
+  return await HttpService.get("group/all");
 }
 
 export async function fetchGroup(data) {
-  await setToken(getToken());
-  return await HttpService.get("group/group/" + data);
+  return await HttpService.get("group/" + data);
 }
 
 export async function joinGroupRequest(data) {
-  await setToken(getToken());
   return await HttpService.post("group/join/" + data);
 }
 
 export async function leaveGroupRequest(data) {
-  await setToken(getToken());
   return await HttpService.post("group/leave/" + data);
 }
 
 export async function editGroupRequest(data) {
-  await setToken(getToken());
   return await HttpService.post("group/edit/" + data._id, data);
 }
 
 export async function deleteGroupRequest(data) {
-  await setToken(getToken());
   return await HttpService.post("group/delete/" + data);
 }
 
 export async function fetchProcessedGroupChat(data) {
-  await setToken(getToken());
   return await HttpService.get("group/chat/" + data);
 }
 

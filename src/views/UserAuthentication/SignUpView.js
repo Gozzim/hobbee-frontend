@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { formatISO } from "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { Button, Checkbox, Divider, FormControl, FormControlLabel, Typography } from "@material-ui/core";
@@ -24,7 +24,7 @@ import { PasswordStrengthBar } from "../../components/UserDataInput/PasswordStre
 import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { TagComponent } from "../../components/TagComponent";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   userSignUpRoot: {
     margin: "auto",
     width: "60%",
@@ -56,6 +56,8 @@ const initialErrors = {
 
 function SignUpView(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user);
 
   const [registerError, setRegisterError] = useState(initialErrors);
@@ -76,13 +78,13 @@ function SignUpView(props) {
 
   useEffect(() => {
     if (user.error) {
-      changeRegisterError({
-        general:
-            "Something went wrong. Maybe you already have a Hobb.ee account.",
+      setRegisterError({
+        ...registerError,
+        general: "Something went wrong. Maybe you already have a Hobb.ee account.",
       });
-      props.dispatch(setAuthError(null));
+      dispatch(setAuthError(null));
     }
-  }, [user.error]);
+  }, [user.error, dispatch, registerError]);
 
   const changeRegisterError = (fieldWithValue) => {
     setRegisterError({
