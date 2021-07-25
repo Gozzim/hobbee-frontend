@@ -9,7 +9,7 @@ export async function fetchGroups() {
 }
 
 export async function fetchGroup(data) {
-  return await HttpService.get("group/" + data);
+  return await HttpService.get("group/id/" + data);
 }
 
 export async function joinGroupRequest(data) {

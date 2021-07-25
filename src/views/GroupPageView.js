@@ -80,7 +80,7 @@ export function GroupPageView(props) {
     } catch (e) {
       console.log(e.response.data.message);
     }
-  }, [user.authReady, joined]);
+  }, [user.authReady, joined, props.location]);
 
   //connect socket
   useEffect(() => {
