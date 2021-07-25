@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TagComponent } from "../../components/TagComponent";
+import { withStyles } from "@material-ui/core/styles";
 import {
   FormControl,
   FormControlLabel,
@@ -8,10 +8,11 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import {
-  TagAutocomplete,
-} from "../../components/TagAutocomplete";
+
+import { TagComponent } from "../../components/TagComponent";
+import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
+import { RADIO_BUTTON_BLUE } from "../../shared/Constants";
 import { createFilterOptions } from "@material-ui/lab";
 
 export function CreateGroup(props) {
@@ -23,24 +24,39 @@ export function CreateGroup(props) {
       return { ...touched, tags: true };
     });
     if (hobbyTag && !props.groupForm.tags.includes(hobbyTag)) {
-      try {
-        props.setGroupForm((groupForm) => {
-          return { ...groupForm, tags: [...groupForm.tags, hobbyTag] };
-        });
-      } catch (e) {
-        console.log(e.message);
-      }
+      props.setGroupForm((groupForm) => {
+        return { ...groupForm, tags: [...groupForm.tags, hobbyTag] };
+      });
     }
     setInputValue("");
     setSelectedHobby(null);
   };
 
+  const BlueRadio = withStyles({
+    root: {
+      color: "grey",
+      "&$checked": {
+        color: RADIO_BUTTON_BLUE,
+      },
+    },
+    checked: {},
+  })((props) => <Radio color="default" {...props} />);
+
   return (
     <>
-      <Typography variant="h3" component={"h1"} align={"center"} className={""}>
-        Create Group
+      <Typography
+        variant="h3"
+        align="center"
+        style={{ fontWeight: "bold", marginBottom: "40px" }}
+      >
+        CREATE GROUP
       </Typography>
-      <Typography className={"creategroup-padding"}>
+
+      <Typography
+        className="creategroup-padding"
+        variant="h6"
+        style={{ fontWeight: "bold" }}
+      >
         What do you want to call your group?
       </Typography>
       <TextField
@@ -48,7 +64,6 @@ export function CreateGroup(props) {
         required
         fullWidth
         variant="outlined"
-        size="small"
         onChange={(event) => {
           props.setTouched((touched) => {
             return { ...touched, groupName: true };
@@ -70,17 +85,19 @@ export function CreateGroup(props) {
         }
       />
 
-      <Typography className={"creategroup-padding"}>
+      <Typography
+        className="creategroup-padding"
+        variant="h6"
+        style={{ fontWeight: "bold" }}
+      >
         In what city will your activity take place?
       </Typography>
-
       <TextField
-        label="e.g. Munich, Germany"
+        label="e.g. Munich"
         className=""
         required
         fullWidth
         variant="outlined"
-        size="small"
         onChange={(event) => {
           props.setTouched((touched) => {
             return { ...touched, city: true };
@@ -96,13 +113,16 @@ export function CreateGroup(props) {
         }
       />
 
-      <Typography className={"creategroup-padding"}>
+      <Typography
+        className="creategroup-padding"
+        variant="h6"
+        style={{ fontWeight: "bold" }}
+      >
         Do you want to meet online or in real life?
       </Typography>
-
       <FormControl component="fieldset">
         <RadioGroup
-          className={"creategroup-radios"}
+          className="creategroup-radios"
           onChange={(event) => {
             props.setGroupForm((groupForm) => {
               return { ...groupForm, onOffline: event.target.value };
@@ -110,22 +130,31 @@ export function CreateGroup(props) {
           }}
           value={props.groupForm.onOffline}
         >
-          <FormControlLabel value="online" control={<Radio />} label="Online" />
+          <FormControlLabel
+            value="online"
+            control={<BlueRadio />}
+            label="Online"
+          />
           <FormControlLabel
             value="offline"
-            control={<Radio />}
+            control={<BlueRadio />}
             label="Offline"
           />
           <FormControlLabel
             value="both"
-            control={<Radio />}
+            control={<BlueRadio />}
             label="Both work for me"
           />
         </RadioGroup>
       </FormControl>
 
-      <Typography className={"creategroup-padding"}>
-        Choose some tags, so that other users can find your group:
+      <Typography
+        className="creategroup-padding"
+        variant="h6"
+        style={{ fontWeight: "bold" }}
+      >
+        Choose some tags!
+        <Typography>This way, other users can find your group.</Typography>
       </Typography>
 
       <TagAutocomplete
@@ -150,10 +179,10 @@ export function CreateGroup(props) {
         }
       />
 
-      <div className={"creategroup-tags"}>
+      <div className="creategroup-tags">
         {props.groupForm.tags.map((x) => {
           return (
-            <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+            <div style={{ marginRight: "10px", marginBottom: "10px" }}>
               <TagComponent
                 id={x._id}
                 key={x._id}

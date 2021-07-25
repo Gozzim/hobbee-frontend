@@ -76,7 +76,7 @@ export function PremiumView(props) {
         <CustomTooltip title="Enjoy a completely advertisement-free experience.">
           <div className={classes.perkBox}>
             <NotInterestedIcon style={{ fontSize: "5rem" }} />
-            <Typography variant="h6" style={{ marginTop: "30px" }}>
+            <Typography variant="h6" style={{ marginTop: "30px", fontWeight: "bold" }}>
               Zero Ads
             </Typography>
           </div>
@@ -84,10 +84,10 @@ export function PremiumView(props) {
         <CustomTooltip title="Meet infinite people by joining as many groups as you like (instead of 5).">
           <div className={classes.perkBox}>
             <AllInclusiveIcon style={{ fontSize: "5rem" }} />
-            <Typography variant="h6" style={{ marginTop: "14px" }}>
+            <Typography variant="h6" style={{ marginTop: "14px", fontWeight: "bold" }}>
               Unlimited
             </Typography>
-            <Typography variant="h6">Groups</Typography>
+            <Typography variant="h6" style={{ fontWeight: "bold" }}>Groups</Typography>
           </div>
         </CustomTooltip>
       </div>
@@ -95,16 +95,16 @@ export function PremiumView(props) {
         <CustomTooltip title="Position all groups that you are the owner of at the top of our search results.">
           <div className={classes.perkBox}>
             <TrendingUpIcon style={{ fontSize: "5rem" }} />
-            <Typography variant="h6" style={{ marginTop: "14px" }}>
+            <Typography variant="h6" style={{ marginTop: "14px", fontWeight: "bold" }}>
               Boost
             </Typography>
-            <Typography variant="h6">Your Groups</Typography>
+            <Typography variant="h6" style={{ fontWeight: "bold" }}>Your Groups</Typography>
           </div>
         </CustomTooltip>
         <CustomTooltip title="Show Hobb.ee some love and invest in the platform's further development">
           <div className={classes.perkBox}>
             <FavoriteIcon style={{ fontSize: "5rem" }} />
-            <Typography variant="h6" style={{ marginTop: "30px" }}>
+            <Typography variant="h6" style={{ marginTop: "30px", fontWeight: "bold" }}>
               Support Us
             </Typography>
           </div>

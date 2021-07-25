@@ -443,6 +443,7 @@ export function EditGroupDialog(props) {
             variant="outlined"
             fullWidth
             value={groupForm.description}
+            inputProps={{ maxLength: 1000 }}
             onChange={(event) => {
               setGroupForm((groupForm) => {
                 return { ...groupForm, description: event.target.value };

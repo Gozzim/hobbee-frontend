@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#cccccc",
     },
   },
+  leftMargin: {
+    fontWeight: "bold",
+  },
 }));
 
 const getPlanFromId = (planId) => {
@@ -86,7 +89,7 @@ export function AccountSettingsView(props) {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="h6">Email Address</Typography>
+            <Typography variant="h6" className={classes.leftMargin}>Email Address</Typography>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h6" style={{ fontWeight: "normal" }}>
@@ -94,7 +97,7 @@ export function AccountSettingsView(props) {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="h6">Password</Typography>
+            <Typography variant="h6" className={classes.leftMargin}>Password</Typography>
           </Grid>
           <Grid item xs={5}>
             <Typography variant="h6" style={{ fontWeight: "normal" }}>
@@ -110,7 +113,7 @@ export function AccountSettingsView(props) {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="h6">Product</Typography>
+            <Typography variant="h6" className={classes.leftMargin}>Product</Typography>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h6" style={{ fontWeight: "normal" }}>
@@ -121,7 +124,7 @@ export function AccountSettingsView(props) {
           </Grid>
           {user.user.premium.active ? (
             <Grid item xs={3}>
-              <Typography variant="h6">Payment Period</Typography>
+              <Typography variant="h6" className={classes.leftMargin}>Payment Period</Typography>
             </Grid>
           ) : null}
           {user.user.premium.active ? (
@@ -174,7 +177,7 @@ export function AccountSettingsView(props) {
           ) : null}
           {user.user.premium.active ? (
             <Grid item xs={3}>
-              <Typography variant="h6" style={{ marginTop: "20px" }}>
+              <Typography variant="h6" className={classes.leftMargin} style={{ marginTop: "20px" }}>
                 Your Perks
               </Typography>
             </Grid>

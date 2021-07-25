@@ -14,12 +14,14 @@ import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
 import { ASCII_BEE } from "./shared/Constants";
 import { fetchHobbyTags } from "./redux/reducers/tagsReducer";
 import { RequireLoggedIn } from "./components/RequireLoggedIn";
+import { NotFoundView } from "./views/NotFoundView";
 
 const useStyles = makeStyles(() => ({
   appRoot: {
     height: "100vh",
     display: "flex",
     flexDirection: "column",
+    backgroundColor: "#f4f4f4",
   },
 }));
 
@@ -77,7 +79,19 @@ function App() {
                 );
               }}
             />
-          ))}
+          ))
+          }
+          <Route
+            key={404}
+            path={"/"}
+            render={(routeProps) => {
+              document.title = "Hobb.ee | 404 - NOT FOUND ";
+
+             return(
+               <NotFoundView {...routeProps} />
+             )
+            }}
+            />
         </Switch>
       </ContentContainer>
     </div>

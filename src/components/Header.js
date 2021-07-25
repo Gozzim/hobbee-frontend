@@ -22,7 +22,10 @@ import UserMenu from "./UserMenu";
 import NotificationMenu from "./Notifications/NotificationMenu";
 import HobbeeIcon from "../assets/hobbee_white.svg";
 import { NotificationBell } from "./Notifications/NotificationBell";
-import { HOBBEE_ORANGE } from "../shared/Constants";
+import {
+  BUTTON_YELLOW,
+  HOBBEE_ORANGE,
+} from "../shared/Constants";
 import { getFileUrl } from "../services/FileService";
 import { fetchNotifications } from "../redux/reducers/notificationReducer";
 
@@ -40,20 +43,22 @@ const useStyles = makeStyles((theme) => ({
   },
   navButton: {
     color: "white",
+    fontWeight: "bold",
     "&:hover": {
       backgroundColor: "#FFFFFF",
-      color: "#32210B",
+      color: "black",
     },
     fontSize: 17,
     marginLeft: 20,
     marginRight: 20,
   },
   createGroupButton: {
-    color: "#32210B",
-    backgroundColor: "#FFCC00",
+    color: "black",
+    backgroundColor: BUTTON_YELLOW,
+    fontWeight: "bold",
     "&:hover": {
-      backgroundColor: "#1CE9E3",
-      color: "#32210B",
+      backgroundColor: "white",
+      color: "black",
     },
     fontSize: 17,
     marginLeft: 20,

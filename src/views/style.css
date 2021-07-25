@@ -40,7 +40,7 @@
 }
 .cardImage {
   display: inline-block !important;
-  padding: 0px !important;
+  padding: 0 !important;
 }
 .selectImageText {
   margin-top: -15px !important;
@@ -83,17 +83,6 @@
 .creategroup-tags {
   display: flex;
 }
-.creategroup-continuebutton {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 30px;
-}
-.customizegroup-bottombuttons {
-  padding-top: 30px;
-  display: flex;
-  justify-content: space-between;
-  flex-grow: 1;
-}
 .scroller {
   margin: 0 auto;
   height: 560px;
@@ -118,7 +107,7 @@
   margin-bottom: 30px;
 }
 .imageupload-description {
-  margin-bottom: 0px !important;
+  margin-bottom: 0 !important;
   margin-top: 10px !important;
 }
 .imageupload-button {

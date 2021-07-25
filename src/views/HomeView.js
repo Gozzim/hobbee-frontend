@@ -11,21 +11,17 @@ import { Link } from "react-router-dom";
 import { SearchBar } from "../components/Search/SearchBar";
 import { SearchResults } from "../components/Search/SearchResults";
 import { useSearch } from "../hooks/useSearch";
-import { useDispatch, useSelector } from "react-redux";
-import { getGroups } from "../redux/reducers/groupsReducer";
 import {
+  BUTTON_BLUE,
   BUTTON_BLUE_HOVER,
   BUTTON_YELLOW,
-  BUTTON_YELLOW_HOVER,
-  HOBBEE_BROWN,
   HOBBEE_ORANGE,
 } from "../shared/Constants";
 
 const useStyles = makeStyles(() => ({
   topContent: {
-    marginTop: "40px",
     display: "flex",
-    color: "#32210B",
+    color: "black",
   },
   imageContainer: {
     flex: 1,
@@ -35,25 +31,26 @@ const useStyles = makeStyles(() => ({
     marginTop: "10px",
   },
   createGroupButton: {
-    color: HOBBEE_BROWN,
-    backgroundColor: BUTTON_YELLOW,
+    color: "black",
+    backgroundColor: BUTTON_BLUE,
     "&:hover": {
-      backgroundColor: BUTTON_YELLOW_HOVER,
-      color: HOBBEE_BROWN,
+      backgroundColor: BUTTON_BLUE_HOVER,
+      color: "black",
     },
     marginTop: "10px",
   },
   bottomContent: {
-    color: HOBBEE_BROWN,
-    borderColor: BUTTON_BLUE_HOVER,
+    color: "black",
+    borderColor: BUTTON_YELLOW,
     backgroundColor: "white",
     borderStyle: "solid",
     borderWidth: "17px",
     borderRadius: "25px",
     paddingTop: "10px",
+    marginBottom: "30px",
   },
   stepsContainer: {
-    color: HOBBEE_BROWN,
+    color: "black",
     display: "flex",
     justifyContent: "space-around",
     marginLeft: 0,
@@ -65,7 +62,7 @@ const useStyles = makeStyles(() => ({
     width: "200px",
   },
   stepIcon: {
-    color: "#13a09b",
+    color: HOBBEE_ORANGE,
     margin: "30px",
     marginBottom: "15px",
     fontSize: "5rem",
@@ -76,14 +73,14 @@ const useStyles = makeStyles(() => ({
     top: "50px",
     left: "50%",
     transform: "translateX(-50%)",
-    color: HOBBEE_ORANGE,
+    color: "black",
   },
   searchBar: {
     marginTop: "40px",
   },
 }));
 
-export function HomeView(props) {
+export function HomeView() {
   const classes = useStyles();
   const groups = useSelector((state) => {
     return state.groups.all.map((id) => state.groups.data[id]);
@@ -95,7 +92,7 @@ export function HomeView(props) {
       dispatch(getGroups());
     }
   }, [dispatch, groups.length]);
-  const search = useSearch({ groups, initialGroupsOnPage: 9 });
+  const search = useSearch({ groups: [], initialGroupsOnPage: 9 });
 
   return (
     <div>
@@ -175,7 +172,7 @@ export function HomeView(props) {
             </div>
             <div className={classes.stepContent}>
               <EmojiEmotionsIcon className={classes.stepIcon} />
-              <Typography variant="h6">Meet Up!</Typography>
+              <Typography variant="h6" style={{fontWeight: "bold"}}>Meet Up!</Typography>
             </div>
           </div>
         </div>

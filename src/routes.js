@@ -1,6 +1,4 @@
-import React from "react";
 import SignInView from "./views/UserAuthentication/SignInView";
-import SignUpView from "./views/UserAuthentication/SignUpView";
 import { CreateGroupView } from "./views/CreateGroupView";
 import { HomeView } from "./views/HomeView";
 import { InMyAreaView } from "./views/InMyAreaView";
@@ -16,7 +14,7 @@ import { GroupPageView } from "./views/GroupPageView";
 import { PaymentPlanView } from "./views/PremiumSubscription/PaymentPlanView";
 import { PaymentConfirmationView } from "./views/PremiumSubscription/PaymentConfirmationView";
 import { FeedbackView } from "./views/Feedback/FeedbackView";
-import { AccountSettingsView} from "./views/AccountSettingsView";
+import { AccountSettingsView } from "./views/AccountSettingsView";
 
 export const routes = [
   {
@@ -25,7 +23,7 @@ export const routes = [
     label: "Home",
   },
   {
-    path: ["/profile","/user/:username"],
+    path: ["/profile", "/user/:username"],
     Component: ProfileView,
     label: "User-Profile",
   },
@@ -93,7 +91,12 @@ export const routes = [
     loginOnly: true,
   },
   {
-    path: ["/group/:id", "/my-groups/:id", "/recommended/:id", "/in-my-area/:id"],
+    path: [
+      "/group/:id",
+      "/my-groups/:id",
+      "/recommended/:id",
+      "/in-my-area/:id",
+    ],
     Component: GroupPageView,
     label: "View Group",
   },

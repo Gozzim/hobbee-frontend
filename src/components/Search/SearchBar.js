@@ -23,6 +23,7 @@ import { createFilterOptions } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    boxShadow: "0 3px 10px rgb(0 0 0 / 0.1)",
     padding: "2px 4px",
     display: "flex",
     alignItems: "center",
@@ -64,9 +65,6 @@ export function SearchBar(props) {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Paper
-          style={{
-            boxShadow: "0 3px 10px rgb(0 0 0 / 0.1)",
-          }}
           component="form"
           className={classes.root}
           onSubmit={(e) => {
@@ -74,7 +72,7 @@ export function SearchBar(props) {
             setShowFilters(true);
           }}
         >
-          <SearchIcon style={{marginLeft: "12px"}}/>
+          <SearchIcon style={{ marginLeft: "12px" }} />
           <InputBase
             className={classes.input}
             placeholder={searchString}
@@ -126,7 +124,7 @@ export function SearchBar(props) {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  format={"dd.MM.yyyy"}
+                  format="dd.MM.yyyy"
                   onChange={(date) => {
                     search.setFilters((filters) => {
                       return {
@@ -152,7 +150,7 @@ export function SearchBar(props) {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  format={"dd.MM.yyyy"}
+                  format="dd.MM.yyyy"
                   onChange={(date) => {
                     search.setFilters((filters) => {
                       return {
@@ -176,9 +174,8 @@ export function SearchBar(props) {
               <Grid container spacing={4} alignItems="center">
                 <Grid item xs={3}>
                   <TextField
-                    id="standard-number"
                     type="number"
-                    placeholder={"unlimited"}
+                    placeholder="unlimited"
                     label="max. Participants"
                     InputLabelProps={{
                       shrink: true,
@@ -200,10 +197,9 @@ export function SearchBar(props) {
                 </Grid>
                 <Grid item xs={3}>
                   <TextField
-                    id="standard-number"
                     type="number"
                     label="Free Slots"
-                    placeholder={"any"}
+                    placeholder="any"
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -277,7 +273,7 @@ export function SearchBar(props) {
               />
             </Grid>
             <Grid item xs={6}>
-              <div className={"creategroup-tags"}>
+              <div className="creategroup-tags">
                 {search.filters.tags.map((x) => {
                   return (
                     <div style={{ marginRight: "10px", marginBottom: "5px" }}>

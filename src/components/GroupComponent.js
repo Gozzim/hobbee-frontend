@@ -22,7 +22,7 @@ import { TagComponent } from "./TagComponent";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useSelector } from "react-redux";
-import { PAPER_CREAM } from "../shared/Constants";
+import {PAPER_BLUE, RADIO_BUTTON_BLUE} from "../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   icons: {
@@ -32,13 +32,14 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: "left",
-    color: "#32210B",
+    color: "black",
     width: "280px",
     height: "432px",
     boxShadow: "0 3px 10px rgb(0 0 0 / 0.1)",
+    borderRadius: "10px",
     "&:hover": {
       backgroundColor: "rgba(0, 0, 0, 0.04)",
-      color: "#32210B",
+      color: "black",
     },
   },
   listItem: {
@@ -59,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "8px",
     marginBottom: "8px",
     textAlign: "center",
+    borderRadius: "5px",
   },
   titleContainer: {
     height: "64px",
@@ -126,12 +128,12 @@ function GroupComponent(props) {
         elevation={0}
         style={{
           backgroundColor: props.group.groupOwner.premium.active
-            ? PAPER_CREAM
+            ? PAPER_BLUE
             : "white",
         }}
       >
         <div className={classes.titleContainer}>
-          <Typography variant={"h6"} align="center" style={{ minWidth: "40%" }}>
+          <Typography variant={"h6"} align="center" style={{ minWidth: "40%", fontWeight: "bold" }}>
             {props.group.groupName}
           </Typography>
         </div>
@@ -205,9 +207,11 @@ function GroupComponent(props) {
             <div>
               {user.authReady &&
               user.isLoggedIn &&
-              props.group.groupMembers.includes(user.user._id) ? (
+              props.group.groupMembers.some(
+                (member) => member._id === user.user._id
+              ) ? (
                 <CustomTooltip title={"Joined"}>
-                  <CheckCircleIcon style={{ color: "mediumseagreen" }} />
+                  <CheckCircleIcon style={{ color: RADIO_BUTTON_BLUE }} />
                 </CustomTooltip>
               ) : null}
             </div>
@@ -237,7 +241,7 @@ function GroupComponent(props) {
         <div>
           {props.group.tags.slice(1).map((x) => {
             return (
-              <div style={{ marginRight: "5px", marginBottom: "5px" }}>
+              <div style={{ marginBottom: "5px" }}>
                 <TagComponent id={x} />
               </div>
             );

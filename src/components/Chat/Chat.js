@@ -11,6 +11,7 @@ import { useHistory } from "react-router";
 
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import EmojiMenu from "./EmojiMenu";
+import {isValidGroupname} from "../../validators/GroupDataValidator";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -88,6 +89,9 @@ export function Chat(props) {
   }, [history]);
 
   const sendMessage = () => {
+    if(input.length > 500) {
+      return;
+    }
     if (input.replace(/\s/g, '').length) {
       io.emit("new user message", {
         sender: user.user._id,
@@ -160,6 +164,12 @@ export function Chat(props) {
                       />
                   ),
                 }}
+                error={input.length > 500}
+                helperText={
+                  input.length > 500
+                      ? "Character limit exceeded"
+                      : ""
+                }
             />
           </form>
           <div className={classes.messageButtonDiv}>

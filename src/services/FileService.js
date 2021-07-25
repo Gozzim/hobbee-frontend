@@ -1,7 +1,7 @@
 import HttpService from "./HttpService";
 
 export function getFileUrl(id) {
-  return `${HttpService.defaults.baseURL}storage/file/view/${id}`;
+  return HttpService.defaults.baseURL + "storage/file/view/" + id;
 }
 
 export async function uploadRequest(file) {
