@@ -11,7 +11,6 @@ import { useHistory } from "react-router";
 
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import EmojiMenu from "./EmojiMenu";
-import {isValidGroupname} from "../../validators/GroupDataValidator";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -25,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   messageButtonDiv: {
-    //flex: 1,
     width: "60px",
     position: "relative",
     marginLeft: "10px",
@@ -60,8 +58,12 @@ export function Chat(props) {
   //get initial chat
   useEffect(() => {
     async function processGroupChat() {
-      const thisGroupChat = await fetchProcessedGroupChat(groupID); //TODO never call http request without try catch
-      setMessages(thisGroupChat.data);
+      try {
+        const thisGroupChat = await fetchProcessedGroupChat(groupID);
+        setMessages(thisGroupChat.data);
+      } catch (e) {
+        console.log(e);
+      }
     }
     processGroupChat();
   }, [groupID]);

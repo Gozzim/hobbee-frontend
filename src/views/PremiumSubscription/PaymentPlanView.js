@@ -34,9 +34,6 @@ const useStyles = makeStyles(() => ({
     right: 35,
     fontWeight: "bold",
   },
-  buttonLabel: {
-    fontSize: 15,
-  },
   recommendedTag: {
     position: "absolute",
     top: "255px",

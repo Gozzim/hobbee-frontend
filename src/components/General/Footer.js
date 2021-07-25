@@ -12,10 +12,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(1),
     height: "50px",
   },
-  title: {
-    flexGrow: 1,
-    paddingLeft: theme.spacing(1),
-  },
 }));
 
 /**

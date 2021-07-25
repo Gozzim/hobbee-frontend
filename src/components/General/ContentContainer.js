@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import { AdBanner } from "./AdBanner";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   contentContainerRoot: {
     height: "calc(100vh - 64px)",
     display: "flex",
@@ -46,7 +46,7 @@ export function ContentContainer(props) {
           <main className={classes.main}>{children}</main>
           {footer}
         </Container>
-        <AdBanner />
+        <div style={{ width: 300, display: "flex", position: "relative" }}/>
       </div>
     </div>
   );
