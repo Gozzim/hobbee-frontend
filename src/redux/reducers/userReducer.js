@@ -2,7 +2,7 @@ import {
   fetchMe,
   loginRequest,
   logoutRequest,
-  registrationRequest, resetPasswordRequest,
+  registrationRequest, resetPasswordRequest, updateMeRequest,
 } from "../../services/UserService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setToken } from "../../services/HttpService";
@@ -47,6 +47,9 @@ const userSlice = createSlice({
       state.error = null;
       state.authReady = true;
     },
+    updateUserReducer: (state, action) => {
+      state.user = action.payload;
+    },
     setAuthError: (state, action) => {
       state.error = action.payload;
     },
@@ -68,7 +71,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutReducer, authUserReducer, setAuthError, authReady } =
+export const { logoutReducer, authUserReducer, updateUserReducer, setAuthError, authReady } =
   userSlice.actions;
 
 export const logout = () => async (dispatch) => {
@@ -105,5 +108,12 @@ export const resetPassword = (user, token, password) => async (dispatch) => {
     setToken(null);
   }
 };
+
+export const updateUser = (data) => async (dispatch) => {
+  try {
+    const result = await updateMeRequest(data);
+    dispatch(updateUserReducer(result.data));
+  } catch (e) {}
+}
 
 export default userSlice.reducer;
