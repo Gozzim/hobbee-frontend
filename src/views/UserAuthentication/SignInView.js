@@ -7,7 +7,11 @@ import Grid from "@material-ui/core/Grid";
 import { Alert } from "@material-ui/lab";
 
 import { login, setAuthError } from "../../redux/reducers/userReducer";
-import { HOBBEE_ORANGE, HOBBEE_YELLOW } from "../../shared/Constants";
+import {
+  BUTTON_BLUE,
+  BUTTON_BLUE_HOVER,
+  HOBBEE_ORANGE,
+} from "../../shared/Constants";
 import HobbeeIcon from "../../assets/hobbee_white.svg";
 import { SignInUpInput } from "../../components/UserDataInput/SignInUpInput";
 import { PasswordEye } from "../../components/UserDataInput/PasswordEye";
@@ -19,9 +23,10 @@ const useStyles = makeStyles(() => ({
     width: "60%",
   },
   submitButton: {
-    backgroundColor: HOBBEE_ORANGE,
+    padding: "8px 10px",
+    backgroundColor: BUTTON_BLUE,
     "&:hover": {
-      backgroundColor: HOBBEE_YELLOW,
+      backgroundColor: BUTTON_BLUE_HOVER,
     },
   },
 }));
@@ -139,13 +144,7 @@ function SignInView(props) {
               </Grid>
             )}
             <Grid item>
-              <Button
-                fullWidth
-                className={classes.submitButton}
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
+              <Button fullWidth className={classes.submitButton} type="submit">
                 Sign In
               </Button>
             </Grid>

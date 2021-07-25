@@ -86,10 +86,11 @@
 .creategroup-continuebutton {
   display: flex;
   justify-content: flex-end;
-  padding-top: 30px;
+  padding-bottom: 30px;
 }
 .customizegroup-bottombuttons {
   padding-top: 30px;
+  padding-bottom: 30px;
   display: flex;
   justify-content: space-between;
   flex-grow: 1;
