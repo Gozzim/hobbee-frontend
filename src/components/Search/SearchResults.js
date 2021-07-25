@@ -37,7 +37,6 @@ export function SearchResults(props) {
     Math.ceil(groupsToShow.length / search.groupsOnPage)
   );
 
-  console.log(groupsToShow);
   return (
     <>
       <Grid container spacing={2}>
@@ -61,7 +60,7 @@ export function SearchResults(props) {
         </Grid>
 
         <Grid item xs={6}>
-          <Grid container alignItems={"center"} justify={"flex-end"}>
+          <Grid container alignItems={"center"} justifyContent={"flex-end"}>
             <FormControl>
               <InputLabel>Sort by</InputLabel>
               <Select
@@ -87,12 +86,15 @@ export function SearchResults(props) {
       </Grid>
 
       <center>
-        <Typography variant="h4" style={{ fontWeight: "bold", marginBottom: "20px"}}>
+        <Typography
+          variant="h4"
+          style={{ fontWeight: "bold", marginBottom: "20px" }}
+        >
           Search Results
         </Typography>
         {groupsToShow.length > 0 ? (
           <div>
-            <Grid container spacing={2} justify="center">
+            <Grid container spacing={2} justifyContent="center">
               {groupsToShow.map((group) => {
                 return (
                   <Grid item key={group._id}>
@@ -104,7 +106,7 @@ export function SearchResults(props) {
             <div className={classes.pagination}>
               <Pagination
                 count={pages}
-                variant="rounded"
+                shape="rounded"
                 page={search.page}
                 onChange={(_, p) => search.setPage(p)}
               />

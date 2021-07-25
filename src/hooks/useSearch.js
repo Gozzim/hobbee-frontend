@@ -1,6 +1,8 @@
 import * as React from "react";
 import equal from "fast-deep-equal";
 import Fuse from "fuse.js";
+import { useDispatch, useSelector } from "react-redux";
+import { getGroups } from "../redux/reducers/groupsReducer";
 
 const initialFiltersState = {
   city: "",
@@ -15,12 +17,19 @@ const initialFiltersState = {
 
 export function useSearch(args) {
   const { groups, initialGroupsOnPage = 15 } = args;
-  let results = [...groups];
 
-  results = results.filter((group) => {
-    const expired = group.date && group.date < new Date().toISOString();
-    return !group.deleted && !expired;
+  // Fetch all groups
+  const allGroups = useSelector((state) => {
+    return state.groups.all.map((id) => state.groups.data[id]);
   });
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    if (allGroups.length === 0) {
+      dispatch(getGroups());
+    }
+  }, []);
+
+  let results = [...allGroups];
 
   // Search
   const [searchValue, setSearchValue] = React.useState("");
@@ -33,7 +42,19 @@ export function useSearch(args) {
 
   // Filters
   const [filters, setFilters] = React.useState(initialFiltersState);
+  const hasFilters = !equal(filters, initialFiltersState);
   results = applyFilters(results, filters);
+
+  // Decide whether to search all groups
+  if (!searchValue && !hasFilters) {
+    results = [...groups];
+  }
+
+  // Filter expired and deleted groups
+  results = results.filter((group) => {
+    const expired = group.date && group.date < new Date().toISOString();
+    return !group.deleted && !expired;
+  });
 
   // Sorting
   const [sortBy, setSortBy] = React.useState("timestamp");
@@ -59,7 +80,7 @@ export function useSearch(args) {
     groupsOnPage,
     setGroupsOnPage,
     results,
-    hasFilters: !equal(filters, initialFiltersState),
+    hasFilters,
   };
 }
 
