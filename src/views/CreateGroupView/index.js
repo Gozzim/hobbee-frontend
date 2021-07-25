@@ -60,10 +60,10 @@ export function CreateGroupView(props) {
   const [formStep, setFormStep] = React.useState(0);
 
   return (
-    <RequireLoggedIn>
+    <div>
       {renderForm()}
       {renderButtons()}
-    </RequireLoggedIn>
+    </div>
   );
 
   function renderForm() {

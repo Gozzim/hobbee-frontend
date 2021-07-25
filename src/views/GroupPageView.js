@@ -81,7 +81,7 @@ export function GroupPageView(props) {
     } catch (e) {
       console.log(e.response.data.message);
     }
-  }, [user.authReady, joined, props.location]);
+  }, [user.authReady, joined, props.location, groupId]);
 
   //connect socket
   useEffect(() => {
@@ -93,10 +93,9 @@ export function GroupPageView(props) {
     return () => {
       io.close();
     };
-  }, []);
+  }, [groupId]);
 
   //dynamically adjust chat height to group info height
-  //TODO: make this less hacky, if possible. Otherwise make comment
   useEffect(() => {
     setTimeout(() => {
       setChatLoaded(true);
@@ -110,7 +109,7 @@ export function GroupPageView(props) {
 
   async function handleJoin() {
     try {
-      const result = await joinGroupRequest(groupId); //TODO handling
+      await joinGroupRequest(groupId);
       setJoined(true);
       io.emit("system update message", {
         groupId: groupId,
@@ -123,7 +122,7 @@ export function GroupPageView(props) {
 
   async function handleLeave() {
     try {
-      const result = await leaveGroupRequest(groupId); //TODO handling
+      await leaveGroupRequest(groupId);
       setJoined(false);
       io.emit("system update message", {
         groupId: groupId,

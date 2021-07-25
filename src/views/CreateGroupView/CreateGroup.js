@@ -13,6 +13,7 @@ import { TagComponent } from "../../components/TagComponent";
 import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
 import { RADIO_BUTTON_BLUE } from "../../shared/Constants";
+import { createFilterOptions } from "@material-ui/lab";
 
 export function CreateGroup(props) {
   const [selectedHobby, setSelectedHobby] = useState(null);
@@ -162,11 +163,12 @@ export function CreateGroup(props) {
           setInputValue(v);
         }}
         style={{ width: 300 }}
-        filterOptions={(options) => {
-          return options.filter(
-            (option) => !props.groupForm.tags.includes(option)
-          );
-        }}
+        filterSelectedOptions
+        filterOptions={createFilterOptions({
+            matchFrom: 'start',
+            stringify: (option => !props.groupForm.tags.includes(option) ? option.title : "")
+
+        })}
         onChange={onChangeTagInput}
         value={selectedHobby}
         error={props.touched.tags && props.groupForm.tags.length === 0}

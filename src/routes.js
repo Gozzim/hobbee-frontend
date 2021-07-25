@@ -1,5 +1,4 @@
 import SignInView from "./views/UserAuthentication/SignInView";
-import SignUpView from "./views/UserAuthentication/SignUpView";
 import { CreateGroupView } from "./views/CreateGroupView";
 import { HomeView } from "./views/HomeView";
 import { InMyAreaView } from "./views/InMyAreaView";
@@ -16,6 +15,7 @@ import { PaymentPlanView } from "./views/PremiumSubscription/PaymentPlanView";
 import { PaymentConfirmationView } from "./views/PremiumSubscription/PaymentConfirmationView";
 import { FeedbackView } from "./views/Feedback/FeedbackView";
 import { AccountSettingsView } from "./views/AccountSettingsView";
+import SignUpView from "./views/UserAuthentication/SignUpView";
 
 export const routes = [
   {
@@ -42,6 +42,7 @@ export const routes = [
     path: "/create-group",
     Component: CreateGroupView,
     label: "Create Group",
+    loginOnly: true,
   },
   {
     path: "/premium",
@@ -52,36 +53,43 @@ export const routes = [
     path: "/premium/payment-plan",
     Component: PaymentPlanView,
     label: "Payment Plan",
+    loginOnly: true,
   },
   {
     path: "/premium/payment-confirmation",
     Component: PaymentConfirmationView,
     label: "Confirmation",
+    loginOnly: true,
   },
   {
     path: "/account-settings",
     Component: AccountSettingsView,
     label: "Account Settings",
+    loginOnly: true,
   },
   {
     path: "/recommended",
     Component: RecommendedView,
     label: "Recommendations",
+    loginOnly: true,
   },
   {
     path: "/in-my-area",
     Component: InMyAreaView,
     label: "In my Area",
+    loginOnly: true,
   },
   {
     path: "/my-groups",
     Component: MyGroupsView,
     label: "My Groups",
+    loginOnly: true,
   },
   {
     path: "/feedback/:id",
     Component: FeedbackView,
     label: "Your Feedback",
+    loginOnly: true,
   },
   {
     path: [

@@ -1,6 +1,6 @@
 import React from "react";
 import { MyGroupsResultsComponent } from "../components/MyGroupsResultsComponent";
-import {Typography} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 /**
  * For my groups

@@ -17,6 +17,8 @@ import {
   BUTTON_YELLOW,
   HOBBEE_ORANGE,
 } from "../shared/Constants";
+import { useDispatch, useSelector } from "react-redux";
+import { getGroups } from "../redux/reducers/groupsReducer";
 
 const useStyles = makeStyles(() => ({
   topContent: {
@@ -82,6 +84,16 @@ const useStyles = makeStyles(() => ({
 
 export function HomeView() {
   const classes = useStyles();
+  const groups = useSelector((state) => {
+    return state.groups.all.map((id) => state.groups.data[id]);
+  });
+
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    if (groups.length === 0) {
+      dispatch(getGroups());
+    }
+  }, [dispatch, groups.length]);
   const search = useSearch({ groups: [], initialGroupsOnPage: 9 });
 
   return (

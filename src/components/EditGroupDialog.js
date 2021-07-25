@@ -31,6 +31,7 @@ import { isValidGroupname } from "../validators/GroupDataValidator";
 import { ImageUploadComponent } from "./ImageUploadComponent";
 import {BUTTON_RED, BUTTON_RED_HOVER, BUTTON_YELLOW, BUTTON_YELLOW_HOVER, HOBBEE_YELLOW} from "../shared/Constants";
 import {io} from "../services/SocketService";
+import { createFilterOptions } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -283,12 +284,12 @@ export function EditGroupDialog(props) {
             onInputChange={(e, v) => {
               setInputValue(v);
             }}
-            filterOptions={(options) => {
-              return options.filter((option) =>
-                  !groupForm.tags.includes(option._id)
+            filterSelectedOptions
+            filterOptions={createFilterOptions({
+              matchFrom: 'start',
+              stringify: (option => !groupForm.tags.includes(option._id) ? option.title : "")
 
-              )
-            }}
+            })}
           />
           <div className={"creategroup-tags"}>
             {groupForm.tags.map((x) => {

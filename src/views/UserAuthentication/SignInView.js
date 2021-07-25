@@ -53,14 +53,7 @@ function SignInView(props) {
 
   useEffect(() => {
     if (user.user) {
-      let targetPath = "/";
-      try {
-        // get last visited site for redirect
-        targetPath = sessionStorage.getItem("last_visited");
-      } catch (e) {
-        // sessionStorage not supported
-      }
-      props.history.push(targetPath);
+      props.history.replace("/profile");
     }
   }, [user, props.history]);
 
