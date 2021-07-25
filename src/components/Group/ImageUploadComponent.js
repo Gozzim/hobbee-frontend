@@ -8,14 +8,21 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText, FormHelperText,
+  DialogContentText,
+  FormHelperText,
   IconButton,
   Slider,
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import { getFileUrl, uploadRequest } from "../services/FileService";
+import { getFileUrl, uploadRequest } from "../../services/FileService";
 import { withStyles } from "@material-ui/core/styles";
+
+const examplePics = [
+  "60ec51d7e0edf15bb9e1993a",
+  "60ec52095fd7f45c7aaf7909",
+  "60ec5220db5ec95c854a253d",
+];
 
 const CustomTooltip = withStyles((theme) => ({
   tooltip: {
@@ -25,7 +32,7 @@ const CustomTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-export function AvatarUploadComponent(props) {
+export function ImageUploadComponent(props) {
   const fileInput = React.useRef();
   const [temporaryImage, setTemporaryImage] = React.useState(null);
   const [isUploading, setIsUploading] = React.useState(false);
@@ -51,9 +58,8 @@ export function AvatarUploadComponent(props) {
       image.toBlob(async (blob) => {
         const response = await uploadRequest(blob);
 
-        props.setUserForm((userForm) => {
-          console.log(userForm);
-          return { ...userForm, avatar: response.data.id };
+        props.setGroupForm((groupForm) => {
+          return { ...groupForm, pic: response.data.id };
         });
         setFileUploadError("");
         setIsUploading(false);
@@ -74,7 +80,7 @@ export function AvatarUploadComponent(props) {
             image={temporaryImage}
             scale={scale}
             width={300}
-            height={300}
+            height={220}
             border={50}
             color={[0, 0, 0, 0.6]}
             rotate={0}
@@ -105,17 +111,17 @@ export function AvatarUploadComponent(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      {props.userForm.avatar ? (
+      {props.groupForm.pic ? (
         <Button
           onClick={() => {
             fileInput.current.click();
           }}
         >
           <img
-            alt="group-image"
-            width={200}
-            height={200}
-            src={getFileUrl(props.userForm.avatar)}
+            alt="group"
+            width={300}
+            height={220}
+            src={getFileUrl(props.groupForm.pic)}
           />
         </Button>
       ) : (
@@ -126,7 +132,7 @@ export function AvatarUploadComponent(props) {
           }}
         >
           <div>
-            {props.userForm.avatar ? null : (
+            {props.groupForm.pic ? null : (
               <>
                 <div className={"imageIcon"}>
                   <ImageIcon color={"disabled"} fontSize={"inherit"} />
@@ -150,7 +156,7 @@ export function AvatarUploadComponent(props) {
         ref={fileInput}
         onChange={async (event) => {
           props.setTouched((touched) => {
-            return { ...touched, avatar: true };
+            return { ...touched, pic: true };
           });
 
           const file = event.target.files[0];
@@ -182,29 +188,38 @@ export function AvatarUploadComponent(props) {
         accept={".jpg, .jpeg, .png"}
       />
 
+      {fileUploadError ? (
+        <FormHelperText error>{fileUploadError}</FormHelperText>
+      ) : null}
+
       <DialogContentText className={"imageupload-description"}>
         Choose or upload an image:
       </DialogContentText>
       <div className={"imageupload-avatare"}>
-        {/*{examplePics.map((id) => {
+        {examplePics.map((id) => {
           return (
             <div key={id}>
               <Button
                 onClick={() => {
                   props.setTouched((touched) => {
-                    return { ...touched, avatar: true };
+                    return { ...touched, pic: true };
                   });
-                  props.setUserForm((userForm) => {
-                    return { ...userForm, avatar: id };
+                  props.setGroupForm((groupForm) => {
+                    return { ...groupForm, pic: id };
                   });
                   fileInput.current.value = "";
                 }}
               >
-                <img alt="example-image" width={130} height={95} src={getFileUrl(id)} />
+                <img
+                  alt="example"
+                  width={130}
+                  height={95}
+                  src={getFileUrl(id)}
+                />
               </Button>
             </div>
           );
-        })}*/}
+        })}
         <CustomTooltip title="Upload Image">
           <IconButton
             onClick={() => {
@@ -216,9 +231,6 @@ export function AvatarUploadComponent(props) {
             <PublishIcon />
           </IconButton>
         </CustomTooltip>
-        {fileUploadError ? (
-          <FormHelperText error>{fileUploadError}</FormHelperText>
-        ) : null}
       </div>
     </div>
   );

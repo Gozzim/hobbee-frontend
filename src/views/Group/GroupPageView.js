@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import "../views/style.css";
+import "../style.css";
 import { Snackbar } from "@material-ui/core";
-import { Chat } from "../components/Chat/Chat";
-import { TagComponent } from "../components/TagComponent";
+import { Chat } from "../../components/Chat/Chat";
+import { TagComponent } from "../../components/Tag/TagComponent";
 import {
   joinGroupRequest,
   leaveGroupRequest,
   fetchGroup,
   deleteGroupRequest,
-} from "../services/GroupService";
-import { io } from "../services/SocketService";
-import { getFileUrl } from "../services/FileService";
+} from "../../services/GroupService";
+import { io } from "../../services/SocketService";
+import { getFileUrl } from "../../services/FileService";
 import Grid from "@material-ui/core/Grid";
-import GroupInformationComponent from "../components/GroupInformationComponent";
+import GroupInformationComponent from "../../components/Group/GroupInformationComponent";
 import { Alert } from "@material-ui/lab";
 import Typography from "@material-ui/core/Typography";
 import {useSelector} from "react-redux";
@@ -79,7 +79,7 @@ export function GroupPageView(props) {
         });
       }
     } catch (e) {
-      console.log(e.response.data.message);
+      console.log(e);
     }
   }, [user.authReady, joined, props.location, groupId]);
 
@@ -115,7 +115,6 @@ export function GroupPageView(props) {
         groupId: groupId,
       });
     } catch (e) {
-      console.log("Failed to join group");
       handleError(e.response.data.message);
     }
   }
@@ -142,7 +141,6 @@ export function GroupPageView(props) {
         groupId: groupId,
       });
     } catch (e) {
-      console.log("Failed to delete group");
       handleError(e.response.data.message);
     }
   }
@@ -230,9 +228,9 @@ export function GroupPageView(props) {
             </Grid>
             <Grid item xs={12}>
               <div style={{ display: "flex", flexWrap: "wrap" }}>
-                {group.tags.map((x) => {
+                {group.tags.map((x, i) => {
                   return (
-                    <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+                    <div style={{ marginRight: "10px", marginBottom: "5px" }} key={i}>
                       <TagComponent id={x} key={x} />
                     </div>
                   );

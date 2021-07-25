@@ -14,15 +14,15 @@ import {
   Typography,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import { getFileUrl } from "../services/FileService";
+import { getFileUrl } from "../../services/FileService";
 import Tooltip from "@material-ui/core/Tooltip";
 import LabelRoundedIcon from "@material-ui/icons/LabelRounded";
 import { Link, withRouter } from "react-router-dom";
-import { TagComponent } from "./TagComponent";
+import { TagComponent } from "../Tag/TagComponent";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useSelector } from "react-redux";
-import {PAPER_BLUE, RADIO_BUTTON_BLUE} from "../shared/Constants";
+import {PAPER_BLUE, RADIO_BUTTON_BLUE} from "../../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   icons: {
@@ -137,7 +137,7 @@ function GroupComponent(props) {
             {props.group.groupName}
           </Typography>
         </div>
-        <img className={classes.img} src={getFileUrl(props.group.pic)} />
+        <img className={classes.img} src={getFileUrl(props.group.pic)} alt={"avatar"} />
         <List>
           <ListItem disableGutters className={classes.listItem}>
             <ListItemIcon className={classes.listItemIcon}>
@@ -239,9 +239,9 @@ function GroupComponent(props) {
         disableRestoreFocus
       >
         <div>
-          {props.group.tags.slice(1).map((x) => {
+          {props.group.tags.slice(1).map((x, i) => {
             return (
-              <div style={{ marginBottom: "5px" }}>
+              <div style={{ marginBottom: "5px" }} key={i}>
                 <TagComponent id={x} />
               </div>
             );

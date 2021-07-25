@@ -1,10 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRecommendedGroups } from "../redux/reducers/groupsReducer";
-import { SearchBar } from "../components/Search/SearchBar";
-import { SearchResults } from "../components/Search/SearchResults";
-import { useSearch } from "../hooks/useSearch";
-import { RequireLoggedIn } from "../components/RequireLoggedIn";
+import { getRecommendedGroups } from "../../redux/reducers/groupsReducer";
+import { SearchBar } from "../../components/Search/SearchBar";
+import { SearchResults } from "../../components/Search/SearchResults";
+import { useSearch } from "../../hooks/useSearch";
 
 export function RecommendedView(props) {
   const groups = useSelector((state) => {
@@ -24,6 +23,6 @@ export function RecommendedView(props) {
     <div>
       <SearchBar search={search} />
       <SearchResults search={search} title="RECOMMENDED FOR ME" />
-    </RequireLoggedIn>
+    </div>
   );
 }

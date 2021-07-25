@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import LandingPageImage from "../assets/landing_page_image.jpg";
+import LandingPageImage from "../../assets/landing_page_image.jpg";
 import { Button, Typography } from "@material-ui/core";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
@@ -8,17 +8,17 @@ import TocIcon from "@material-ui/icons/Toc";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import { Link } from "react-router-dom";
-import { SearchBar } from "../components/Search/SearchBar";
-import { SearchResults } from "../components/Search/SearchResults";
-import { useSearch } from "../hooks/useSearch";
+import { SearchBar } from "../../components/Search/SearchBar";
+import { SearchResults } from "../../components/Search/SearchResults";
+import { useSearch } from "../../hooks/useSearch";
 import {
   BUTTON_BLUE,
   BUTTON_BLUE_HOVER,
   BUTTON_YELLOW,
   HOBBEE_ORANGE,
-} from "../shared/Constants";
+} from "../../shared/Constants";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroups } from "../redux/reducers/groupsReducer";
+import { getGroups } from "../../redux/reducers/groupsReducer";
 
 const useStyles = makeStyles(() => ({
   topContent: {

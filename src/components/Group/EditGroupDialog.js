@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -16,8 +16,8 @@ import {
   IconButton,
   DialogContentText,
 } from "@material-ui/core";
-import { TagAutocomplete } from "./TagAutocomplete";
-import { TagComponent } from "./TagComponent";
+import { TagAutocomplete } from "../Tag/TagAutocomplete";
+import { TagComponent } from "../Tag/TagComponent";
 import {
   KeyboardDatePicker,
   KeyboardTimePicker,
@@ -25,12 +25,12 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import { editGroupRequest } from "../services/GroupService";
+import { editGroupRequest } from "../../services/GroupService";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { isValidGroupname } from "../validators/GroupDataValidator";
+import { isValidGroupname } from "../../validators/GroupDataValidator";
 import { ImageUploadComponent } from "./ImageUploadComponent";
-import {BUTTON_RED, BUTTON_RED_HOVER, BUTTON_YELLOW, BUTTON_YELLOW_HOVER, HOBBEE_YELLOW} from "../shared/Constants";
-import {io} from "../services/SocketService";
+import { BUTTON_RED, BUTTON_RED_HOVER, RADIO_BUTTON_BLUE } from "../../shared/Constants";
+import { io } from "../../services/SocketService";
 import { createFilterOptions } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "14px",
   },
   deleteGroupButton: {
-    //marginLeft: "10px",
     marginTop: "30px",
     marginBottom: "30px",
     backgroundColor: BUTTON_RED,
@@ -67,7 +66,7 @@ const BlueRadio = withStyles({
   root: {
     color: "grey",
     "&$checked": {
-      color: "#17C2BC",
+      color: RADIO_BUTTON_BLUE,
     },
   },
   checked: {},
@@ -143,7 +142,6 @@ export function EditGroupDialog(props) {
         });
         handleClose();
       } catch (e) {
-        console.log(e.message);
         handleClose();
         io.emit("system update message", {
           groupId: props.group._id,
@@ -292,9 +290,9 @@ export function EditGroupDialog(props) {
             })}
           />
           <div className={"creategroup-tags"}>
-            {groupForm.tags.map((x) => {
+            {groupForm.tags.map((x, i) => {
               return (
-                <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+                <div style={{ marginRight: "10px", marginBottom: "5px" }} key={i} >
                   <TagComponent
                     id={x}
                     key={x}

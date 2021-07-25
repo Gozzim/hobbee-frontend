@@ -19,15 +19,15 @@ import PremiumIcon from "@material-ui/icons/FavoriteOutlined";
 import { connect, useDispatch, useSelector } from "react-redux";
 
 import UserMenu from "./UserMenu";
-import NotificationMenu from "./Notifications/NotificationMenu";
-import HobbeeIcon from "../assets/hobbee_white.svg";
-import { NotificationBell } from "./Notifications/NotificationBell";
+import NotificationMenu from "../Notifications/NotificationMenu";
+import HobbeeIcon from "../../assets/hobbee_white.svg";
+import { NotificationBell } from "../Notifications/NotificationBell";
 import {
   BUTTON_YELLOW,
   HOBBEE_ORANGE,
-} from "../shared/Constants";
-import { getFileUrl } from "../services/FileService";
-import { fetchNotifications } from "../redux/reducers/notificationReducer";
+} from "../../shared/Constants";
+import { getFileUrl } from "../../services/FileService";
+import { fetchNotifications } from "../../redux/reducers/notificationReducer";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {

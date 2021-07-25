@@ -13,10 +13,10 @@ import NotInterestedIcon from "@material-ui/icons/NotInterested";
 import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import Tooltip from "@material-ui/core/Tooltip";
-import { CancelPremiumDialog } from "../components/CancelPremiumDialog";
-import { ChangePasswordDialog } from "../components/ChangePasswordDialog";
+import { CancelPremiumDialog } from "../../components/UserProfile/CancelPremiumDialog";
+import { ChangePasswordDialog } from "../../components/UserProfile/ChangePasswordDialog";
 import { useSelector } from "react-redux";
-import { SUBSCRIPTION_PLAN } from "../shared/Constants";
+import { RADIO_BUTTON_BLUE, SUBSCRIPTION_PLAN } from "../../shared/Constants";
 import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
@@ -139,12 +139,12 @@ export function AccountSettingsView(props) {
                 })}
               </Typography>
               {cancelled ? (
-                <Typography variant="h7" style={{ fontWeight: "normal" }}>
+                <Typography style={{ fontWeight: "normal" }}>
                   The subscription has been cancelled and will terminate at the
                   end of the payment period.
                 </Typography>
               ) : (
-                <Typography variant="h7" style={{ fontWeight: "normal" }}>
+                <Typography style={{ fontWeight: "normal" }}>
                   The subscription renews automatically at the end of the
                   payment period.
                 </Typography>
@@ -194,7 +194,7 @@ export function AccountSettingsView(props) {
                   <List dense={false}>
                     <ListItem>
                       <ListItemIcon>
-                        <NotInterestedIcon style={{ fill: "#17C2BC" }} />
+                        <NotInterestedIcon style={{ fill: RADIO_BUTTON_BLUE }} />
                       </ListItemIcon>
                       <ListItemText
                         primary="Zero Adds"
@@ -203,7 +203,7 @@ export function AccountSettingsView(props) {
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <AllInclusiveIcon style={{ fill: "#17C2BC" }} />
+                        <AllInclusiveIcon style={{ fill: RADIO_BUTTON_BLUE }} />
                       </ListItemIcon>
                       <ListItemText
                         primary="Unlimited Groups"
@@ -212,7 +212,7 @@ export function AccountSettingsView(props) {
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <TrendingUpIcon style={{ fill: "#17C2BC" }} />
+                        <TrendingUpIcon style={{ fill: RADIO_BUTTON_BLUE }} />
                       </ListItemIcon>
                       <ListItemText
                         primary="Boost Your Groups"

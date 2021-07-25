@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import "../views/style.css";
+import "../../views/style.css";
 
 const useStyles = makeStyles((theme) => ({
   footerRoot: {

@@ -8,8 +8,8 @@ import ExitIcon from "@material-ui/icons/ExitToApp";
 import UserIcon from "@material-ui/icons/AccountCircle";
 import {
   BUTTON_BLUE,
-  BUTTON_BLUE_HOVER,
-} from "../shared/Constants";
+  BUTTON_BLUE_HOVER, RADIO_BUTTON_BLUE,
+} from "../../shared/Constants";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
 import GroupIcon from "@material-ui/icons/PeopleAlt";
@@ -123,7 +123,7 @@ function GroupInformationComponent(props) {
               >
                 <TrendingUpIcon
                   style={{
-                    fill: "#17C2BC",
+                    fill: RADIO_BUTTON_BLUE,
                     marginTop: "4px",
                     marginLeft: "8px",
                   }}
@@ -205,6 +205,7 @@ function GroupInformationComponent(props) {
                       {props.group.groupMembers.map((member) => {
                         return (
                           <MenuItem
+                            key={member._id}
                             onClick={() =>
                               props.history.push("/user/" + member.username)
                             }
@@ -226,7 +227,7 @@ function GroupInformationComponent(props) {
         </Grid>
         <Grid item xs={8}>
           <Typography variant="h6">
-            {props.group.maxMembers != 0
+            {props.group.maxMembers !== 0
               ? props.group.groupMembers.length + "/" + props.group.maxMembers
               : props.group.groupMembers.length}
           </Typography>
@@ -263,7 +264,6 @@ function GroupInformationComponent(props) {
                 </div>
                 <div style={{ marginTop: "8px", marginLeft: "15px" }}>
                   <Typography
-                    variant="h7"
                     style={{ color: "tomato", fontWeight: 800 }}
                   >
                     This group has expired and can't be joined.

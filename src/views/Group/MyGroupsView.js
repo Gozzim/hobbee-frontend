@@ -1,5 +1,5 @@
 import React from "react";
-import { MyGroupsResultsComponent } from "../components/MyGroupsResultsComponent";
+import { MyGroupsResultsComponent } from "../../components/Group/MyGroupsResultsComponent";
 import { Typography } from "@material-ui/core";
 
 /**

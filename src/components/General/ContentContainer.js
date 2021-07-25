@@ -27,10 +27,6 @@ const useStyles = makeStyles((theme) => ({
   main: {
     flexGrow: 1,
   },
-  spacer: {
-    width: "300px",
-    flexShrink: 1,
-  },
 }));
 
 /**

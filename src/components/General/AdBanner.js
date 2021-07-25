@@ -1,6 +1,6 @@
 import React from "react";
 
-import adBanner from "../assets/hobbee_ad.png";
+import adBanner from "../../assets/hobbee_ad.png";
 import { useSelector } from "react-redux";
 
 export function AdBanner() {

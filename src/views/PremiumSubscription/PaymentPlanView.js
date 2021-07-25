@@ -6,7 +6,7 @@ import {
   RadioGroup,
   Typography,
 } from "@material-ui/core";
-import PayPalCheckout from "../../components/PayPalCheckout";
+import PayPalCheckout from "../../components/General/PayPalCheckout";
 import {
   BUTTON_YELLOW,
   PAPER_CREAM,

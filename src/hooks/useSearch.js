@@ -153,7 +153,6 @@ function applySorting(groups, sortBy, ascending) {
 
   if (sortBy === "timestamp") {
     sortedGroups.sort((a, b) => {
-      console.log(a);
       const aPremium = a.groupOwner.premium.active;
       const bPremium = b.groupOwner.premium.active;
       if (aPremium && !bPremium) {

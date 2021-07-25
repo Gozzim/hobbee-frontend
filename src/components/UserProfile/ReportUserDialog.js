@@ -16,8 +16,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { reportUserRequest } from "../services/UserService";
+import { reportUserRequest } from "../../services/UserService";
 import FlagIcon from '@material-ui/icons/Flag';
+import { RADIO_BUTTON_BLUE } from "../../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -37,7 +38,7 @@ const CustomTooltip = withStyles((theme) => ({
 const BlueCheckbox = withStyles({
   root: {
     '&$checked': {
-      color: "#17C2BC",
+      color: RADIO_BUTTON_BLUE,
     },
   },
   checked: {},

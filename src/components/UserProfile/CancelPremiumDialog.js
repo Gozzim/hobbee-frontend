@@ -5,8 +5,8 @@ import { Button, DialogContentText } from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import { makeStyles } from "@material-ui/core/styles";
-import { sendPremiumCancelRequest } from "../services/paymentService";
-import {BUTTON_RED, BUTTON_RED_HOVER} from "../shared/Constants";
+import { sendPremiumCancelRequest } from "../../services/paymentService";
+import {BUTTON_RED, BUTTON_RED_HOVER} from "../../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   cancelSubscriptionButton: {

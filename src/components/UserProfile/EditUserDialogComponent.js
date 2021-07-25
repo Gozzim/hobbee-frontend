@@ -10,13 +10,13 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { TextField, Tooltip, IconButton } from "@material-ui/core";
 import { createFilterOptions } from "@material-ui/lab";
 
-import { HOBBEE_YELLOW } from "../shared/Constants";
-import { isValidUsername } from "../validators/UserDataValidator";
+import { HOBBEE_YELLOW } from "../../shared/Constants";
+import { isValidUsername } from "../../validators/UserDataValidator";
 import { AvatarUploadComponent } from "./AvatarUploadComponent";
-import { isUsernameAvailable, updateMeRequest } from "../services/UserService";
-import { updateUser } from "../redux/reducers/userReducer";
-import { TagComponent } from "./TagComponent";
-import { TagAutocomplete } from "./TagAutocomplete";
+import { isUsernameAvailable, updateMeRequest } from "../../services/UserService";
+import { updateUser } from "../../redux/reducers/userReducer";
+import { TagComponent } from "../Tag/TagComponent";
+import { TagAutocomplete } from "../Tag/TagAutocomplete";
 
 const useStyles = makeStyles(() => ({
   textfield: {
@@ -155,7 +155,7 @@ export function EditUserDialogComponent(props) {
             variant="outlined"
             onChange={onChangeUsername}
             value={userForm.username}
-            error={usernameError}
+            error={!!usernameError}
             helperText={usernameError}
           />
           <TextField

@@ -5,16 +5,16 @@ import { Button, Snackbar } from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import { makeStyles } from "@material-ui/core/styles";
-import { SignInUpInput } from "./UserDataInput/SignInUpInput";
-import { PasswordEye } from "./UserDataInput/PasswordEye";
+import { SignInUpInput } from "../UserDataInput/SignInUpInput";
+import { PasswordEye } from "../UserDataInput/PasswordEye";
 import {
   getPasswordStrength,
   isValidPassword,
-} from "../validators/UserDataValidator";
-import { PasswordStrengthBar } from "./UserDataInput/PasswordStrengthBar";
-import { changePasswordRequest } from "../services/UserService";
+} from "../../validators/UserDataValidator";
+import { PasswordStrengthBar } from "../UserDataInput/PasswordStrengthBar";
+import { changePasswordRequest } from "../../services/UserService";
 import { Alert } from "@material-ui/lab";
-import {BUTTON_YELLOW, BUTTON_YELLOW_HOVER} from "../shared/Constants";
+import {BUTTON_YELLOW, BUTTON_YELLOW_HOVER} from "../../shared/Constants";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {

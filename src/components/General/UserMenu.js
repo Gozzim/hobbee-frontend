@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Divider, Menu, MenuItem } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
-import { logout } from "../redux/reducers/userReducer";
+import { logout } from "../../redux/reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({
   firstMenuitem: {

@@ -11,13 +11,13 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import ExploreIcon from "@material-ui/icons/Explore";
 import LabelIcon from "@material-ui/icons/Label";
 
-import { TagComponent } from "../components/TagComponent";
-import { fetchUser } from "../services/UserService";
-import { EditUserDialogComponent } from "../components/EditUserDialogComponent";
-import { getFileUrl } from "../services/FileService";
-import { ReportUserDialog } from "../components/ReportUserDialog";
-import PlaceHolderAvatar from "../assets/bee_white.png";
-import { RADIO_BUTTON_BLUE } from "../shared/Constants";
+import { TagComponent } from "../../components/Tag/TagComponent";
+import { fetchUser } from "../../services/UserService";
+import { EditUserDialogComponent } from "../../components/UserProfile/EditUserDialogComponent";
+import { getFileUrl } from "../../services/FileService";
+import { ReportUserDialog } from "../../components/UserProfile/ReportUserDialog";
+import PlaceHolderAvatar from "../../assets/bee_white.png";
+import { RADIO_BUTTON_BLUE } from "../../shared/Constants";
 
 const useStyles = makeStyles(() => ({
   root: {

@@ -4,17 +4,17 @@ import { connect, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import { ContentContainer } from "./components/ContentContainer";
+import { ContentContainer } from "./components/General/ContentContainer";
 import { routes } from "./routes";
-import Header from "./components/Header";
-import { Footer } from "./components/Footer";
+import Header from "./components/General/Header";
+import { Footer } from "./components/General/Footer";
 import { getToken, setToken } from "./services/HttpService";
 import { authReady, authUser } from "./redux/reducers/userReducer";
-import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
+import DynamicBreadcrumbs from "./components/General/DynamicBreadcrumbs";
 import { ASCII_BEE } from "./shared/Constants";
 import { fetchHobbyTags } from "./redux/reducers/tagsReducer";
-import { RequireLoggedIn } from "./components/RequireLoggedIn";
-import { NotFoundView } from "./views/NotFoundView";
+import { RequireLoggedIn } from "./components/General/RequireLoggedIn";
+import { NotFoundView } from "./views/General/NotFoundView";
 
 const useStyles = makeStyles(() => ({
   appRoot: {

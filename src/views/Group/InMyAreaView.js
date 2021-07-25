@@ -1,10 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroupsInMyArea } from "../redux/reducers/groupsReducer";
-import { SearchBar } from "../components/Search/SearchBar";
-import { SearchResults } from "../components/Search/SearchResults";
-import { useSearch } from "../hooks/useSearch";
-import { RequireLoggedIn } from "../components/RequireLoggedIn";
+import { getGroupsInMyArea } from "../../redux/reducers/groupsReducer";
+import { SearchBar } from "../../components/Search/SearchBar";
+import { SearchResults } from "../../components/Search/SearchResults";
+import { useSearch } from "../../hooks/useSearch";
 
 export function InMyAreaView(props) {
   const groups = useSelector((state) => {
@@ -24,6 +23,6 @@ export function InMyAreaView(props) {
     <div>
       <SearchBar search={search} />
       <SearchResults search={search} title="GROUPS IN MY AREA" />
-    </RequireLoggedIn>
+    </div>
   );
 }

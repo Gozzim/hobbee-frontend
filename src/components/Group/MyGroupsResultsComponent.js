@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import GroupComponent from "./GroupComponent";
-import { getMyGroups } from "../redux/reducers/groupsReducer";
+import { getMyGroups } from "../../redux/reducers/groupsReducer";
 import { useLocation } from "react-router";
 import { Tooltip, Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -58,9 +58,9 @@ export function MyGroupsResultsComponent() {
         <Typography variant="h5">You don't have any active groups.</Typography>
       ) : (
         <Grid container spacing={2}>
-          {currentGroups.map((a) => {
+          {currentGroups.map((a, i) => {
             return (
-              <Grid item>
+              <Grid item key={i}>
                 <GroupComponent group={a} />{" "}
               </Grid>
             );
@@ -86,9 +86,9 @@ export function MyGroupsResultsComponent() {
         </Typography>
       ) : (
         <Grid container spacing={2}>
-          {pastGroups.map((a) => {
+          {pastGroups.map((a, i) => {
             return (
-              <Grid item>
+              <Grid item key={i}>
                 <GroupComponent group={a} />{" "}
               </Grid>
             );

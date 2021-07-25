@@ -1,20 +1,20 @@
 import SignInView from "./views/UserAuthentication/SignInView";
 import { CreateGroupView } from "./views/CreateGroupView";
-import { HomeView } from "./views/HomeView";
-import { InMyAreaView } from "./views/InMyAreaView";
+import { HomeView } from "./views/General/HomeView";
+import { InMyAreaView } from "./views/Group/InMyAreaView";
 import { PremiumView } from "./views/PremiumSubscription/PremiumView";
-import { RecommendedView } from "./views/RecommendedView";
-import { MyGroupsView } from "./views/MyGroupsView";
+import { RecommendedView } from "./views/Group/RecommendedView";
+import { MyGroupsView } from "./views/Group/MyGroupsView";
 import { Imprint } from "./views/Legal/Imprint";
 import { PrivacyPolicy } from "./views/Legal/PrivacyPolicy";
 import { ToS } from "./views/Legal/TermsOfService";
-import ProfileView from "./views/ProfileView";
+import ProfileView from "./views/User/ProfileView";
 import ResetPasswordView from "./views/UserAuthentication/ResetPasswordView";
-import { GroupPageView } from "./views/GroupPageView";
+import { GroupPageView } from "./views/Group/GroupPageView";
 import { PaymentPlanView } from "./views/PremiumSubscription/PaymentPlanView";
 import { PaymentConfirmationView } from "./views/PremiumSubscription/PaymentConfirmationView";
 import { FeedbackView } from "./views/Feedback/FeedbackView";
-import { AccountSettingsView } from "./views/AccountSettingsView";
+import { AccountSettingsView } from "./views/User/AccountSettingsView";
 import SignUpView from "./views/UserAuthentication/SignUpView";
 
 export const routes = [

@@ -114,6 +114,7 @@ export function CustomizeGroup(props) {
                 color={[0, 0, 0, 0.6]}
                 rotate={0}
                 ref={avatarEditor}
+                alt={"avatar"}
               />
               <Slider
                 min={0.1}
@@ -377,7 +378,6 @@ export function CustomizeGroup(props) {
               />
               <CustomTooltip title="Reset date">
                 <IconButton
-                  al
                   className={classes.deleteDateIcon}
                   onClick={() => {
                     props.setGroupForm((groupForm) => {
