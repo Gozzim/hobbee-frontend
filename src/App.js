@@ -1,17 +1,16 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { Route, Switch } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+
 import { ContentContainer } from "./components/ContentContainer";
 import { routes } from "./routes";
-import { Header } from "./components/Header";
+import Header from "./components/Header";
 import { Footer } from "./components/Footer";
 import { getToken, setToken } from "./services/HttpService";
 import { authReady, authUser } from "./redux/reducers/userReducer";
-import { useDispatch } from "react-redux";
 import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
-import { connect } from "react-redux";
-import { fetchNotifications } from "./redux/reducers/notificationReducer";
 import { ASCII_BEE } from "./shared/Constants";
 import { fetchHobbyTags } from "./redux/reducers/tagsReducer";
 
@@ -32,7 +31,6 @@ function App() {
     if (token) {
       setToken(token);
       dispatch(authUser());
-      dispatch(fetchNotifications());
     } else {
       dispatch(authReady());
     }
