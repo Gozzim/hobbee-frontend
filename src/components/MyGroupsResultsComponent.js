@@ -4,12 +4,24 @@ import Grid from "@material-ui/core/Grid";
 import GroupComponent from "./GroupComponent";
 import { getMyGroups } from "../redux/reducers/groupsReducer";
 import { useLocation } from "react-router";
+import { Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  title: {
+    fontWeight: "bold",
+    marginTop: "40px",
+    marginBottom: "25px",
+  },
+}));
 
 export function MyGroupsResultsComponent() {
+  const classes = useStyles();
+
   const currentGroups = useSelector((state) => {
     return state.groups.mine
       .map((id) => state.groups.data[id])
-      .filter((group) => group.date > new Date().toISOString());
+      .filter((group) => !group.date || group.date > new Date().toISOString());
   });
 
   const pastGroups = useSelector((state) => {
@@ -30,15 +42,15 @@ export function MyGroupsResultsComponent() {
 
   return currentGroups.length > 0 || pastGroups.length > 0 ? (
     <div>
-      <center>
-        <h1> ACTIVE GROUPS </h1>
-      </center>
+      <Typography variant="h4" className={classes.title}>
+        ACTIVE GROUPS
+      </Typography>
       {currentGroups.length === 0 ? (
         <center>
           <div>You do not have any active groups</div>
         </center>
       ) : (
-        <Grid container spacing={2} justify="center">
+        <Grid container spacing={2}>
           {currentGroups.map((a) => {
             return (
               <Grid item>
@@ -49,15 +61,15 @@ export function MyGroupsResultsComponent() {
         </Grid>
       )}
 
-      <center>
-        <h1> PAST GROUPS </h1>
-      </center>
+      <Typography variant="h4" className={classes.title}>
+        EXPIRED GROUPS
+      </Typography>
       {pastGroups.length === 0 ? (
         <center>
           <div>You do not have any past groups</div>
         </center>
       ) : (
-        <Grid container spacing={2} justify="center">
+        <Grid container spacing={2}>
           {pastGroups.map((a) => {
             return (
               <Grid item>

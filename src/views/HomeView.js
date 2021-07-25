@@ -15,14 +15,13 @@ import {
   BUTTON_BLUE,
   BUTTON_BLUE_HOVER,
   BUTTON_YELLOW,
-  HOBBEE_BROWN,
   HOBBEE_ORANGE,
 } from "../shared/Constants";
 
 const useStyles = makeStyles(() => ({
   topContent: {
     display: "flex",
-    color: "#32210B",
+    color: "black",
   },
   imageContainer: {
     flex: 1,
@@ -32,16 +31,16 @@ const useStyles = makeStyles(() => ({
     marginTop: "10px",
   },
   createGroupButton: {
-    color: HOBBEE_BROWN,
+    color: "black",
     backgroundColor: BUTTON_BLUE,
     "&:hover": {
       backgroundColor: BUTTON_BLUE_HOVER,
-      color: HOBBEE_BROWN,
+      color: "black",
     },
     marginTop: "10px",
   },
   bottomContent: {
-    color: HOBBEE_BROWN,
+    color: "black",
     borderColor: BUTTON_YELLOW,
     backgroundColor: "white",
     borderStyle: "solid",
@@ -51,7 +50,7 @@ const useStyles = makeStyles(() => ({
     marginBottom: "30px",
   },
   stepsContainer: {
-    color: HOBBEE_BROWN,
+    color: "black",
     display: "flex",
     justifyContent: "space-around",
     marginLeft: 0,
@@ -74,7 +73,7 @@ const useStyles = makeStyles(() => ({
     top: "50px",
     left: "50%",
     transform: "translateX(-50%)",
-    color: HOBBEE_BROWN,
+    color: "black",
   },
   searchBar: {
     marginTop: "40px",
@@ -163,7 +162,7 @@ export function HomeView() {
             </div>
             <div className={classes.stepContent}>
               <EmojiEmotionsIcon className={classes.stepIcon} />
-              <Typography variant="h6">Meet Up!</Typography>
+              <Typography variant="h6" style={{fontWeight: "bold"}}>Meet Up!</Typography>
             </div>
           </div>
         </div>
