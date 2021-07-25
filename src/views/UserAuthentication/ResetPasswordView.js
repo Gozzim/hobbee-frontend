@@ -74,7 +74,6 @@ function ResetPasswordView(props) {
 
   const onChangePassword = (e) => {
     setPassword(e.target.value);
-    // TODO: Fix ugly if statements
     if (e.target.value === "") {
       setPassError("");
     } else if (!isValidPassword(e.target.value)) {
@@ -89,7 +88,6 @@ function ResetPasswordView(props) {
 
   const onChangePassword2 = (e) => {
     setPassword2(e.target.value);
-    // TODO: Fix ugly if statements
     if (password !== "") {
       if (password !== e.target.value && e.target.value !== "") {
         setPassError("Passwords do not match.");

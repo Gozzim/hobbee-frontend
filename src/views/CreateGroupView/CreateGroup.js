@@ -9,8 +9,8 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import { TagComponent } from "../../components/TagComponent";
-import { TagAutocomplete } from "../../components/TagAutocomplete";
+import { TagComponent } from "../../components/Tag/TagComponent";
+import { TagAutocomplete } from "../../components/Tag/TagAutocomplete";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
 import { RADIO_BUTTON_BLUE } from "../../shared/Constants";
 import { createFilterOptions } from "@material-ui/lab";
@@ -180,9 +180,9 @@ export function CreateGroup(props) {
       />
 
       <div className="creategroup-tags">
-        {props.groupForm.tags.map((x) => {
+        {props.groupForm.tags.map((x, i) => {
           return (
-            <div style={{ marginRight: "10px", marginBottom: "10px" }}>
+            <div style={{ marginRight: "10px", marginBottom: "10px" }} key={i}>
               <TagComponent
                 id={x._id}
                 key={x._id}

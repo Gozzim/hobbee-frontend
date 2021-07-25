@@ -14,8 +14,8 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { TagAutocomplete } from "../TagAutocomplete";
-import { TagComponent } from "../TagComponent";
+import { TagAutocomplete } from "../Tag/TagAutocomplete";
+import { TagComponent } from "../Tag/TagComponent";
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";

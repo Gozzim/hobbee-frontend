@@ -36,8 +36,8 @@ import HobbeeIcon from "../../assets/hobbee_white.svg";
 import { SignInUpInput } from "../../components/UserDataInput/SignInUpInput";
 import { PasswordEye } from "../../components/UserDataInput/PasswordEye";
 import { PasswordStrengthBar } from "../../components/UserDataInput/PasswordStrengthBar";
-import { TagAutocomplete } from "../../components/TagAutocomplete";
-import { TagComponent } from "../../components/TagComponent";
+import { TagAutocomplete } from "../../components/Tag/TagAutocomplete";
+import { TagComponent } from "../../components/Tag/TagComponent";
 import { createFilterOptions } from "@material-ui/lab";
 
 const useStyles = makeStyles(() => ({
@@ -366,9 +366,9 @@ function SignUpView(props) {
               }
             />
             <div className={"creategroup-tags"}>
-              {registerState.hobbies.map((x) => {
+              {registerState.hobbies.map((x, i) => {
                 return (
-                  <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+                  <div style={{ marginRight: "10px", marginBottom: "5px" }} key={i}>
                     <TagComponent
                       id={x._id}
                       key={x._id}

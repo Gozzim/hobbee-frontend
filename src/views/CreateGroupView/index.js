@@ -5,7 +5,6 @@ import React, {useState} from "react";
 import { CreateGroup } from "./CreateGroup";
 import { CustomizeGroup } from "./CustomizeGroup";
 import { createRequest } from "../../services/GroupService";
-import { RequireLoggedIn } from "../../components/RequireLoggedIn";
 import { isValidGroupname } from "../../validators/GroupDataValidator";
 import { BUTTON_BLUE, BUTTON_BLUE_HOVER } from "../../shared/Constants";
 import {Alert} from "@material-ui/lab";

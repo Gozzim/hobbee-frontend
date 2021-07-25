@@ -24,7 +24,7 @@ export const login = createAsyncThunk(
       switch (e.response.status) {
         case 401:
         case 404:
-          return thunkAPI.rejectWithValue("Incorrect username or password."); //TODO: not necessary anymore
+          return thunkAPI.rejectWithValue("Incorrect username or password.");
         default:
           return thunkAPI.rejectWithValue(e.response.data.error);
       }

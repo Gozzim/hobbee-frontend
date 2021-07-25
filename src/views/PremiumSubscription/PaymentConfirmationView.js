@@ -56,8 +56,8 @@ export function PaymentConfirmationView(props) {
         <Grid item>
           <Divider style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }} />
         </Grid>
-        {Object.entries(receipt).map(([k, v]) => (
-          <Grid container>
+        {Object.entries(receipt).map(([k, v], i) => (
+          <Grid container key={i}>
             <Grid item xs={4}>
               <Typography
                 variant="body1"
