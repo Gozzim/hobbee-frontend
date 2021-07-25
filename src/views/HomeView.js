@@ -17,6 +17,8 @@ import {
   BUTTON_YELLOW,
   HOBBEE_ORANGE,
 } from "../shared/Constants";
+import { useDispatch, useSelector } from "react-redux";
+import { getGroups } from "../redux/reducers/groupsReducer";
 
 const useStyles = makeStyles(() => ({
   topContent: {

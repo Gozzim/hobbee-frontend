@@ -15,6 +15,7 @@ import { PaymentPlanView } from "./views/PremiumSubscription/PaymentPlanView";
 import { PaymentConfirmationView } from "./views/PremiumSubscription/PaymentConfirmationView";
 import { FeedbackView } from "./views/Feedback/FeedbackView";
 import { AccountSettingsView } from "./views/AccountSettingsView";
+import SignUpView from "./views/UserAuthentication/SignUpView";
 
 export const routes = [
   {
