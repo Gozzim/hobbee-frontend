@@ -94,7 +94,7 @@ export function HomeView(props) {
     if (groups.length === 0) {
       dispatch(getGroups());
     }
-  }, []);
+  }, [dispatch, groups.length]);
   const search = useSearch({ groups, initialGroupsOnPage: 9 });
 
   return (

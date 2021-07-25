@@ -64,9 +64,8 @@ export function AccountSettingsView(props) {
     if (user.isLoggedIn) {
       setPageLoaded(true);
       setCancelled(user.user.premium.cancelled);
-      console.log(user);
     }
-  }, [user.user]);
+  }, [user]);
 
   if (!pageLoaded) {
     return <div />;

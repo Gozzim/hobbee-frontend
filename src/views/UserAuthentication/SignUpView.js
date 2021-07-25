@@ -23,6 +23,7 @@ import { PasswordEye } from "../../components/UserDataInput/PasswordEye";
 import { PasswordStrengthBar } from "../../components/UserDataInput/PasswordStrengthBar";
 import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { TagComponent } from "../../components/TagComponent";
+import { createFilterOptions } from "@material-ui/lab";
 
 const useStyles = makeStyles(() => ({
   userSignUpRoot: {
@@ -338,12 +339,12 @@ function SignUpView(props) {
                   onInputChange={(e, v) => {
                     setInputValue(v);
                   }}
-                  filterOptions={(options) => {
-                    return options.filter((option) =>
-                        !registerState.hobbies.includes(option)
+                  filterSelectedOptions
+                  filterOptions={createFilterOptions({
+                    matchFrom: 'start',
+                    stringify: (option => !registerState.hobbies.includes(option) ? option.title : "")
 
-                    )
-                  }}
+                  })}
               />
               <div className={"creategroup-tags"}>
                 {registerState.hobbies.map((x) => {

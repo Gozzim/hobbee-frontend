@@ -19,6 +19,7 @@ import { updateUser } from "../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import { TagComponent } from "./TagComponent";
 import { TagAutocomplete } from "./TagAutocomplete";
+import { createFilterOptions } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -73,10 +74,11 @@ export function EditUserDialogComponent(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [open, setOpen] = React.useState(false);
-  const [userForm, setUserForm] = React.useState(props.user);
-  const [touched, setTouched] = React.useState(initialTouchedState);
+  const [open, setOpen] = useState(false);
+  const [userForm, setUserForm] = useState(props.user);
+  const [touched, setTouched] = useState(initialTouchedState);
   const [selectedHobby, setSelectedHobby] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
 
   const onChangeTagInput = (event, hobbyTag) => {
@@ -88,12 +90,13 @@ export function EditUserDialogComponent(props) {
         setUserForm((userForm) => {
           return { ...userForm, hobbies: [...userForm.hobbies, hobbyTag._id] };
         });
-        setSelectedHobby(null);
       } catch (e) {
         console.log(e.message);
       }
     }
-  }
+    setInputValue("");
+    setSelectedHobby(null);
+  };
 
   const handleOpen = () => {
     setUserForm(props.user);
@@ -205,6 +208,10 @@ export function EditUserDialogComponent(props) {
           />
 
           <TagAutocomplete
+              inputValue={inputValue}
+              onInputChange={(e, v) => {
+                setInputValue(v);
+              }}
             onChange={onChangeTagInput}
             value={selectedHobby}
             error={touched.hobbies && userForm.hobbies.length === 0}
@@ -213,6 +220,12 @@ export function EditUserDialogComponent(props) {
                 ? "You need at least two hobbies"
                 : ""
             }
+            filterSelectedOptions
+            filterOptions={createFilterOptions({
+              matchFrom: 'start',
+              stringify: (option => !userForm.hobbies.includes(option._id) ? option.title : "")
+
+            })}
           />
           <div className={"creategroup-tags"}>
             {userForm.hobbies.map((x) => {

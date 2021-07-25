@@ -161,7 +161,7 @@ function GroupInformationComponent(props) {
           </div>
         </Grid>
         <Grid item xs={10}>
-          {props.joined && !props.group.location == "" ? (
+          {props.joined && props.group.location !== "" ? (
               <div>
             <Typography variant="h6" style={{ wordWrap: "break-word" }}>
               {props.group.location}
