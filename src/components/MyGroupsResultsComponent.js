@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function MyGroupsResultsComponent(props) {
+export function MyGroupsResultsComponent() {
   const classes = useStyles();
 
   const currentGroups = useSelector((state) => {
@@ -38,7 +38,7 @@ export function MyGroupsResultsComponent(props) {
     if (user.isLoggedIn) {
       dispatch(getMyGroups());
     }
-  }, [user.isLoggedIn, location]);
+  }, [user.isLoggedIn, location, dispatch]);
 
   return currentGroups.length > 0 || pastGroups.length > 0 ? (
     <div>
@@ -61,9 +61,9 @@ export function MyGroupsResultsComponent(props) {
         </Grid>
       )}
 
-        <Typography variant="h4" className={classes.title}>
-            EXPIRED GROUPS
-        </Typography>
+      <Typography variant="h4" className={classes.title}>
+        EXPIRED GROUPS
+      </Typography>
       {pastGroups.length === 0 ? (
         <center>
           <div>You do not have any past groups</div>

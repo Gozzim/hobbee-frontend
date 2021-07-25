@@ -2,9 +2,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { Menu, MenuItem, Divider } from "@material-ui/core";
+import { Divider, Menu, MenuItem } from "@material-ui/core";
 import { connect, useSelector } from "react-redux";
-import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import { logout } from "../redux/reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({

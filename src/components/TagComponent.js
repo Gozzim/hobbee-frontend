@@ -1,5 +1,5 @@
-import React from "react";
 import Chip from "@material-ui/core/Chip";
+import React from "react";
 import { useSelector } from "react-redux";
 
 export function TagComponent(props) {
@@ -10,7 +10,7 @@ export function TagComponent(props) {
   const colors = ["orange", "yellow", "blue"];
   const color = colors[1];
 
-  if(index<0) {
+  if (index < 0) {
     return null;
   }
 
