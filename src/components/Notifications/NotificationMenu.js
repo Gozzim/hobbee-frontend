@@ -49,7 +49,7 @@ function NotificationMenu(props) {
         horizontal: "right",
       }}
     >
-      {props.notifications.length > 0 ? (<div style={{minWidth: 300, maxWidth: 500}}>
+      {props.notifications.length > 0 ? (<div style={{minWidth: 300, maxWidth: 500, maxHeight: 360}}>
       <TransitionGroup>
         {props.notifications.map((notification) => (
           <Collapse key={notification._id}>

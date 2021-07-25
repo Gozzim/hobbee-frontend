@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { Button, Divider, Snackbar, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -13,7 +13,7 @@ import { SignInUpInput } from "../../components/UserDataInput/SignInUpInput";
 import { PasswordEye } from "../../components/UserDataInput/PasswordEye";
 import { ForgotPasswordDialog } from "../../components/UserDataInput/ForgotPasswordDialog";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   userLoginRoot: {
     margin: "auto",
     width: "60%",
@@ -28,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 function SignInView(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user);
 
   const [username, setUsername] = useState("");
@@ -40,26 +42,22 @@ function SignInView(props) {
   useEffect(() => {
     if (user.error) {
       setLoginError("Invalid login credentials");
-      props.dispatch(setAuthError(null));
+      dispatch(setAuthError(null));
     }
-  }, [user.error]);
+  }, [user.error, dispatch]);
 
   useEffect(() => {
     if (user.user) {
-      onAfterLogin();
+      let targetPath = "/";
+      try {
+        // get last visited site for redirect
+        targetPath = sessionStorage.getItem("last_visited");
+      } catch (e) {
+        // sessionStorage not supported
+      }
+      props.history.push(targetPath);
     }
   }, [user, props.history]);
-
-  const onAfterLogin = () => {
-    let targetPath = "/";
-    try {
-      // get last visited site for redirect
-      targetPath = sessionStorage.getItem("last_visited");
-    } catch (e) {
-      // sessionStorage not supported
-    }
-    props.history.push(targetPath);
-  };
 
   const onClose = () => {
     props.history.replace(props.location.pathname);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { formatISO } from "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { Button, Checkbox, Divider, FormControl, FormControlLabel, Typography } from "@material-ui/core";
@@ -24,7 +24,7 @@ import { PasswordStrengthBar } from "../../components/UserDataInput/PasswordStre
 import { TagAutocomplete } from "../../components/TagAutocomplete";
 import { TagComponent } from "../../components/TagComponent";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   userSignUpRoot: {
     margin: "auto",
     width: "60%",
@@ -56,6 +56,8 @@ const initialErrors = {
 
 function SignUpView(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user);
 
   const [registerError, setRegisterError] = useState(initialErrors);
@@ -63,6 +65,7 @@ function SignUpView(props) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [selectedHobby, setSelectedHobby] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
   const minAge = new Date();
   minAge.setFullYear(minAge.getFullYear() - 18);
@@ -75,13 +78,13 @@ function SignUpView(props) {
 
   useEffect(() => {
     if (user.error) {
-      changeRegisterError({
-        general:
-            "Something went wrong. Maybe you already have a Hobb.ee account.",
+      setRegisterError({
+        ...registerError,
+        general: "Something went wrong. Maybe you already have a Hobb.ee account.",
       });
-      props.dispatch(setAuthError(null));
+      dispatch(setAuthError(null));
     }
-  }, [user.error]);
+  }, [user.error, dispatch, registerError]);
 
   const changeRegisterError = (fieldWithValue) => {
     setRegisterError({
@@ -99,7 +102,7 @@ function SignUpView(props) {
 
   const onChangeHobbyInput = (event, hobbyTag) => {
     setSelectedHobby(hobbyTag);
-    if (!registerState.hobbies.includes(hobbyTag)) {
+    if (hobbyTag && !registerState.hobbies.includes(hobbyTag)) {
       try {
         changeRegisterState({ hobbies: [...registerState.hobbies, hobbyTag] });
         setSelectedHobby(null);
@@ -107,6 +110,8 @@ function SignUpView(props) {
         console.log(e.message);
       }
     }
+    setInputValue("");
+    setSelectedHobby(null);
   };
 
   const onSubmit = (e) => {
@@ -118,6 +123,13 @@ function SignUpView(props) {
         registerState.bday > minAge ||
         registerState.city === ""
     ) {
+      return;
+    }
+    if (registerState.hobbies.length < 2) {
+      changeRegisterError({
+        general:
+            "You need to select at least 2 hobbies.",
+      });
       return;
     }
     try {
@@ -322,6 +334,16 @@ function SignUpView(props) {
               <TagAutocomplete
                   onChange={onChangeHobbyInput}
                   value={selectedHobby}
+                  inputValue={inputValue}
+                  onInputChange={(e, v) => {
+                    setInputValue(v);
+                  }}
+                  filterOptions={(options) => {
+                    return options.filter((option) =>
+                        !registerState.hobbies.includes(option)
+
+                    )
+                  }}
               />
               <div className={"creategroup-tags"}>
                 {registerState.hobbies.map((x) => {

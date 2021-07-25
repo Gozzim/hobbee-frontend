@@ -33,7 +33,7 @@ export function CancelPremiumDialog(props) {
   const handleUnsubscribe = async () => {
     try {
       await sendPremiumCancelRequest();
-      props.setCanceled(true);
+      props.setCancelled(true);
     } catch (e) {
       console.log(e);
     }

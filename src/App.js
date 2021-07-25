@@ -13,8 +13,9 @@ import DynamicBreadcrumbs from "./components/DynamicBreadcrumbs";
 import { connect } from "react-redux";
 import { fetchNotifications } from "./redux/reducers/notificationReducer";
 import { ASCII_BEE } from "./shared/Constants";
+import { fetchHobbyTags } from "./redux/reducers/tagsReducer";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appRoot: {
     height: "100vh",
     display: "flex",
@@ -35,7 +36,8 @@ function App() {
     } else {
       dispatch(authReady());
     }
-  }, []);
+    dispatch(fetchHobbyTags());
+  }, [dispatch]);
 
   useEffect(() => {
     console.log(ASCII_BEE)

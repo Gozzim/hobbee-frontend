@@ -26,7 +26,7 @@ function PayPalCheckout(props) {
     const onCancel = () => {
         return (<Snackbar autoHideDuration={6000}>
             <Alert severity="error">
-                The checkout process was canceled!
+                The checkout process was cancelled!
             </Alert>
         </Snackbar>)
     };

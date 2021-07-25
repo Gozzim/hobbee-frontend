@@ -3,14 +3,14 @@ import Grid from "@material-ui/core/Grid";
 import { Button, Divider, TextField, Typography } from "@material-ui/core";
 import { HobbeeRating } from "../../components/HobbeeRating";
 import { makeStyles } from "@material-ui/core/styles";
-import {BUTTON_YELLOW, BUTTON_YELLOW_HOVER, HOBBEE_ORANGE, HOBBEE_YELLOW} from "../../shared/Constants";
+import { BUTTON_YELLOW, BUTTON_YELLOW_HOVER } from "../../shared/Constants";
 import {
   feedbackFormRequest,
   submitFeedbackRequest,
 } from "../../services/FeedbackService";
 import { useSelector } from "react-redux";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   feedbackRoot: {
     margin: "auto",
     width: "80%",
@@ -45,32 +45,35 @@ export function FeedbackView(props) {
   const [error, setError] = useState("");
   const [formStatus, setFormStatus] = useState(initialFormStatus);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (user.isLoggedIn) {
-      try {
+      async function requestForm() {
         const resp = await feedbackFormRequest(props.match.params.id);
         setFormStatus({
           ...formStatus,
           status: resp.status,
           groupName: resp.data.groupName,
         });
-      } catch (e) {
-        if (e.response) {
-          setFormStatus({
-            ...formStatus,
-            status: e.response.status,
-            groupName: e.response.statusText,
-          });
-        } else {
-          setFormStatus({
-            ...formStatus,
-            status: 400,
-            groupName: e.message,
-          });
-        }
       }
+        try {
+          requestForm();
+        } catch (e) {
+          if (e.response) {
+            setFormStatus({
+              ...formStatus,
+              status: e.response.status,
+              groupName: e.response.statusText,
+            });
+          } else {
+            setFormStatus({
+              ...formStatus,
+              status: 400,
+              groupName: e.message,
+            });
+          }
+        }
     }
-  }, [user]);
+  }, [user, formStatus, props.match.params.id]);
 
   const onSubmit = async (e) => {
     e.preventDefault();

@@ -1,4 +1,4 @@
-import HttpService, {getToken, setToken} from "./HttpService";
+import HttpService, { setToken } from "./HttpService";
 
 export async function registrationRequest(userdata) {
   const resp = await HttpService.post("auth/register", userdata);

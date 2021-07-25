@@ -75,7 +75,6 @@ function ProfileView(props) {
   }, [user.authReady]);
 
 
-
   if (!formData) return (<div className={classes.root}> <h1>User Does Not Exist</h1> </div>) //TODO
 
   return (
