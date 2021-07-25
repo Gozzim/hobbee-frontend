@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -6,50 +7,23 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import {
-  TextField,
-  Tooltip,
-  IconButton,
-} from "@material-ui/core";
+import { TextField, Tooltip, IconButton } from "@material-ui/core";
+import { createFilterOptions } from "@material-ui/lab";
+
 import { HOBBEE_YELLOW } from "../shared/Constants";
-import { isValidUsername} from "../validators/UserDataValidator";
+import { isValidUsername } from "../validators/UserDataValidator";
 import { AvatarUploadComponent } from "./AvatarUploadComponent";
 import { isUsernameAvailable, updateMeRequest } from "../services/UserService";
 import { updateUser } from "../redux/reducers/userReducer";
-import { useDispatch } from "react-redux";
 import { TagComponent } from "./TagComponent";
 import { TagAutocomplete } from "./TagAutocomplete";
-import { createFilterOptions } from "@material-ui/lab";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   textfield: {
     marginBottom: "20px",
   },
-  deleteDateIcon: {
-    width: "60px",
-    height: "60px",
-    marginLeft: "10px",
-    marginTop: "14px",
-  },
-  deleteGroupButton: {
-    //marginLeft: "10px",
-    marginTop: "30px",
-    marginBottom: "30px",
-    backgroundColor: "#ff6347",
-    borderStyle: "solid",
-    borderWidth: "4px",
-    borderColor: "#ff5233",
-    color: "black",
-    "&:hover": {
-      borderColor: "#e6e6e6",
-    },
-  },
   updateButton: {
     backgroundColor: HOBBEE_YELLOW,
-    color: "black",
-  },
-  deleteButton: {
-    backgroundColor: "#ff6347",
     color: "black",
   },
 }));
@@ -82,7 +56,6 @@ export function EditUserDialogComponent(props) {
 
   const [usernameError, setUsernameError] = useState(null);
 
-
   const onChangeTagInput = (event, hobbyTag) => {
     setTouched((touched) => {
       return { ...touched, hobbies: true };
@@ -101,26 +74,25 @@ export function EditUserDialogComponent(props) {
   };
 
   const onChangeUsername = async (event) => {
-      const usernameUsedResp = await isUsernameAvailable(userForm.username);
+    setTouched((touched) => {
+      return { ...touched, username: true };
+    });
+    setUserForm((userForm) => {
+      return { ...userForm, username: event.target.value };
+    });
+    const usernameUsedResp = await isUsernameAvailable(event.target.value);
 
-    if (!isValidUsername(userForm.username)){
+    if (!isValidUsername(event.target.value)) {
       setUsernameError("Invalid username");
+    } else if (
+      !usernameUsedResp.isUsernameAvailable &&
+      event.target.value !== props.user.username
+    ) {
+      setUsernameError("Username already in use");
+    } else {
+      setUsernameError("");
     }
-    else if (!usernameUsedResp.isUsernameAvailable) {
-        setUsernameError("Username already in use");
-      }
-    else {
-        setUsernameError("");
-      }
-
-      setTouched((touched) => {
-        return { ...touched, username: true };
-      });
-      setUserForm((userForm) => {
-        return { ...userForm, username: event.target.value };
-      })
   };
-
 
   const handleOpen = () => {
     setUserForm(props.user);
@@ -132,22 +104,17 @@ export function EditUserDialogComponent(props) {
   };
 
   const handleUpdate = async () => {
-    if (
-      isValidUsername(userForm.username)
-    ) {
+    if (isValidUsername(userForm.username)) {
       try {
         const resp = await updateMeRequest(userForm);
-        console.log(userForm)
         dispatch(updateUser(userForm));
-        console.log(resp);
         props.setUser(resp.data);
         handleClose();
       } catch (e) {
-        console.log(e.message);
         handleClose();
       }
     } else {
-      setTouched((touched) => {
+      setTouched(() => {
         return {
           username: true,
           city: true,
@@ -158,12 +125,10 @@ export function EditUserDialogComponent(props) {
     }
   };
 
-
-
   return (
     <div>
       <div style={{ position: "relative" }}>
-        <CustomTooltip title="Edit User">
+        <CustomTooltip key="edit" title="Edit User">
           <IconButton
             onClick={handleOpen}
             style={{ position: "absolute", transform: "translateY(-12px)" }}
@@ -172,12 +137,8 @@ export function EditUserDialogComponent(props) {
           </IconButton>
         </CustomTooltip>
       </div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Edit User</DialogTitle>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="edit-user">
+        <DialogTitle id="edit-user">Edit User</DialogTitle>
 
         <DialogContent>
           <AvatarUploadComponent
@@ -192,23 +153,17 @@ export function EditUserDialogComponent(props) {
             required
             fullWidth
             variant="outlined"
-            //size="small"
             onChange={onChangeUsername}
             value={userForm.username}
             error={usernameError}
-            helperText={
-              usernameError
-                ? "Invalid Username"
-                : ""
-            }
+            helperText={usernameError}
           />
           <TextField
             label="City"
             className={classes.textfield}
-            required //TODO IS THIS REQUIRED?
+            required
             fullWidth
             variant="outlined"
-            //size="small"
             onChange={(event) => {
               setTouched((touched) => {
                 return { ...touched, city: true };
@@ -219,16 +174,14 @@ export function EditUserDialogComponent(props) {
             }}
             value={userForm.city}
             error={touched.city && userForm.city === ""}
-            helperText={
-              touched.city && userForm.city === "" ? "Invalid City" : ""
-            }
+            helperText={touched.city && !userForm.city ? "Invalid City" : ""}
           />
 
           <TagAutocomplete
-              inputValue={inputValue}
-              onInputChange={(e, v) => {
-                setInputValue(v);
-              }}
+            inputValue={inputValue}
+            onInputChange={(e, v) => {
+              setInputValue(v);
+            }}
             onChange={onChangeTagInput}
             value={selectedHobby}
             error={touched.hobbies && userForm.hobbies.length === 0}
@@ -239,15 +192,15 @@ export function EditUserDialogComponent(props) {
             }
             filterSelectedOptions
             filterOptions={createFilterOptions({
-              matchFrom: 'start',
-              stringify: (option => !userForm.hobbies.includes(option._id) ? option.title : "")
-
+              matchFrom: "start",
+              stringify: (option) =>
+                !userForm.hobbies.includes(option._id) ? option.title : "",
             })}
           />
           <div className={"creategroup-tags"}>
-            {userForm.hobbies.map((x) => {
+            {userForm.hobbies.map((x, i) => {
               return (
-                <div style={{ marginRight: "10px", marginBottom: "5px" }}>
+                <div style={{ marginRight: "10px", marginBottom: "5px" }} key={i} >
                   <TagComponent
                     id={x}
                     key={x}
@@ -258,7 +211,9 @@ export function EditUserDialogComponent(props) {
                       setUserForm((userForm) => {
                         return {
                           ...userForm,
-                          hobbies: userForm.hobbies.filter((hobby) => x !== hobby),
+                          hobbies: userForm.hobbies.filter(
+                            (hobby) => x !== hobby
+                          ),
                         };
                       });
                     }}

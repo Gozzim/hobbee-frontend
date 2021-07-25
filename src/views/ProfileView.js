@@ -1,30 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { connect, useSelector } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { TagComponent } from "../components/TagComponent";
-import { connect, useSelector } from "react-redux";
-import { fetchUser } from "../services/UserService";
 import UserIcon from "@material-ui/icons/AccountCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import CakeIcon from "@material-ui/icons/Cake";
 import Typography from "@material-ui/core/Typography";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
-import { EditUserDialogComponent } from "../components/EditUserDialogComponent";
-import { getFileUrl } from "../services/FileService";
 import ExploreIcon from "@material-ui/icons/Explore";
-import { withRouter } from "react-router-dom";
-import { ReportUserDialog } from "../components/ReportUserDialog";
-import PlaceHolderAvatar from "../assets/bee_white.png";
 import LabelIcon from "@material-ui/icons/Label";
 
-const useStyles = makeStyles((theme) => ({
+import { TagComponent } from "../components/TagComponent";
+import { fetchUser } from "../services/UserService";
+import { EditUserDialogComponent } from "../components/EditUserDialogComponent";
+import { getFileUrl } from "../services/FileService";
+import { ReportUserDialog } from "../components/ReportUserDialog";
+import PlaceHolderAvatar from "../assets/bee_white.png";
+import { RADIO_BUTTON_BLUE } from "../shared/Constants";
+
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "Center",
-    color: "black",
   },
   img: {
     borderRadius: "10px",
@@ -52,37 +49,38 @@ const CustomTooltip = withStyles((theme) => ({
 function ProfileView(props) {
   const classes = useStyles();
   const usernameInURL = props.match.params.username;
-  console.log(usernameInURL);
 
-  const [formData, setFormData] = React.useState(null);
+  const [formData, setFormData] = useState(null);
   const user = useSelector((state) => state.user);
 
-  React.useEffect(async () => {
+  useEffect(() => {
     if (user.authReady) {
-      try {
-        if (
-          user.isLoggedIn &&
-          (user.user.username === usernameInURL || !usernameInURL)
-        ) {
-          setFormData(user.user);
-        } else {
-          const profileData = await fetchUser(usernameInURL);
-          console.log(usernameInURL === profileData.data.username);
-          console.log(typeof usernameInURL);
-          setFormData(profileData.data);
+      async function populateData() {
+        try {
+          if (
+              user.isLoggedIn &&
+              (user.user.username === usernameInURL || !usernameInURL)
+          ) {
+            setFormData(user.user);
+          } else {
+            const profileData = await fetchUser(usernameInURL);
+            setFormData(profileData.data);
+          }
+        } catch (e) {
+          console.log(e);
         }
-      } catch (e) {
-        console.log(e);
       }
+      populateData();
     }
-  }, [user.authReady, props.location]);
+  }, [user.authReady, props.location, usernameInURL]); // eslint-disable-line -- react-hooks/exhaustive-deps
+  // Only initialized once on render with finished auth state
 
   if (!formData)
     return (
       <div className={classes.root}>
         <h1>User Does Not Exist</h1>
       </div>
-    ); //TODO
+    );
 
   return (
     <div className={classes.root}>
@@ -118,7 +116,7 @@ function ProfileView(props) {
 
               <Grid item xs={2}>
                 <div className={classes.detailsItem}>
-                  <CustomTooltip title="Username">
+                  <CustomTooltip key={"username"} title="Username">
                     <UserIcon style={{ fill: "black" }} />
                   </CustomTooltip>
                 </div>
@@ -128,11 +126,12 @@ function ProfileView(props) {
                   <Typography variant="h6">{formData.username}</Typography>
                   {formData.premium.active ? (
                     <CustomTooltip
+                      key={"vip"}
                       title={formData.username + " is supporting Hobb.ee ❤"}
                     >
                       <TrendingUpIcon
                         style={{
-                          fill: "#17C2BC",
+                          fill: RADIO_BUTTON_BLUE,
                           marginTop: "4px",
                           marginLeft: "8px",
                         }}
@@ -157,14 +156,14 @@ function ProfileView(props) {
               </Grid>
 
               {(formData.username === user.user.username || !usernameInURL) && [
-                <Grid item xs={2}>
+                <Grid key={"bday"} item xs={2}>
                   <div className={classes.detailsItem}>
                     <CustomTooltip title="Birthday">
                       <CakeIcon style={{ fill: "black" }} />
                     </CustomTooltip>
                   </div>
                 </Grid>,
-                <Grid item xs={10}>
+                <Grid key={"bdayLabel"} item xs={10}>
                   <Typography variant="h6">
                     {new Date(formData.dateOfBirth).toLocaleString("en-GB", {
                       year: "numeric",
@@ -177,7 +176,7 @@ function ProfileView(props) {
 
               <Grid item xs={2}>
                 <div className={classes.detailsItem}>
-                  <CustomTooltip title="City">
+                  <CustomTooltip key={"city"} title="City">
                     <ExploreIcon style={{ fill: "black" }} />
                   </CustomTooltip>
                 </div>
@@ -188,7 +187,7 @@ function ProfileView(props) {
 
               <Grid item xs={2}>
                 <div className={classes.detailsItem}>
-                  <CustomTooltip title="Hobbies">
+                  <CustomTooltip key={"hobbies"} title="Hobbies">
                     <LabelIcon style={{ fill: "black" }} />
                   </CustomTooltip>
                 </div>
@@ -196,10 +195,11 @@ function ProfileView(props) {
 
               <Grid item xs={10}>
                 <div style={{ display: "flex", flexWrap: "wrap" }}>
-                  {formData.hobbies.map((x) => {
+                  {formData.hobbies.map((x, i) => {
                     return (
                       <div
                         style={{ marginRight: "10px", marginBottom: "5px" }}
+                        key={i}
                       >
                         <TagComponent id={x} key={x} />
                       </div>

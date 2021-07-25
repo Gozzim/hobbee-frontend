@@ -17,6 +17,7 @@ export function AdBanner() {
           }}
           href={"/premium"}
           target="_blank"
+          rel={"noopener noreferrer"}
         >
           <img
             style={{ maxWidth: 300, height: "auto", position: "fixed" }}
