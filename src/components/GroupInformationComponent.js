@@ -9,7 +9,6 @@ import UserIcon from "@material-ui/icons/AccountCircle";
 import {
   BUTTON_BLUE,
   BUTTON_BLUE_HOVER,
-  HOBBEE_BROWN,
 } from "../shared/Constants";
 import EventIcon from "@material-ui/icons/Event";
 import LocationIcon from "@material-ui/icons/LocationOn";
@@ -107,7 +106,7 @@ function GroupInformationComponent(props) {
         <Grid item xs={2}>
           <div className={classes.detailsItem}>
             <CustomTooltip title="Group Owner">
-              <UserIcon style={{ fill: HOBBEE_BROWN }} />
+              <UserIcon style={{ fill: "black" }} />
             </CustomTooltip>
           </div>
         </Grid>
@@ -136,7 +135,7 @@ function GroupInformationComponent(props) {
         <Grid item xs={2}>
           <div className={classes.detailsItem}>
             <CustomTooltip title="Date">
-              <EventIcon style={{ fill: HOBBEE_BROWN }} />
+              <EventIcon style={{ fill: "black" }} />
             </CustomTooltip>
           </div>
         </Grid>
@@ -159,7 +158,7 @@ function GroupInformationComponent(props) {
         <Grid item xs={2}>
           <div className={classes.detailsItem}>
             <CustomTooltip title="Location">
-              <LocationIcon style={{ fill: HOBBEE_BROWN }} />
+              <LocationIcon style={{ fill: "black" }} />
             </CustomTooltip>
           </div>
         </Grid>
@@ -190,7 +189,7 @@ function GroupInformationComponent(props) {
                   <React.Fragment>
                     <CustomTooltip title="Group Members">
                       <GroupIcon
-                        style={{ fill: HOBBEE_BROWN, cursor: "pointer" }}
+                        style={{ fill: "black", cursor: "pointer" }}
                         {...bindTrigger(popupState)}
                       />
                     </CustomTooltip>
@@ -220,7 +219,7 @@ function GroupInformationComponent(props) {
               </PopupState>
             ) : (
               <CustomTooltip title="Group Members">
-                <GroupIcon style={{ fill: HOBBEE_BROWN }} />
+                <GroupIcon style={{ fill: "black" }} />
               </CustomTooltip>
             )}
           </div>

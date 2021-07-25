@@ -55,7 +55,7 @@ export function CreateGroup(props) {
       >
         CREATE GROUP
       </Typography>
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className={"creategroup-padding"} variant={"h6"} style={{fontWeight: "bold"}}>
         What do you want to call your group?
       </Typography>
       <TextField
@@ -84,7 +84,7 @@ export function CreateGroup(props) {
         }
       />
 
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className={"creategroup-padding"} variant={"h6"} style={{fontWeight: "bold"}}>
         In what city will your activity take place?
       </Typography>
 
@@ -109,7 +109,7 @@ export function CreateGroup(props) {
         }
       />
 
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className={"creategroup-padding"} variant={"h6"} style={{fontWeight: "bold"}}>
         Do you want to meet online or in real life?
       </Typography>
 
@@ -141,7 +141,7 @@ export function CreateGroup(props) {
         </RadioGroup>
       </FormControl>
 
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className={"creategroup-padding"} variant={"h6"} style={{fontWeight: "bold"}}>
         Choose some tags!
         <Typography>This way, other users can find your group.</Typography>
       </Typography>

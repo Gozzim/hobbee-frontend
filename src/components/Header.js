@@ -24,7 +24,6 @@ import { NotificationBell } from "./Notifications/NotificationBell";
 import {
   BUTTON_YELLOW,
   BUTTON_YELLOW_HOVER,
-  HOBBEE_BROWN,
   HOBBEE_ORANGE,
 } from "../shared/Constants";
 import { getFileUrl } from "../services/FileService";
@@ -46,19 +45,19 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     "&:hover": {
       backgroundColor: "#FFFFFF",
-      color: "#32210B",
+      color: "black",
     },
     fontSize: 17,
     marginLeft: 20,
     marginRight: 20,
   },
   createGroupButton: {
-    color: HOBBEE_BROWN,
+    color: "black",
     backgroundColor: BUTTON_YELLOW,
     fontWeight: "bold",
     "&:hover": {
       backgroundColor: BUTTON_YELLOW_HOVER,
-      color: HOBBEE_BROWN,
+      color: "black",
     },
     fontSize: 17,
     marginLeft: 20,

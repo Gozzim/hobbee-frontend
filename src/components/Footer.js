@@ -27,21 +27,21 @@ export function Footer(props) {
 
   return (
     <div className={classes.footerRoot}>
-      <Typography variant="h6">
+      <Typography variant="h6" style={{fontWeight: "bold"}}>
         <Link className={"linkDefault"} to={"/imprint"}>
           Imprint
         </Link>
         &nbsp;&nbsp; | &nbsp;&nbsp;
       </Typography>
 
-      <Typography variant="h6">
+      <Typography variant="h6" style={{fontWeight: "bold"}}>
         <Link className={"linkDefault"} to={"/tos"}>
           Terms of Service
         </Link>
         &nbsp;&nbsp; | &nbsp;&nbsp;
       </Typography>
 
-      <Typography variant="h6">
+      <Typography variant="h6" style={{fontWeight: "bold"}}>
         <Link className={"linkDefault"} to={"/privacy"}>
           Privacy Policy
         </Link>
