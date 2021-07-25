@@ -147,6 +147,7 @@ export function CustomizeGroup(props) {
                 width={300}
                 height={225}
                 src={getFileUrl(props.groupForm.pic)}
+                alt={"group-img"}
               />
             </Button>
           ) : (
@@ -220,7 +221,7 @@ export function CustomizeGroup(props) {
         <Grid item xs={6}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant={"h6"} style={{ marginTop: "20px" }}>
+              <Typography variant={"h6"} style={{ marginTop: "20px", fontWeight: "bold" }}>
                 Upload or choose a profile picture:
                 <IconButton
                   onClick={() => {
@@ -269,7 +270,7 @@ export function CustomizeGroup(props) {
           </Grid>
         </Grid>
         <Grid item xs={6}>
-          <Typography variant={"h6"} style={{ marginTop: "12px" }}>
+          <Typography variant={"h6"} style={{ marginTop: "12px", fontWeight: "bold" }}>
             Limit the number of participants:
           </Typography>
         </Grid>
@@ -298,8 +299,8 @@ export function CustomizeGroup(props) {
             value={props.groupForm.maxMembers}
           />
         </Grid>
-        <Grid item xs={6} style={{ marginTop: "24px" }}>
-          <Typography variant={"h6"}>Set a time and date:</Typography>
+        <Grid item xs={6} style={{ marginTop: "24px", fontWeight: "bold" }}>
+          <Typography variant={"h6"} style={{fontWeight: "bold"}}>Set a time and date:</Typography>
         </Grid>
         <Grid item xs={6}>
           <div style={{ display: "flex", marginBottom: "10px" }}>
@@ -311,6 +312,9 @@ export function CustomizeGroup(props) {
                 inputVariant="outlined"
                 style={{ marginRight: "10px" }}
                 onChange={(date) => {
+                  props.setTouched((touched) => {
+                    return { ...touched, date: true };
+                  });
                   if (date instanceof Date && !isNaN(date)) {
                     props.setGroupForm((groupForm) => {
                       return {
@@ -331,6 +335,9 @@ export function CustomizeGroup(props) {
                 format={"HH:mm"}
                 inputVariant="outlined"
                 onChange={(date) => {
+                  props.setTouched((touched) => {
+                    return { ...touched, date: true };
+                  });
                   if (date instanceof Date && !isNaN(date)) {
                     props.setGroupForm((groupForm) => {
                       return {
@@ -340,6 +347,18 @@ export function CustomizeGroup(props) {
                     });
                   }
                 }}
+                error={
+                  props.touched.date &&
+                  props.groupForm.date &&
+                  props.groupForm.date <= new Date().toISOString()
+                }
+                helperText={
+                  props.touched.date &&
+                  props.groupForm.date &&
+                  props.groupForm.date <= new Date().toISOString()
+                    ? "Must lie in the future"
+                    : ""
+                }
                 value={props.groupForm.date}
               />
               <CustomTooltip title="Reset date">
@@ -359,12 +378,12 @@ export function CustomizeGroup(props) {
             </MuiPickersUtilsProvider>
           </div>
         </Grid>
-        <Grid item xs={6} style={{ marginTop: "12px" }}>
-          <Typography variant={"h6"}>Choose a specific location:</Typography>
+        <Grid item xs={6} style={{ marginTop: "12px", fontWeight: "bold"}}>
+          <Typography variant={"h6"} style={{fontWeight: "bold"}}>Choose a specific location:</Typography>
         </Grid>
         <Grid item xs={6}>
           <TextField
-            label="e.g. TUMStammgelände, Arcisstr. 21 80333"
+            label="e.g. TUM Stammgelände, Arcisstr. 21 80333"
             id="TitleField"
             type="text"
             className=""
@@ -378,7 +397,7 @@ export function CustomizeGroup(props) {
           />
         </Grid>
       </Grid>
-      <Typography className={"creategroup-padding"} variant={"h6"}>
+      <Typography className={"creategroup-padding"} variant={"h6"} style={{fontWeight: "bold"}}>
         Give a short description of the planned activity:
       </Typography>
       <TextField

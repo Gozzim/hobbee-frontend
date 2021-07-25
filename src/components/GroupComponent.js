@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: "left",
-    color: "#32210B",
+    color: "black",
     width: "280px",
     height: "432px",
     boxShadow: "0 3px 10px rgb(0 0 0 / 0.1)",
     "&:hover": {
       backgroundColor: "rgba(0, 0, 0, 0.04)",
-      color: "#32210B",
+      color: "black",
     },
   },
   listItem: {
@@ -131,7 +131,7 @@ function GroupComponent(props) {
         }}
       >
         <div className={classes.titleContainer}>
-          <Typography variant={"h6"} align="center" style={{ minWidth: "40%" }}>
+          <Typography variant={"h6"} align="center" style={{ minWidth: "40%", fontWeight: "bold" }}>
             {props.group.groupName}
           </Typography>
         </div>
