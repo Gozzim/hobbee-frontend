@@ -24,7 +24,7 @@ const CustomTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-export function MyGroupsResultsComponent(props) {
+export function MyGroupsResultsComponent() {
   const classes = useStyles();
 
   const currentGroups = useSelector((state) => {
@@ -47,7 +47,7 @@ export function MyGroupsResultsComponent(props) {
     if (user.isLoggedIn) {
       dispatch(getMyGroups());
     }
-  }, [user.isLoggedIn, location]);
+  }, [user.isLoggedIn, location, dispatch]);
 
   return currentGroups.length > 0 || pastGroups.length > 0 ? (
     <div style={{ marginBottom: "30px" }}>

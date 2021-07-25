@@ -75,7 +75,7 @@ function ProfileView(props) {
         console.log(e);
       }
     }
-  }, [user.authReady]);
+  }, [user.authReady, props.location]);
 
   if (!formData)
     return (

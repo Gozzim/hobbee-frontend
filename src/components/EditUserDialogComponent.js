@@ -14,7 +14,7 @@ import {
 import { HOBBEE_YELLOW } from "../shared/Constants";
 import { isValidUsername} from "../validators/UserDataValidator";
 import { AvatarUploadComponent } from "./AvatarUploadComponent";
-import { updateMeRequest } from "../services/UserService";
+import { isUsernameAvailable, updateMeRequest } from "../services/UserService";
 import { updateUser } from "../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import { TagComponent } from "./TagComponent";
@@ -78,6 +78,8 @@ export function EditUserDialogComponent(props) {
   const [touched, setTouched] = React.useState(initialTouchedState);
   const [selectedHobby, setSelectedHobby] = useState(null);
 
+  const [usernameError, setUsernameError] = useState(null);
+
 
   const onChangeTagInput = (event, hobbyTag) => {
     setTouched((touched) => {
@@ -94,6 +96,28 @@ export function EditUserDialogComponent(props) {
       }
     }
   }
+
+  const onChangeUsername = async (event) => {
+      const usernameUsedResp = await isUsernameAvailable(userForm.username);
+
+    if (!isValidUsername(userForm.username)){
+      setUsernameError("Invalid username");
+    }
+    else if (!usernameUsedResp.isUsernameAvailable) {
+        setUsernameError("Username already in use");
+      }
+    else {
+        setUsernameError("");
+      }
+
+      setTouched((touched) => {
+        return { ...touched, username: true };
+      });
+      setUserForm((userForm) => {
+        return { ...userForm, username: event.target.value };
+      })
+  };
+
 
   const handleOpen = () => {
     setUserForm(props.user);
@@ -166,19 +190,12 @@ export function EditUserDialogComponent(props) {
             fullWidth
             variant="outlined"
             //size="small"
-            onChange={(event) => {
-              setTouched((touched) => {
-                return { ...touched, username: true };
-              });
-              setUserForm((userForm) => {
-                return { ...userForm, username: event.target.value };
-              });
-            }}
+            onChange={onChangeUsername}
             value={userForm.username}
-            error={touched.username && !isValidUsername(userForm.username)}
+            error={usernameError}
             helperText={
-              touched.username && !isValidUsername(userForm.username)
-                ? "Invalid User Name"
+              usernameError
+                ? "Invalid Username"
                 : ""
             }
           />

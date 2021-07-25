@@ -41,26 +41,29 @@ export function SearchResults(props) {
     <>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Grid>
-            <FormControl className={classes.resultsPerPage}>
-              <InputLabel>Results per page</InputLabel>
-              <Select
-                value={search.groupsOnPage}
-                onChange={(event) => {
-                  search.setGroupsOnPage(event.target.value);
-                  search.setPage(1);
-                }}
-              >
-                <MenuItem value="9">9</MenuItem>
-                <MenuItem value="15">15</MenuItem>
-                <MenuItem value="30">30</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+          <FormControl className={classes.resultsPerPage}>
+            <InputLabel>Results per page</InputLabel>
+            <Select
+              value={search.groupsOnPage}
+              onChange={(event) => {
+                search.setGroupsOnPage(event.target.value);
+                search.setPage(1);
+              }}
+            >
+              <MenuItem value={9}>9</MenuItem>
+              <MenuItem value={15}>15</MenuItem>
+              <MenuItem value={30}>30</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
 
         <Grid item xs={6}>
-          <Grid container alignItems={"center"} justifyContent={"flex-end"}>
+          <Grid
+            container
+            item
+            alignItems={"center"}
+            justifyContent={"flex-end"}
+          >
             <FormControl>
               <InputLabel>Sort by</InputLabel>
               <Select
@@ -90,10 +93,10 @@ export function SearchResults(props) {
           variant="h4"
           style={{ fontWeight: "bold", marginBottom: "20px" }}
         >
-          Search Results
+          {props.search.searchValue ? "SEARCH RESULTS" : props.title}
         </Typography>
         {groupsToShow.length > 0 ? (
-          <div>
+          <>
             <Grid container spacing={2} justifyContent="center">
               {groupsToShow.map((group) => {
                 return (
@@ -111,7 +114,7 @@ export function SearchResults(props) {
                 onChange={(_, p) => search.setPage(p)}
               />
             </div>
-          </div>
+          </>
         ) : (
           <div>
             <center>

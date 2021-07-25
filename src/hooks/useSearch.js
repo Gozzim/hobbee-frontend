@@ -2,8 +2,9 @@ import * as React from "react";
 import equal from "fast-deep-equal";
 import Fuse from "fuse.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroups } from "../redux/reducers/groupsReducer";
 import { useLocation } from "react-router";
+
+import { getGroups } from "../redux/reducers/groupsReducer";
 
 const initialFiltersState = {
   city: "",
@@ -25,10 +26,9 @@ export function useSearch(args) {
   });
   const dispatch = useDispatch();
   const location = useLocation();
-
   React.useEffect(() => {
     dispatch(getGroups());
-  }, [location]);
+  }, [location, dispatch]);
 
   let results = [...allGroups];
 

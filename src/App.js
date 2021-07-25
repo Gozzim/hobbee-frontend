@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import { fetchNotifications } from "./redux/reducers/notificationReducer";
 import { ASCII_BEE } from "./shared/Constants";
 import { fetchHobbyTags } from "./redux/reducers/tagsReducer";
+import { NotFoundView } from "./views/NotFoundView";
 
 const useStyles = makeStyles(() => ({
   appRoot: {
@@ -72,7 +73,19 @@ function App() {
                 );
               }}
             />
-          ))}
+          ))
+          }
+          <Route
+            key={404}
+            path={"/"}
+            render={(routeProps) => {
+              document.title = "Hobb.ee | 404 - NOT FOUND ";
+
+             return(
+               <NotFoundView {...routeProps} />
+             )
+            }}
+            />
         </Switch>
       </ContentContainer>
     </div>

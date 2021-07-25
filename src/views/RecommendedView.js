@@ -18,7 +18,7 @@ export function RecommendedView(props) {
     if (user.isLoggedIn) {
       dispatch(getRecommendedGroups());
     }
-  }, [user.isLoggedIn, props.location]);
+  }, [user.isLoggedIn, props.location, dispatch]);
 
   return (
     <RequireLoggedIn>

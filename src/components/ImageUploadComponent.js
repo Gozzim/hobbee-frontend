@@ -60,6 +60,7 @@ export function ImageUploadComponent(props) {
         props.setGroupForm((groupForm) => {
           return { ...groupForm, pic: response.data.id };
         });
+        setFileUploadError("");
         setIsUploading(false);
         resetTemporaryImage();
       }, "image/png");
