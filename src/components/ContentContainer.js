@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     width: "100%",
     overflow: "scroll",
+    overflowX: "hidden",
   },
   wrapper: {
     paddingTop: "40px",
