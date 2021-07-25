@@ -4,8 +4,9 @@ import Grid from "@material-ui/core/Grid";
 import GroupComponent from "./GroupComponent";
 import { getMyGroups } from "../redux/reducers/groupsReducer";
 import { useLocation } from "react-router";
-import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip, Typography } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import HelpIcon from "@material-ui/icons/Help";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -14,6 +15,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "25px",
   },
 }));
+
+const CustomTooltip = withStyles((theme) => ({
+  tooltip: {
+    boxShadow: theme.shadows[1],
+    fontSize: 14,
+    margin: 0,
+  },
+}))(Tooltip);
 
 export function MyGroupsResultsComponent() {
   const classes = useStyles();
@@ -41,14 +50,12 @@ export function MyGroupsResultsComponent() {
   }, [user.isLoggedIn, location, dispatch]);
 
   return currentGroups.length > 0 || pastGroups.length > 0 ? (
-    <div>
+    <div style={{ marginBottom: "30px" }}>
       <Typography variant="h4" className={classes.title}>
         ACTIVE GROUPS
       </Typography>
       {currentGroups.length === 0 ? (
-        <center>
-          <div>You do not have any active groups</div>
-        </center>
+        <Typography variant="h5">You don't have any active groups.</Typography>
       ) : (
         <Grid container spacing={2}>
           {currentGroups.map((a) => {
@@ -61,13 +68,22 @@ export function MyGroupsResultsComponent() {
         </Grid>
       )}
 
-      <Typography variant="h4" className={classes.title}>
-        EXPIRED GROUPS
-      </Typography>
+      <div style={{ display: "flex" }}>
+        <Typography variant="h4" className={classes.title}>
+          EXPIRED GROUPS
+          <CustomTooltip
+              placement="right"
+            title="A group expires once it reaches its meeting date. Group members are still able to chat, but the group can not be edited, joined or left anymore."
+            style={{ marginLeft: "20px", fill: "#aaaaaa" }}
+          >
+            <HelpIcon />
+          </CustomTooltip>
+        </Typography>
+      </div>
       {pastGroups.length === 0 ? (
-        <center>
-          <div>You do not have any past groups</div>
-        </center>
+        <Typography variant="h5">
+          None of your groups have expired yet.
+        </Typography>
       ) : (
         <Grid container spacing={2}>
           {pastGroups.map((a) => {
@@ -82,12 +98,16 @@ export function MyGroupsResultsComponent() {
     </div>
   ) : (
     <div>
-      <center>
-        <h1> You don't seem to be part of any groups. </h1>
-      </center>
-      <center>
-        <h3> Try joining one or creating your own!</h3>
-      </center>
+      <Typography
+        variant="h4"
+        align={"center"}
+        style={{ marginTop: "40px", marginBottom: "10px" }}
+      >
+        You don't seem to be in any groups.
+      </Typography>
+      <Typography variant="h5" align={"center"}>
+        Try joining one or creating your own!
+      </Typography>
     </div>
   );
 }

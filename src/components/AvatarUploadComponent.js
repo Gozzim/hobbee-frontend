@@ -8,7 +8,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
+  DialogContentText, FormHelperText,
   IconButton,
   Slider,
   Tooltip,
@@ -216,6 +216,9 @@ export function AvatarUploadComponent(props) {
             <PublishIcon />
           </IconButton>
         </CustomTooltip>
+        {fileUploadError ? (
+          <FormHelperText error>{fileUploadError}</FormHelperText>
+        ) : null}
       </div>
     </div>
   );

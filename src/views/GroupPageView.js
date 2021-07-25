@@ -21,6 +21,7 @@ import {useSelector} from "react-redux";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    marginBottom: "30px",
   },
   image: {
     borderRadius: "10px",
@@ -241,7 +242,7 @@ export function GroupPageView(props) {
             </Grid>
             <Grid item xs={12}>
               <div style={{flexWrap: "wrap" , wordWrap: "break-word"}}>
-              {group.description}
+                <Typography>{group.description}</Typography>
               </div>
             </Grid>
           </Grid>
