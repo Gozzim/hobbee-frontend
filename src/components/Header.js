@@ -22,6 +22,7 @@ import HobbeeIcon from "../assets/hobbee_white.svg";
 import { useSelector } from "react-redux";
 import { NotificationBell } from "./Notifications/NotificationBell";
 import { HOBBEE_ORANGE } from "../shared/Constants";
+import { getFileUrl } from "../services/FileService";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -190,10 +191,9 @@ export function Header(props) {
             color="inherit"
           >
             {user.isLoggedIn ? (
-              /*TODO: RenderUserAvatarFunction*/
               <Avatar>
                 {user.user.avatar
-                  ? "🐝"
+                  ? <img alt="user-image" width={50} height={50} src={getFileUrl(user.user.avatar)} />
                   : user.user.username
                   ? user.user.username[0]
                   : "🍯"}
