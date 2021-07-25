@@ -29,10 +29,6 @@
 .border {
   border-bottom: 1px solid #eee;
 }
-.customizegroup-grid {
-  padding-top: 60px;
-  padding-bottom: 50px;
-}
 .imageIcon {
   display: flex;
   justify-content: center;
@@ -52,21 +48,6 @@
   width: 100%;
   height: 100%;
 }
-.customizegroup-avatare {
-  display: flex;
-}
-.customizegroup-avatar-container {
-  margin-top: 63px;
-  padding-right: 5px;
-}
-
-.selectedAvatar{
-  border: 5px outset #1ce9e3 !important;
-}
-
-.customizegroup-filename {
-  padding-top: 20px;
-}
 .creategroup-padding {
   padding-top: 35px;
   padding-bottom: 15px;
@@ -80,9 +61,6 @@
   padding-bottom: 30px;
   flex-wrap: wrap;
 }
-.creategroup-tags {
-  display: flex;
-}
 .scroller {
   margin: 0 auto;
   height: 560px;
@@ -92,15 +70,6 @@
 }
 .scroller-item {
   margin: 30px 0;
-}
-.creategroup-nodatebutton{
-  margin-top: 10px !important;
-  margin-left: -5px !important;
-}
-.customizegroup-datetime-container {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-end;
 }
 .imageupload-avatare {
   display: flex;
