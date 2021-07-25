@@ -23,7 +23,7 @@ export function InMyAreaView(props) {
   return (
     <RequireLoggedIn>
       <SearchBar search={search} />
-      <SearchResults search={search} title="GROUPS IN YOUR AREA" />
+      <SearchResults search={search} title="GROUPS IN MY AREA" />
     </RequireLoggedIn>
   );
 }

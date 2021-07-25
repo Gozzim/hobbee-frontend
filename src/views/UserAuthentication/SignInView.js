@@ -29,6 +29,11 @@ const useStyles = makeStyles(() => ({
       backgroundColor: BUTTON_BLUE_HOVER,
     },
   },
+  forgotPasswordDiv: {
+    "&:hover": {
+      cursor: "pointer",
+    },
+  }
 }));
 
 function SignInView(props) {
@@ -163,14 +168,16 @@ function SignInView(props) {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography align="center" variant="body2">
-                <Link
-                  style={{ textDecoration: "none", color: "inherit" }}
+              <div className={classes.forgotPasswordDiv}>
+                <Typography
+                  align="center"
+                  variant="body2"
                   onClick={() => setForgotOpen(true)}
+                  className={"linkDefault"}
                 >
                   Forgot Password?
-                </Link>
-              </Typography>
+                </Typography>
+              </div>
             </Grid>
           </Grid>
         </form>

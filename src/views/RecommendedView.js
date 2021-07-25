@@ -23,7 +23,7 @@ export function RecommendedView(props) {
   return (
     <RequireLoggedIn>
       <SearchBar search={search} />
-      <SearchResults search={search} title="RECOMMENDED FOR YOU" />
+      <SearchResults search={search} title="RECOMMENDED FOR ME" />
     </RequireLoggedIn>
   );
 }

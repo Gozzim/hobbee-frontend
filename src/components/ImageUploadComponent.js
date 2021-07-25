@@ -9,6 +9,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  FormHelperText,
   IconButton,
   Slider,
   Tooltip,
@@ -117,7 +118,7 @@ export function ImageUploadComponent(props) {
           }}
         >
           <img
-            alt="group-image"
+            alt="group"
             width={300}
             height={220}
             src={getFileUrl(props.groupForm.pic)}
@@ -186,6 +187,10 @@ export function ImageUploadComponent(props) {
         }}
         accept={".jpg, .jpeg, .png"}
       />
+
+      {fileUploadError ? (
+        <FormHelperText error>{fileUploadError}</FormHelperText>
+      ) : null}
 
       <DialogContentText className={"imageupload-description"}>
         Choose or upload an image:
