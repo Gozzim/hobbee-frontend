@@ -55,6 +55,7 @@ export function AvatarUploadComponent(props) {
           console.log(userForm);
           return { ...userForm, avatar: response.data.id };
         });
+        setFileUploadError("");
         setIsUploading(false);
         resetTemporaryImage();
       }, "image/png");
