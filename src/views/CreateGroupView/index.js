@@ -36,6 +36,7 @@ const initialTouchedState = {
   city: false,
   tags: false,
   pic: false,
+  date: false,
 };
 
 export function CreateGroupView(props) {
@@ -112,7 +113,10 @@ export function CreateGroupView(props) {
             type="button"
             className={classes.button}
             onClick={async () => {
-              if (groupForm.pic !== "") {
+              if (
+                groupForm.pic !== "" &&
+                (!groupForm.date || groupForm.date >= new Date().toISOString())
+              ) {
                 const response = await createRequest(groupForm);
                 props.history.push("/my-groups/" + response.data.id + "#new");
               } else {
@@ -120,6 +124,7 @@ export function CreateGroupView(props) {
                   return {
                     ...touched,
                     pic: true,
+                    date: true,
                   };
                 });
               }

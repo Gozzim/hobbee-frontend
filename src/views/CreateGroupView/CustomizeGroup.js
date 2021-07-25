@@ -311,6 +311,9 @@ export function CustomizeGroup(props) {
                 inputVariant="outlined"
                 style={{ marginRight: "10px" }}
                 onChange={(date) => {
+                  props.setTouched((touched) => {
+                    return { ...touched, date: true };
+                  });
                   if (date instanceof Date && !isNaN(date)) {
                     props.setGroupForm((groupForm) => {
                       return {
@@ -331,6 +334,9 @@ export function CustomizeGroup(props) {
                 format={"HH:mm"}
                 inputVariant="outlined"
                 onChange={(date) => {
+                  props.setTouched((touched) => {
+                    return { ...touched, date: true };
+                  });
                   if (date instanceof Date && !isNaN(date)) {
                     props.setGroupForm((groupForm) => {
                       return {
@@ -340,6 +346,18 @@ export function CustomizeGroup(props) {
                     });
                   }
                 }}
+                error={
+                  props.touched.date &&
+                  props.groupForm.date &&
+                  props.groupForm.date <= new Date().toISOString()
+                }
+                helperText={
+                  props.touched.date &&
+                  props.groupForm.date &&
+                  props.groupForm.date <= new Date().toISOString()
+                    ? "Must lie in the future"
+                    : ""
+                }
                 value={props.groupForm.date}
               />
               <CustomTooltip title="Reset date">
