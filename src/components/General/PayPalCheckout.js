@@ -1,9 +1,10 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { sendPremiumRequest } from "../../services/paymentService";
 import { withRouter } from "react-router-dom";
+import { authUser } from "../../redux/reducers/userReducer";
 
 const initialOptions = {
     "client-id": "AU7zuQUIr6Py3Vyt85-b8wASl7rWeaaoTc1ETAAx0xM7PUygJoVmxGDkPEzSC8obakqZ7C8y976kbZrM",
@@ -13,10 +14,12 @@ const initialOptions = {
 };
 
 function PayPalCheckout(props) {
+    const dispatch = useDispatch();
 
     const onApprove = async (order) => {
         try {
             const receipt = await sendPremiumRequest(order);
+            dispatch(authUser());
             props.onSuccess(receipt);
         } catch (e) {
             console.log(e)
