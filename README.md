@@ -9,7 +9,7 @@ The web application was built as part of the SEBA-Master course 2021 at TUM by t
 Hobb.ee is a social networking service that helps individuals meet new people with common interests by recommending activity-oriented groups based on their personal preferences.
 
 
-Backend can be found [here](https://gitlab.lrz.de/seba-master-2021/team-01/backend/)
+Backend can be found [here](https://github.com/Gozzim/hobbee-backend)
 
 
 Follow this readme to build and run the hobb.ee frontend locally.
@@ -41,42 +41,42 @@ We tested on these versions. You can try to run the project on newer versions, b
 
 ## Getting Started
 
-To get started, you simply clone the [hobb.ee-frontend](https://gitlab.lrz.de/seba-master-2021/team-01/frontend/) repository and install all of its dependencies:
+To get started, you simply clone the [hobb.ee-frontend](https://github.com/Gozzim/hobbee-frontend) repository and install all of its dependencies:
 
 ### Prerequisites
 
-You need git to clone the [hobb.ee-frontend](https://gitlab.lrz.de/seba-master-2021/team-01/frontend/) repository. You can get git from [http://git-scm.com/](http://git-scm.com/).
+You need git to clone the [hobb.ee-frontend](https://github.com/Gozzim/hobbee-frontend) repository. You can get git from [http://git-scm.com/](http://git-scm.com/).
 
-We also use a number of node.js tools to initialize and test [hobb.ee-frontend](https://gitlab.lrz.de/seba-master-2021/team-01/frontend/). You must have node.js and its package manager (npm) installed. You can get them from [http://nodejs.org/](http://nodejs.org/).
+We also use a number of node.js tools to initialize and test [hobb.ee-frontend](https://github.com/Gozzim/hobbee-frontend). You must have node.js and its package manager (npm) installed. You can get them from [http://nodejs.org/](http://nodejs.org/).
 
 ### Clone Hobb.ee-Project-frontend
 
 Navigate to a folder of your choice to create the file structure for the project. We recommend the following:
 ```
 - /root-folder/
-    - /root-folder/frontend/
-    - /root-folder/backend/
+    - /root-folder/hobbee-frontend/
+    - /root-folder/hobbee-backend/
     - /root-folder/database/
 ```
 
 After creating the file structure, navigate to your root folder.
 
-Clone the [hobb.ee-frontend](https://gitlab.lrz.de/seba-master-2021/team-01/frontend/) repository using [git](http://git-scm.com/):
+Clone the [hobb.ee-frontend](https://github.com/Gozzim/hobbee-frontend) repository using [git](http://git-scm.com/):
 
-```
-git clone https://gitlab.lrz.de/seba-master-2021/team-01/frontend.git
+```bash
+git clone https://github.com/Gozzim/hobbee-frontend.git
 ```
 
 ### Install Dependencies
 
 Go to your frontend folder via command line
-```
-cd path/to/main-folder/frontend
+```bash
+cd path/to/main-folder/hobbee-frontend
 ```
 
 We get the necessary tools for our web application via `npm`, the [node package manager](https://www.npmjs.com).
 
-```
+```bash
 npm install
 ```
 
@@ -85,7 +85,7 @@ npm install
 
 Run the command:
 
-```
+```bash
 npm run build
 ```
 
@@ -95,24 +95,19 @@ npm run build
 
 We have preconfigured the project with a simple development web server. The simplest way to start this server is:
 
-```
+```bash
 npm start
 ```
 
 Now browse to the app at `http://localhost:3000`.
 
-## Testing Premium - Using Paypal sandbox for  hobb.ee
+### Deploy the Application
 
-
-For our Paypal Integration we are using the Paypal Sandbox.
-If you want to test this integration you can follow the "Buy Premium" steps after you logged in and enter the following Paypal Customer Credentials:
-
-```
-CustomerAccount:
-   Login: sb-4347ask6835997@personal.example.com
-   Pass: 8emswG&w
+```bash
+serve -s build
 ```
 
+Now browse to the app at `http://localhost:5000`.
 
 Happy testing!
 
