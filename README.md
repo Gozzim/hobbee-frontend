@@ -2,6 +2,8 @@
 
 
 # Seba Team 01 Hobb.ee-web-application-frontend
+[![CodeFactor](https://www.codefactor.io/repository/github/gozzim/hobbee-frontend/badge)](https://www.codefactor.io/repository/github/gozzim/hobbee-frontend)
+
 
 This repository contains the frontend for Hobb.ee.
 The web application was built as part of the SEBA-Master course 2021 at TUM by team 01.
