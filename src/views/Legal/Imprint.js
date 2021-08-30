@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Imprint(props) {
+export function Imprint() {
   return (
     <div>
       <p>
@@ -10,10 +10,10 @@ export function Imprint(props) {
         <h3>Information in accordance with section 5 TMG:</h3>
       </p>
       <p>
-        Maja Schuknecht
+          Max Mustermann
         <br/>
-        Martin-Behaim-Str. 2<br/>
-        81373 München
+        Muster-Str. 2<br/>
+        81337 Muster
         <br/>
         E-Mail: contact@hobb.ee
       </p>
