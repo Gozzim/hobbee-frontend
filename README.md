@@ -111,4 +111,7 @@ Now browse to the app at `http://localhost:5000`.
 
 Happy testing!
 
+## License
+This code and content is released under the [GNU AGPL license](https://github.com/Gozzim/hobbee-frontend/blob/master/LICENSE).
+
 # <img src="https://hobb.ee/static/media/hobbee_white.7e5bc008.svg" height="75" alt="logo">
