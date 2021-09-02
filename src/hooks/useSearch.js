@@ -65,6 +65,7 @@ export function useSearch(args) {
   // Pagination
   const [page, setPage] = React.useState(1);
   const [groupsOnPage, setGroupsOnPage] = React.useState(initialGroupsOnPage);
+  const pages = Math.max(1, Math.ceil(results.length / groupsOnPage));
   results = results.slice(groupsOnPage * (page - 1), groupsOnPage * page);
 
   return {
@@ -82,6 +83,7 @@ export function useSearch(args) {
     setGroupsOnPage,
     results,
     hasFilters,
+    pages,
   };
 }
 

@@ -32,11 +32,6 @@ export function SearchResults(props) {
   const classes = useStyles();
   const groupsToShow = search.results;
 
-  const pages = Math.max(
-    1,
-    Math.ceil(groupsToShow.length / search.groupsOnPage)
-  );
-
   return (
     <>
       <Grid container spacing={2}>
@@ -108,7 +103,7 @@ export function SearchResults(props) {
             </Grid>
             <div className={classes.pagination}>
               <Pagination
-                count={pages}
+                count={search.pages}
                 shape="rounded"
                 page={search.page}
                 onChange={(_, p) => search.setPage(p)}
