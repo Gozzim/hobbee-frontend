@@ -2,6 +2,7 @@
 
 
 # Seba Team 01 Hobb.ee-web-application-frontend
+[![build](https://github.com/Gozzim/hobbee-frontend/actions/workflows/build.yml/badge.svg)](https://github.com/Gozzim/hobbee-frontend/actions/workflows/build.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/gozzim/hobbee-frontend/badge)](https://www.codefactor.io/repository/github/gozzim/hobbee-frontend)
 
 
