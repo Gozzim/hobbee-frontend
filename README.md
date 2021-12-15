@@ -1,4 +1,4 @@
-# <img src="https://hobb.ee/static/media/hobbee_white.7e5bc008.svg" height="75" alt="logo">
+# <img src="src/assets//hobbee_white.svg" height="75" alt="logo">
 
 
 # Seba Team 01 Hobb.ee-web-application-frontend
@@ -117,4 +117,4 @@ Happy testing!
 ## License
 This code and content is released under the [GNU AGPL license](https://github.com/Gozzim/hobbee-frontend/blob/master/LICENSE).
 
-# <img src="https://hobb.ee/static/media/hobbee_white.7e5bc008.svg" height="75" alt="logo">
+# <img src="src/assets//hobbee_white.svg" height="75" alt="logo">
